@@ -75,7 +75,8 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var companyId = $(this).data('id');
-        $.get('/company/edit/'+companyId, function (response) {
+        getCompanyDetailsUrl.replace('__ID__', companyId);
+        $.get(getCompanyDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#company_id').val(response.data.companyDetails.id);
@@ -97,7 +98,7 @@ $(document).ready(function () {
             var postData = {
                 companyId : $(this).data('id'),
             };
-            $.post('/company/delete', postData, function (response) {
+            $.post(deleteCompanyUrl, postData, function (response) {
                 if(response.status == true){
                     companiesTable.draw();
                     showToastMessage('success', response.message);
@@ -117,7 +118,7 @@ $(document).ready(function () {
                 companyId : $(this).data('id'),
                 status: $(this).val(),
             };
-            $.post('/company/change-status', postData, function (response) {
+            $.post(changeCompanyStatusUrl, postData, function (response) {
                 if(response.status == true){
                     companiesTable.draw();
                     showToastMessage('success', response.message);

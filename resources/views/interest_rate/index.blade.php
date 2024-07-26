@@ -68,6 +68,7 @@
 @push('js')
     <script>
         var getInterestRatesUrl = "{{ route('interestrate.get') }}";
+        var getInterestRateDetailsUrl = "{{ route('interestrate.edit', ['id' => '__ID__']) }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

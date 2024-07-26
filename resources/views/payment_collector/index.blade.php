@@ -108,6 +108,8 @@
 @push('js')
     <script>
         var getPaymentCollectorsUrl = "{{ route('paymentcollector.get') }}";
+        var getPaymentCollectorDetailsUrl = "{{ route('paymentcollector.edit', ['id' => '__ID__']) }}";
+        var deletePaymentCollector = "{{ route('paymentcollector.delete') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

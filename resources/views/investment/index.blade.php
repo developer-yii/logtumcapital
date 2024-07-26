@@ -93,6 +93,8 @@
 @push('js')
     <script>
         var getInvestmentsUrl = "{{ route('investment.get') }}";
+        var getInvestmentDetailsUrl = "{{ route('investment.edit', ['id' => '__ID__']) }}";
+        var deleteInvestmentUrl = "{{ route('investment.delete') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

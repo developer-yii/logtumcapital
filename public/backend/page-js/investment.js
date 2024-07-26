@@ -76,7 +76,8 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var investmentId = $(this).data('id');
-        $.get('/investment/edit/'+investmentId, function (response) {
+        getInvestmentDetailsUrl.replace('__ID__', investmentId);
+        $.get(getInvestmentDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#investment_id').val(response.data.investmentDetails.id);
@@ -99,7 +100,7 @@ $(document).ready(function () {
             var postData = {
                 investmentId : $(this).data('id'),
             };
-            $.post('/investment/delete', postData, function (response) {
+            $.post(deleteInvestmentUrl, postData, function (response) {
                 if(response.status == true){
                     investmentsTable.draw();
                     showToastMessage('success', response.message);

@@ -103,7 +103,8 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var employeeId = $(this).data('id');
-        $.get('/employee/edit/'+employeeId, function (response) {
+        getEmployeeDetailsUrl.replace('__ID__', employeeId);
+        $.get(getEmployeeDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#employee_id').val(response.data.employeeDetails.id);
@@ -129,7 +130,7 @@ $(document).ready(function () {
             var postData = {
                 employeeId : $(this).data('id'),
             };
-            $.post('/employee/delete', postData, function (response) {
+            $.post(deleteEmployeeUrl, postData, function (response) {
                 if(response.status == true){
                     employeesTable.draw();
                     showToastMessage('success', response.message);

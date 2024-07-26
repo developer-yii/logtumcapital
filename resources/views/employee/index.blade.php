@@ -156,6 +156,8 @@
         var companyId = "{{ isset($_REQUEST['cid'])?$_REQUEST['cid']:'' }}";
         var getEmployeesUrl = "{{ route('employee.get') }}";
         var getCompanyEmployeesUrl = "{{ route('employee.getCompanyEmployees') }}";
+        var getEmployeeDetailsUrl = "{{ route('employee.edit', ['id' => '__ID__']) }}";
+        var deleteEmployeeUrl = "{{ route('employee.delete') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

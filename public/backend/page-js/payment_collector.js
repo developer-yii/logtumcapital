@@ -74,7 +74,8 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var paymentcollectorId = $(this).data('id');
-        $.get('/payment-collector/edit/'+paymentcollectorId, function (response) {
+        getPaymentCollectorDetailsUrl.replace('__ID__', paymentcollectorId);
+        $.get(getPaymentCollectorDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#id').val(response.data.paymentCollectorDetails.id);
@@ -98,7 +99,7 @@ $(document).ready(function () {
             var postData = {
                 paymentCollectorId : $(this).data('id'),
             };
-            $.post('/payment-collector/delete', postData, function (response) {
+            $.post(deletePaymentCollector, postData, function (response) {
                 if(response.status == true){
                     paymentCollectorsTable.draw();
                     showToastMessage('success', response.message);

@@ -103,6 +103,9 @@
 @push('js')
     <script>
         var getCompaniesUrl = "{{ route('company.get') }}";
+        var getCompanyDetailsUrl = "{{ route('company.edit', ['id' => '__ID__']) }}";
+        var deleteCompanyUrl = "{{ route('company.delete') }}";
+        var changeCompanyStatusUrl = "{{ route('company.changeStatus') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

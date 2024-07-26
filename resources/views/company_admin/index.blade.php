@@ -118,6 +118,8 @@
     <script>
         var companyId = "{{ isset($_REQUEST['cid'])?$_REQUEST['cid']:1 }}";
         var getCompanyAdminUrl = "{{ route('companyadmin.get') }}";
+        var getCompanyAdminDetailsUrl = "{{ route('companyadmin.edit', ['id' => '__ID__']) }}";
+        var deleteCompanyAdminUrl = "{{ route('companyadmin.delete') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

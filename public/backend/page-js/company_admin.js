@@ -72,7 +72,8 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var companyId = $(this).data('id');
-        $.get('/company-admin/edit/'+companyId, function (response) {
+        getCompanyAdminDetailsUrl.replace('__ID__', companyId);
+        $.get(getCompanyAdminDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#company_admin_id').val(response.data.companyAdminDetails.id);
@@ -97,7 +98,7 @@ $(document).ready(function () {
             var postData = {
                 companyAdminId : $(this).data('id'),
             };
-            $.post('/company-admin/delete', postData, function (response) {
+            $.post(deleteCompanyAdminUrl, postData, function (response) {
                 if(response.status == true){
                     companyAdminsTable.draw();
                     showToastMessage('success', response.message);

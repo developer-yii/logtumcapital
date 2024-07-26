@@ -90,7 +90,7 @@ if (!function_exists('currencyFormatter')) {
     function currencyFormatter($amount, $prefix = true)
     {
         if($prefix){
-            return 'MYR '.number_format($amount, 2, '.', ',');
+            return '$ '.number_format($amount, 2, '.', ',');
         }
         return number_format($amount, 2, '.', ',');
     }

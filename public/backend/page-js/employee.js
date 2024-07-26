@@ -103,8 +103,9 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var employeeId = $(this).data('id');
-        getEmployeeDetailsUrl = getEmployeeDetailsUrl.replace('__ID__', employeeId);
-        $.get(getEmployeeDetailsUrl, function (response) {
+        var url = getEmployeeDetailsUrl;
+        url = url.replace('__ID__', employeeId);
+        $.get(url, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#employee_id').val(response.data.employeeDetails.id);

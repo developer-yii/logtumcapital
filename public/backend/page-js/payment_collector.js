@@ -74,8 +74,9 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var paymentcollectorId = $(this).data('id');
-        getPaymentCollectorDetailsUrl = getPaymentCollectorDetailsUrl.replace('__ID__', paymentcollectorId);
-        $.get(getPaymentCollectorDetailsUrl, function (response) {
+        var url = getPaymentCollectorDetailsUrl;
+        url = url.replace('__ID__', paymentcollectorId);
+        $.get(url, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#id').val(response.data.paymentCollectorDetails.id);

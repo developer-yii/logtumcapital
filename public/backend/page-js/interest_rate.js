@@ -61,8 +61,9 @@ $(document).ready(function () {
         $('#add-form').trigger("reset");
         $('.error').html('');
         var interestRateId = $(this).data('id');
-        getInterestRateDetailsUrl = getInterestRateDetailsUrl.replace('__ID__', interestRateId);
-        $.get(getInterestRateDetailsUrl, function (response) {
+        var url = getInterestRateDetailsUrl;
+        url = url.replace('__ID__', interestRateId);
+        $.get(url, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#interest_rate_id').val(response.interestRateData.id);

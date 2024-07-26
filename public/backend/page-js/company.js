@@ -75,8 +75,9 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var companyId = $(this).data('id');
-        getCompanyDetailsUrl = getCompanyDetailsUrl = getCompanyDetailsUrl.replace('__ID__', companyId);
-        $.get(getCompanyDetailsUrl, function (response) {
+        var url = getCompanyDetailsUrl;
+        url = url.replace('__ID__', companyId);
+        $.get(url, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#company_id').val(response.data.companyDetails.id);

@@ -103,7 +103,7 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var employeeId = $(this).data('id');
-        getEmployeeDetailsUrl.replace('__ID__', employeeId);
+        getEmployeeDetailsUrl = getEmployeeDetailsUrl.replace('__ID__', employeeId);
         $.get(getEmployeeDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');

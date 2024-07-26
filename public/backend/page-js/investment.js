@@ -76,7 +76,7 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var investmentId = $(this).data('id');
-        getInvestmentDetailsUrl.replace('__ID__', investmentId);
+        getInvestmentDetailsUrl = getInvestmentDetailsUrl.replace('__ID__', investmentId);
         $.get(getInvestmentDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');

@@ -72,7 +72,7 @@ $(document).ready(function () {
         $('#id').val('');
         $('.error').html('');
         var companyId = $(this).data('id');
-        getCompanyAdminDetailsUrl.replace('__ID__', companyId);
+        getCompanyAdminDetailsUrl = getCompanyAdminDetailsUrl.replace('__ID__', companyId);
         $.get(getCompanyAdminDetailsUrl, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');

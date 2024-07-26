@@ -28,7 +28,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>email</th>
+                                    <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Actions</th>
                                 </tr>

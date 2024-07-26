@@ -56,7 +56,7 @@ $(document).ready(function () {
     $('#add-new-btn').click(function () {
         $('#add-form').trigger("reset");
         $('#addModal .modal-title span').html('Add');
-        $('#id').val('');
+        $('#employee_id').val('');
         $('.error').html('');
     });
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
     // Edit employee
     $('body').on('click', '.editEmployee', function () {
         $('#add-form').trigger("reset");
-        $('#id').val('');
+        $('#employee_id').val('');
         $('.error').html('');
         var employeeId = $(this).data('id');
         var url = getEmployeeDetailsUrl;

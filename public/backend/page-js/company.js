@@ -28,7 +28,7 @@ $(document).ready(function () {
     $('#add-new-btn').click(function () {
         $('#add-form').trigger("reset");
         $('#addModal .modal-title span').html('Add');
-        $('#id').val('');
+        $('#company_id').val('');
         $('.error').html('');
     });
 
@@ -72,7 +72,7 @@ $(document).ready(function () {
     // Edit company
     $('body').on('click', '.editCompany', function () {
         $('#add-form').trigger("reset");
-        $('#id').val('');
+        $('#company_id').val('');
         $('.error').html('');
         var companyId = $(this).data('id');
         var url = getCompanyDetailsUrl;

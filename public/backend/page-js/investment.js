@@ -29,7 +29,7 @@ $(document).ready(function () {
     $('#add-new-btn').click(function () {
         $('#add-form').trigger("reset");
         $('#addModal .modal-title span').html('Add');
-        $('#id').val('');
+        $('#investment_id').val('');
         $('.error').html('');
     });
 
@@ -73,7 +73,7 @@ $(document).ready(function () {
     // Edit investment
     $('body').on('click', '.editInvestment', function () {
         $('#add-form').trigger("reset");
-        $('#id').val('');
+        $('#investment_id').val('');
         $('.error').html('');
         var investmentId = $(this).data('id');
         var url = getInvestmentDetailsUrl;

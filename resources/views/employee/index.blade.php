@@ -41,7 +41,7 @@
                                     <th>#</th>
                                     <th>Company Name</th>
                                     <th>Name</th>
-                                    <th>email</th>
+                                    <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Authorized Credit Limit</th>
                                     <th>Actions</th>

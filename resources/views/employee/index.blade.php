@@ -101,7 +101,7 @@
                         <div class="form-group mb-3">
                             <label for="phone_number" class="form-label">Phone number</label>
                             <input type="text" id="phone_number" name="phone_number" class="form-control" value="">
-                            <span class="text-secondary">For example : +601234567890</span><br>
+                            <span class="text-secondary">For example : +521234567890</span><br>
                             <span id="error_phone_number" class="error text-danger"></span>
                         </div>
                         <div class="form-group mb-3">

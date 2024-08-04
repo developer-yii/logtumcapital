@@ -90,12 +90,21 @@ if (!function_exists('isSuperAdmin')) {
 if (!function_exists('currencyFormatter')) {
     function currencyFormatter($amount, $prefix = true)
     {
-        if($prefix){
-            return '$ '.number_format($amount, 2, '.', ',');
+        // Check if the decimal part is zero
+        if (floor($amount) == $amount) {
+            // No decimal part, format without decimals
+            $formattedAmount = number_format($amount, 0, '.', ',');
+        } else {
+            // Decimal part exists, format with two decimal places
+            $formattedAmount = number_format($amount, 2, '.', ',');
         }
-        return number_format($amount, 2, '.', ',');
+
+        if ($prefix) {
+            return '$' . $formattedAmount;
+        }
+        return $formattedAmount;
     }
-}
+}              
 if (!function_exists('getCompanyData')) {
     function getCompanyData($companyId)
     {
@@ -145,9 +154,12 @@ if (! function_exists('getInterestRate')) {
     }
 }
 if(! function_exists('getAvailableSuperAdminCredit')){
-    function getAvailableSuperAdminCredit(){
+    function getAvailableSuperAdminCredit($id = null){
         $totalInvestment = Investment::sum('contributions');
         $totalCreditSpendToCompanies = Company::sum('authorized_credit_limit');
+        if($id){
+            $totalCreditSpendToCompanies = Company::where('id', '!=', $id)->sum('authorized_credit_limit');
+        }
         return ($totalInvestment - $totalCreditSpendToCompanies);
     }
 }

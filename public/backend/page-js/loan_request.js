@@ -33,41 +33,49 @@ $(document).ready(function () {
     $('body').on('change', '.change-fund-request-status', function(){
         var changedStatus = $(this).val();
         if (confirm("Are you sure you want to change status?")) {
-            var postData = {
-                requestId : $(this).data('id'),
-                status : changedStatus
-            };
-            $.ajax({
-                url: changeRequestStatusUrl,
-                type: 'POST',
-                data: postData,
-                beforeSend: function() {
-                    $('.loan-request-status').prop('disabled', true);
-                    showLoader();
-                },
-                success:function(response){
-                    $('.loan-request-status').prop('disabled', false);
-                    hideLoader();
-                    if(response.status == true){
-                        fundRequestTable.draw();
-                        showToastMessage('success', response.message);
-                    }else{
-                        showToastMessage('error', response.message);
+            if(changedStatus == 2){
+                $('#upload_ioweyou_form').trigger("reset");
+                $('#upload_ioweyou_modal .error').html('');
+                $('#upload_ioweyou_modal #fund_request_id').val($(this).data('id'));
+                $('#upload_ioweyou_modal #status').val($(this).val());
+                $('#upload_ioweyou_modal').modal('show');
+            }else{
+                var postData = {
+                    requestId : $(this).data('id'),
+                    status : changedStatus
+                };
+                $.ajax({
+                    url: rejectRequestStatusUrl,
+                    type: 'POST',
+                    data: postData,
+                    beforeSend: function() {
+                        $('.loan-request-status').prop('disabled', true);
+                        showLoader();
+                    },
+                    success:function(response){
+                        $('.loan-request-status').prop('disabled', false);
+                        hideLoader();
+                        if(response.status == true){
+                            fundRequestTable.draw();
+                            showToastMessage('success', response.message);
+                        }else{
+                            showToastMessage('error', response.message);
+                        }
                     }
-                }
-            });
+                });
+            }
         }else{
             fundRequestTable.draw();
         }
     });
 
     // open upload iowe you modal
-    $('body').on('click', '.upload-ioweyou', function(){
-        $('#upload_ioweyou_form').trigger("reset");
-        $('#upload_ioweyou_modal .error').html('');
-        $('#upload_ioweyou_modal #fund_request_id').val($(this).data('id'));
-        $('#upload_ioweyou_modal').modal('show');
-    });
+    // $('body').on('click', '.upload-ioweyou', function(){
+    //     $('#upload_ioweyou_form').trigger("reset");
+    //     $('#upload_ioweyou_modal .error').html('');
+    //     $('#upload_ioweyou_modal #fund_request_id').val($(this).data('id'));
+    //     $('#upload_ioweyou_modal').modal('show');
+    // });
 
     $('body').on('submit', '#upload_ioweyou_form', function(e){
         e.preventDefault();

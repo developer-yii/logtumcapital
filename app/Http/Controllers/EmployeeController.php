@@ -48,7 +48,7 @@ class EmployeeController extends Controller
                     return $row->first_name.' '.$row->middle_name.' '.$row->last_name;
                 })
                 ->editColumn('authorized_credit_limit', function($row){
-                    return currencyFormatter($row->authorized_credit_limit, false);
+                    return currencyFormatter($row->authorized_credit_limit);
                 })
                 ->addColumn('action', function($row){
                     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm editEmployee me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit employee details"><i class="mdi mdi-pencil-outline"></i></a>';
@@ -76,8 +76,8 @@ class EmployeeController extends Controller
                 'users.email',
                 'users.phone_number',
                 'loans.user_id',
-                DB::raw('SUM(loans.amount) as used_credit_limit'),
-                DB::raw('users.authorized_credit_limit - SUM(loans.amount) as available_credit_limit'),
+                DB::raw('COALESCE(SUM(loans.amount), 0) as used_credit_limit'),
+                DB::raw('(users.authorized_credit_limit - COALESCE(SUM(loans.amount), 0)) as available_credit_limit'),
                 'users.authorized_credit_limit',
                 'users.ine',
                 'users.proof_of_address'
@@ -86,23 +86,22 @@ class EmployeeController extends Controller
                 'users.id',
                 'loans.user_id',
             );
-
             return Datatables::of($employees)
                 ->addIndexColumn()
                 ->addColumn('name', function($row){
                     return $row->first_name.' '.$row->middle_name.' '.$row->last_name;
                 })
                 ->editColumn('authorized_credit_limit', function($row){
-                    return currencyFormatter($row->authorized_credit_limit, false);
+                    return currencyFormatter($row->authorized_credit_limit);
                 })
                 ->editColumn('used_credit_limit', function($row){
-                    return currencyFormatter($row->used_credit_limit, false);
+                    return currencyFormatter($row->used_credit_limit);
                 })
                 ->editColumn('available_credit_limit', function($row){
-                    return currencyFormatter($row->available_credit_limit, false);
+                    return currencyFormatter($row->available_credit_limit);
                 })
                 ->editColumn('available_credit_limit', function($row){
-                    return currencyFormatter($row->available_credit_limit, false);
+                    return currencyFormatter($row->available_credit_limit);
                 })
                 ->editColumn('ine', function($row){
                     $file = asset('storage').'/'.$row->ine;
@@ -400,7 +399,7 @@ class EmployeeController extends Controller
             }
             $superAdminMailData = [
                 'subject' => 'Change Authorized Credit Limit Request',
-                'message' => $request->company_name . ' requested to update the authorized credit limit from the current limit of ' . currencyFormatter($request->current_limit, false) . ' to the new limit of ' . currencyFormatter($request->authorized_credit_limit, false) . '.'
+                'message' => $request->company_name . ' requested to update the authorized credit limit from the current limit of ' . currencyFormatter($request->current_limit) . ' to the new limit of ' . currencyFormatter($request->authorized_credit_limit) . '.'
             ];
             Mail::to(config('app.super_admin_mail'))->send(new SendFundRequestNotificationMail($superAdminMailData));
             return response()->json(['status' => true, 'message' => 'Your request of increase credit limit sent successfully.']);
@@ -415,15 +414,20 @@ class EmployeeController extends Controller
             $rules = [
                 'employee' => 'required',
                 'authorized_credit_limit' => ['required', 'numeric', 'min:0', function ($attribute, $value, $fail) use($user, $request){
-                    $companyCreditData = getCompanyCreditsData($user->company_id);
-                    $availableCredit = $companyCreditData['availableCredit'];
-                    $employeeCreditData = getEmployeeCreditsData($request->employee);
-                    $usedEmployeeCredit = $employeeCreditData['usedCredit'];
-                    if($value > $availableCredit){
-                        $fail('You can not exceed the credit limit of '. currencyFormatter($availableCredit, false));
+                    if($user->company_id){
+                        $companyCreditData = getCompanyCreditsData($user->company_id);
+                        $availableCredit = $companyCreditData['availableCredit'];
+                        if($value > $availableCredit){
+                            $fail("You cannot exceed the company's total credit limit of ".currencyFormatter($availableCredit).'.');
+                        }
                     }
-                    if($value < $usedEmployeeCredit){
-                        $fail('You can not set the credit limit lower than '. currencyFormatter($usedEmployeeCredit, false));
+                    
+                    if($request->employee){
+                        $employeeCreditData = getEmployeeCreditsData($request->employee);
+                        $usedEmployeeCredit = $employeeCreditData['usedCredit'];
+                        if($value < $usedEmployeeCredit){
+                            $fail('You cannot set the credit limit lower than '.currencyFormatter($usedEmployeeCredit).'.');
+                        }
                     }
                 }]
             ];

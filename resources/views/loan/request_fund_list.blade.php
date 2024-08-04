@@ -57,6 +57,12 @@
                 </div>
                 <div class="modal-body m-1">
                     <input type="hidden" id="fund_request_id" name="fund_request_id" value="">
+                    <input type="hidden" id="status" name="status" value="">
+                    <div class="form-group mb-3">
+                        <label for="disbursement_date" class="form-label">Disbursement date</label>
+                        <input type="date" id="disbursement_date" name="disbursement_date" class="form-control" value="">
+                        <span id="error_disbursement_date" class="error text-danger"></span>
+                    </div>
                     <div class="form-group mb-3">
                         <label for="ioweyou_document" class="form-label">IOweYou</label>
                         <input type="file" id="ioweyou_document" name="ioweyou_document" class="form-control" value="">
@@ -90,7 +96,7 @@
 @push('js')
     <script>
         var getFundRequestsUrl = "{{ route('loan.requests') }}";
-        var changeRequestStatusUrl = "{{ route('loan.changeFundRequestStatus') }}";
+        var rejectRequestStatusUrl = "{{ route('loan.rejectFundRequestStatus') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

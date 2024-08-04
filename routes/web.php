@@ -56,7 +56,7 @@ Route::middleware(['checkrole:Super Admin'])->group(function () {
     });
     Route::prefix('loan')->group(function () {
         Route::get('/requests', [LoanRequestController::class, 'getLoanRequests'])->name('loan.requests');
-        Route::post('/change-fund-request-status', [LoanRequestController::class, 'changeFundRequestStatus'])->name('loan.changeFundRequestStatus');
+        Route::post('/reject-fund-request-status', [LoanRequestController::class, 'rejectFundRequestStatus'])->name('loan.rejectFundRequestStatus');
         Route::post('/upload-ioweyou', [LoanRequestController::class, 'uploadIoweyou'])->name('loan.uploadIoweyou');
         Route::get('/pending-for-disbursed', [LoanRequestController::class, 'pendingForDisbursed'])->name('loan.pendingForDisbursed');
         Route::post('/change-loan-status', [LoanRequestController::class, 'changeLoanStatus'])->name('loan.changeLoanStatus');

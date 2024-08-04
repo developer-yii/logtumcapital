@@ -78,7 +78,7 @@
                     <div class="form-group mb-3">
                         <label for="consetitutive_act_document" class="form-label">Constitutive act document<span class="text-danger"> *</span></label>
                         <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" value="">
-                        <div class="show-edit-document d-none" id="download_consetitutive_act_document"><a href="" download>Current Constitutive Act Document</a></div>
+                        <div class="show-edit-document d-none" id="download_consetitutive_act_document"><a href="" download>Current Consetitutive Act Document</a></div>
                         <span id="error_consetitutive_act_document" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">

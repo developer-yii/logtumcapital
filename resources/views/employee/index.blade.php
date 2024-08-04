@@ -127,11 +127,13 @@
                         <div class="form-group mb-3">
                             <label for="proof_of_address" class="form-label">Proof of address<span class="text-danger"> *</span></label>
                             <input type="file" id="proof_of_address" name="proof_of_address" class="form-control" value="">
+                            <div class="show-edit-document d-none" id="download_proof_of_address_document"><a href="" download>Current Proof Of Address Document</a></div>
                             <span id="error_proof_of_address" class="error text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label for="ine_document" class="form-label">INE document<span class="text-danger"> *</span></label>
                             <input type="file" id="ine_document" name="ine_document" class="form-control" value="">
+                            <div class="show-edit-document d-none" id="download_ine_document"><a href="" download>Current INE Document</a></div>
                             <span id="error_ine_document" class="error text-danger"></span>
                         </div>
                     @else
@@ -158,6 +160,7 @@
         var getCompanyEmployeesUrl = "{{ route('employee.getCompanyEmployees') }}";
         var getEmployeeDetailsUrl = "{{ route('employee.edit', ['id' => '__ID__']) }}";
         var deleteEmployeeUrl = "{{ route('employee.delete') }}";
+        var basePath = "{{ asset('/storage') }}/";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

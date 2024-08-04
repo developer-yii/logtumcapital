@@ -55,7 +55,7 @@
                 <li class="side-nav-item {{ isActiveRouteMain(['loan.requests']) }}">
                     <a href="{{ route('loan.requests') }}" class="side-nav-link {{ isActiveRoute(['loan.requests']) }}">
                         <i class="mdi mdi-cash-plus fs-3"></i>
-                        <span>Fund Requests</span>
+                        <span>Pending Loans</span>
                     </a>
                 </li>
                 <li class="side-nav-item {{ isActiveRouteMain(['loan.pendingForDisbursed']) }}">
@@ -100,7 +100,7 @@
                 <li class="side-nav-item {{ isActiveRouteMain(['employee.requestFund']) }}">
                     <a href="{{ route('employee.requestFund') }}" class="side-nav-link {{ isActiveRoute(['employee.requestFund']) }}">
                         <i class="mdi mdi-cash-plus fs-3"></i>
-                        <span>Request For Fund</span>
+                        <span>Loan Requests</span>
                     </a>
                 </li>
             @endif

@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Request For Fund";
-  $label = "request for fund";
+  $labelMain = "Loan Requests";
+  $label = "request for loan";
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -27,8 +27,8 @@
                             $loanAmount = !empty($loanData->amount)?$loanData->amount:0;
                         @endphp
                         <h4>Name : {{ auth()->user()->first_name." ".auth()->user()->last_name }}</h4>
-                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount, false) }}</h5>
-                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount, false) }}</h5>
+                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
+                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount) }}</h5>
                     </div>
                 </div>
                 <div class="row">

@@ -90,9 +90,9 @@ $(document).ready(function () {
                 let consetutive_act_doc = basePath + response.data.companyDetails.consetutive_act;
                 let ine_doc = basePath + response.data.companyDetails.ine;
                 let ioweyou_doc = basePath + response.data.companyDetails.ioweyou;
-                $('.show-edit-document #download_constitutive_act_document').attr('href', basePath + response.data.companyDetails.consetutive_act);
-                $('#download_ine_document').attr('href', basePath + response.data.companyDetails.ine);
-                $('#download_ioweyou_document').attr('href', basePath + response.data.companyDetails.ioweyou);
+                $('#download_consetitutive_act_document a').attr('href', consetutive_act_doc);
+                $('#download_ine_document a').attr('href', ine_doc);
+                $('#download_ioweyou_document a').attr('href', ioweyou_doc);
                 $('.show-edit-document').removeClass('d-none');
                 // console.log(basePath + response.data.companyDetails.consetutive_act);
                 // console.log(basePath + response.data.companyDetails.ine);

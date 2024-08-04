@@ -55,28 +55,39 @@ class CompanyController extends Controller
             $rules = [
                 'name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
-                'authorized_credit_limit' => [
-                    'required',
-                    'numeric',
-                    'min:1',
-                    function($attribute, $value, $fail) {
-                        $availableCredit = getAvailableSuperAdminCredit();
-                        if ($value > $availableCredit) {
-                            $fail('You cannot assign a credit limit more than '.$availableCredit.'.');
-                        }
-                    }
-                ],
             ];
             if(!empty($request->company_id)){
                 $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number,'.$request->company_id];
                 $rules['consetitutive_act_document'] = ['nullable','file','mimes:pdf,jpeg,jpg,png','max:5120'];
                 $rules['ine_document'] = ['nullable','file','mimes:pdf,jpeg,png','max:5120'];
                 $rules['ioweyou_document'] = ['nullable','file','mimes:pdf,jpeg,png','max:5120'];
+                $rules['authorized_credit_limit'] = [
+                    'required',
+                    'numeric',
+                    'min:1',
+                    function($attribute, $value, $fail) use($request){
+                        $availableCredit = getAvailableSuperAdminCredit($request->company_id);
+                        if ($value > $availableCredit) {
+                            $fail('Current available credit limit is : '.$availableCredit.'.');
+                        }
+                    }
+                ];
             }else{
                 $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number'];
                 $rules['consetitutive_act_document'] = ['required','file','mimes:pdf,jpeg,jpg,png','max:5120'];
                 $rules['ine_document'] = ['required','file','mimes:pdf,jpeg,png','max:5120'];
                 $rules['ioweyou_document'] = ['required','file','mimes:pdf,jpeg,png','max:5120'];
+                $rules['authorized_credit_limit'] = [
+                    'required',
+                    'numeric',
+                    'min:1',
+                    function($attribute, $value, $fail) {
+                        $availableCredit = getAvailableSuperAdminCredit();
+                        if ($value > $availableCredit) {
+                            $fail('Current available credit limit is : '.$availableCredit.'.');
+                        }
+                    }
+                ];
             }
 
             // Validate the request data

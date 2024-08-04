@@ -44,16 +44,12 @@ class LoanRequestController extends Controller
                     if(!empty($row->ioweyou)){
                         $extension = strtolower(pathinfo($row->ioweyou, PATHINFO_EXTENSION));
                         $img= asset('storage').'/'.$row->ioweyou;
-                        if($extension == 'pdf'){
-                            return '<a class="btn custom-btn" src="'.$img.'" download>Click me</a>';
-                        }
-                        return "<img class='enlarge-image pe-auto' src='".$img."' height='50px' width='50px'>";
+                        // if($extension == 'pdf'){
+                            return '<a class="btn custom-btn" href="'.$img.'" download>Download</a>';
+                        // }
+                        // return "<img class='enlarge-image pe-auto' href='".$img."' height='50px' width='50px'>";
                     }else{
-                        if($row->status == 2){
-                            return "<button class='btn btn-primary upload-ioweyou' data-id='".$row->id."'>Upload IoweYou</button>";
-                        }else{
-                            return '-';
-                        }
+                        return '-';
                     }
                 })
                 ->editColumn('status',function($row){
@@ -61,7 +57,7 @@ class LoanRequestController extends Controller
                         return "<select class='change-fund-request-status form-select w-auto' data-id='".$row->id."'>
                             <option value='1' selected>Pending</option>
                             <option value='2'>Accept</option>
-                            <option value='3'>Reject</option>
+                            <option value='6'>Reject</option>
                         </select>";
                     }elseif($row->status == 2){
                         return 'Approved';
@@ -79,9 +75,8 @@ class LoanRequestController extends Controller
     }
 
     // change fund request status
-    public function changeFundRequestStatus(Request $request){
-        $loanRequestData = LoanRequest::where('id', $request->requestId)->first();
-        if(!empty($loanRequestData)){
+    private function changeFundRequestStatus($loanRequestData, $status, $disbursement_date=null){
+        if(!empty($loanRequestData) && !empty($status)){
             $user = User::select('company_id', 'first_name', 'middle_name', 'last_name', 'email')->where('id', $loanRequestData->user_id)->first();
             $fullName = '';
             $companyAdminData = '';
@@ -106,16 +101,16 @@ class LoanRequestController extends Controller
                 $weekText = 'week';
             }
 
-            $loanRequestData->status = $request->status;
+            $loanRequestData->status = $status;
             if($loanRequestData->save()){
                 $employeeMailData = [];
                 $companyAdminMailData = [];
 
                 //  fund request accepted
-                if($request->status == 2){
+                if($status == 2){
 
                     // request accepted -> create loan
-                    $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id);
+                    $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id, $disbursement_date);
 
                     //  create installments
                     $this->createInstallments($responseLoanData);
@@ -136,7 +131,7 @@ class LoanRequestController extends Controller
                     ];
                 }
                 // fund request rejected
-                else if($request->status == 3){
+                elseif($status == 6){
                     $employeeMailData = [
                         'subject' => 'Loan Request Rejected',
                         'message' => 'You request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
@@ -152,40 +147,41 @@ class LoanRequestController extends Controller
                 if(!empty($companyAdminEmail)){
                     Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
                 }
-                return response()->json(['status' => true, 'message' => 'Fund request status changed successfully.']);
+                return ['status' => true, 'message' => 'Fund request status changed successfully.'];
             }
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
     }
 
     // create loan when fund request accepted
-    private function createLoan($loanRequest, $companyAdminId){
+    private function createLoan($loanRequest, $companyAdminId, $disbursement_date){
         $loanData = Loan::where('user_id', $loanRequest->user_id)->first();
         if(empty($loanData)){
             $loanData = new Loan;
             $loanData->user_id = $loanRequest->user_id;
             $loanData->company_id = $loanRequest->company_id;
             $loanData->company_admin_id = $companyAdminId;
-            $loanData->yearly_interest_rate =  getInterestRate();
-            $loanData->weekly_interest_rate =  getInterestRate()/52;
             $loanData->status = 4;
         }
         $totalPaidInstallments = LoanInstallment::where('loan_id', $loanRequest->loan_id)->where('status', 2)->sum('capital');
-        $totalLoanAmount = LoanInstallment::where('loan_id', $loanRequest->loan_id)->sum('capital');
+        $totalPaidInstallmentsCount = LoanInstallment::where('loan_id', $loanRequest->loan_id)->where('status', 2)->count();
+        $totalLoanAmount = $loanData->amount;
         $finalAmount = (($totalLoanAmount - $totalPaidInstallments) + $loanRequest->amount);
-        $finalDuration = $loanData->duration + $loanRequest->duration;
+        $finalDuration = ($loanData->duration - $totalPaidInstallmentsCount) + $loanRequest->duration;
         $loanData->amount = $finalAmount;
         $loanData->duration = $finalDuration;
+        $loanData->yearly_interest_rate =  getInterestRate();
+        $loanData->weekly_interest_rate =  getInterestRate()/52;
         $loanData->loan_interest_rate = (getInterestRate()/52) * $finalDuration;
-        $loanData->first_installment_date = date('Y-m-d', strtotime(Carbon::now()->addWeek()));
-        $loanData->last_installment_date = date('Y-m-d', strtotime(Carbon::now()->addWeeks($finalDuration)));
+        $loanData->first_installment_date = Carbon::parse($disbursement_date)->copy()->addWeek(1)->format('Y-m-d');
+        $loanData->last_installment_date = Carbon::parse($loanData->first_installment_date)->copy()->addWeeks($finalDuration)->format('Y-m-d');
         $loanData->save();
 
         return $loanData;
     }
 
     // create installments
-    public function createInstallments($loanData){
+    private function createInstallments($loanData){
         $installments = LoanInstallment::where('loan_id',$loanData->id)->get();
         $installments->each(function ($installment) {
             $installment->delete();
@@ -217,6 +213,7 @@ class LoanRequestController extends Controller
     public function uploadIoweyou(Request $request){
         if($request->ajax()){
             $rules = [
+                'disbursement_date' => ['required', 'date'],
                 'ioweyou_document' => ['required','file','mimes:pdf,jpeg,png','max:5120'],
             ];
 
@@ -228,6 +225,7 @@ class LoanRequestController extends Controller
             }
 
             $loanRequestData = LoanRequest::where('id', $request->fund_request_id)->first();
+            $changeFundRequestResponse = $this->changeFundRequestStatus($loanRequestData, $request->status, $request->disbursement_date);
             if ($request->hasFile('ioweyou_document')) {
                 if ($loanRequestData->ioweyou) {
                     Storage::delete($loanRequestData->ioweyou);
@@ -236,12 +234,15 @@ class LoanRequestController extends Controller
             } else {
                 $ioweyouDocument = $loanRequestData->ioweyou;
             }
-
+            
             $loanRequestData->ioweyou = $ioweyouDocument;
             if($loanRequestData->save()){
                 $loanData = Loan::where('id', $loanRequestData->loan_id)->first();
                 $loanData->ioweyou = $loanRequestData->ioweyou;
                 $loanData->save();
+                if(isset($changeFundRequestResponse['status'])){
+                    return response()->json($changeFundRequestResponse);
+                }
                 return response()->json(['status'=>true, 'message'=>'Ioweyou document uploaded successfully.']);
             }
         }
@@ -270,11 +271,8 @@ class LoanRequestController extends Controller
                 if($row->status == 2){
                     return "<select class='change-loan-status form-select w-auto' data-id='".$row->id."'>
                     <option value='2' selected>Accepted</option>
-                    <option value='3'>Partial Disbursed</option>
-                    <option value='4'>Disbursed</option>
+                    <option value='3'>Disbursed</option>
                     </select>";
-                }else if($row->status == 3){
-                    return 'Partially Disbursed';
                 }else{
                     return 'Disbursed';
                 }
@@ -326,16 +324,6 @@ class LoanRequestController extends Controller
                 $companyAdminMailData = [];
 
                 if($request->status == 3){
-                    $employeeMailData = [
-                        'subject' => 'Loan Request Partially Disbursed',
-                        'message' => 'You request of fund amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been partially disbursed.'
-                    ];
-
-                    $companyAdminMailData = [
-                        'subject' => 'Loan Request Partially Disbursed',
-                        'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been partially disbursed.'
-                    ];
-                }else if($request->status == 4){
                     $employeeMailData = [
                         'subject' => 'Loan Request Disbursed',
                         'message' => 'You request of fund amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been disbursed.'
@@ -390,5 +378,17 @@ class LoanRequestController extends Controller
             }
             return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
         }
+    }
+
+    // handle change request status with reject status
+    public function rejectFundRequestStatus(Request $request){
+        if(!empty($request->requestId) && !empty($request->status)){
+            $loanRequestData = LoanRequest::where('id', $request->requestId)->first();
+            $response = $this->changeFundRequestStatus($loanRequestData, $request->status, null);   
+            if(!empty($response['status']) && $response['status'] == true){
+                return response()->json($response);
+            }
+        }
+        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
     }
 }

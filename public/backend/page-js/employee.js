@@ -55,6 +55,8 @@ $(document).ready(function () {
     // Create new employee
     $('#add-new-btn').click(function () {
         $('#add-form').trigger("reset");
+        $('.show-edit-document').addClass('d-none');
+        $('.show-edit-document a').attr('href', '');
         $('#addModal .modal-title span').html('Add');
         $('#employee_id').val('');
         $('.error').html('');
@@ -117,6 +119,11 @@ $(document).ready(function () {
                 $('#phone_number').val(response.data.employeeDetails.phone_number);
                 $('#address').val(response.data.employeeDetails.address);
                 $('#authorized_credit_limit').val(response.data.employeeDetails.authorized_credit_limit);
+                let proof_of_address_doc = basePath + response.data.employeeDetails.proof_of_address;
+                let ine_doc = basePath + response.data.employeeDetails.ine;
+                $('#download_proof_of_address_document a').attr('href', proof_of_address_doc);
+                $('#download_ine_document a').attr('href', ine_doc);
+                $('.show-edit-document').removeClass('d-none');
                 $('#addModal').modal('show');
             }else{
                 showToastMessage('error', response.message);

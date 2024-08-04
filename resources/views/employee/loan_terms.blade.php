@@ -26,8 +26,8 @@
                             $loanAmount = !empty($loanData->amount)?$loanData->amount:0;
                         @endphp
                         <h4>Name : {{ auth()->user()->first_name." ".auth()->user()->last_name }}</h4>
-                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount, false) }}</h5>
-                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount, false) }}</h5>
+                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
+                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount) }}</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -55,7 +55,7 @@
                                             echo "<td></td>";
                                             echo "<td></td>";
                                             echo "<td></td>";
-                                            echo "<td>".currencyFormatter($loanData->amount, false)."</td>";
+                                            echo "<td>".currencyFormatter($loanData->amount)."</td>";
                                             echo "<td>Disbursed</td>";
                                             echo "</tr>";
                                             $totalCapital = 0;
@@ -66,10 +66,10 @@
                                                 echo "<tr>";
                                                 echo "<td>" . $i . "</td>";
                                                 echo "<td>" . date('d-m-Y', strtotime($installment->installment_date)) . "</td>";
-                                                echo "<td>" . currencyFormatter($installment->capital, false) . "</td>";
-                                                echo "<td>" . currencyFormatter($installment->interest, false) . "</td>";
-                                                echo "<td>" . currencyFormatter($installment->payment, false) . "</td>";
-                                                echo "<td>" . currencyFormatter($installment->balance, false) . "</td>";
+                                                echo "<td>" . currencyFormatter($installment->capital) . "</td>";
+                                                echo "<td>" . currencyFormatter($installment->interest) . "</td>";
+                                                echo "<td>" . currencyFormatter($installment->payment) . "</td>";
+                                                echo "<td>" . currencyFormatter($installment->balance) . "</td>";
                                                 $installmentStatus = ($installment->status ==  1) ? "Pending" : "Paid";
                                                 echo "<td>" . $installmentStatus . "</td>";
                                                 echo "</tr>";
@@ -79,9 +79,9 @@
                                             }
                                             echo "<tr>";
                                             echo "<td colspan=2></td>";
-                                            echo "<td>".currencyFormatter($totalCapital, false)."</td>";
-                                            echo "<td>".currencyFormatter($totalInterest, false)."</td>";
-                                            echo "<td>".currencyFormatter($totalPayment, false)."</td>";
+                                            echo "<td>".currencyFormatter(round($totalCapital))."</td>";
+                                            echo "<td>".currencyFormatter($totalInterest)."</td>";
+                                            echo "<td>".currencyFormatter(round($totalPayment))."</td>";
                                             echo "<td colspan=2></td>";
                                             echo "</tr>";
                                         }else{

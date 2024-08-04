@@ -23,15 +23,15 @@
                 <div class="col">
                     @if(!empty($creditData))
                         <h4>{{ !empty($creditData['companyName'])?$creditData['companyName']:$creditData['companyName'] }}</h4>
-                        <h5>Total Credit : {{ currencyFormatter($creditData['credit'], false) }}</h5>
-                        <h5>Available Credit : {{ currencyFormatter($creditData['availableCredit'], false) }}</h5>
-                        <h5>Used Credit : {{ currencyFormatter($creditData['usedCredit'], false) }}</h5>
+                        <h5>Total Credit : {{ currencyFormatter($creditData['credit']) }}</h5>
+                        <h5>Available Credit : {{ currencyFormatter($creditData['availableCredit']) }}</h5>
+                        <h5>Used Credit : {{ currencyFormatter($creditData['usedCredit']) }}</h5>
                     @endif
                 </div>
                 <div class="col">
                     <div class="float-end">
-                        <button class="btn btn-primary mb-2" id="increase_company_limit">Increase Authorized Credit Limit</button><br>
-                        <button class="btn btn-primary" id="change_user_credit_limit">Change Authorized Credit Limit</button>
+                        <button class="btn btn-primary mb-2" id="increase_company_limit">Increase Company Credit Limit</button><br>
+                        <button class="btn btn-primary" id="change_user_credit_limit">Change Employee Credit Limit</button>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Change credit limit request</h4>
+                    <h4 class="modal-title">Increase company credit limit request</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
@@ -78,10 +78,11 @@
                         <input type="text" id="authorized_credit_limit" name="authorized_credit_limit" class="form-control" value="">
                         <span id="error_authorized_credit_limit" class="error text-danger"></span>
                     </div>
+                    <p><span class="text-danger text-bolder">Note : </span>Please note that your current credit limit will be increased by the entered amount.</p>
                 </div>
                 <div class="d-block modal-footer">
                     <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-success float-end" id="saveRequestBtn">Save</button>
+                        <button type="submit" class="btn btn-success float-end" id="saveRequestBtn">Save</button>
                 </div>
             </div>
         </form>
@@ -95,7 +96,7 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Increase credit limit request</h4>
+                    <h4 class="modal-title">Change employee credit limit</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">

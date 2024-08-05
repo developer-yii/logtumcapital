@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\InterestRate;
+use App\Models\Investment;
 use App\Models\Loan;
 use App\Models\LoanInstallment;
 use App\Models\LoanRequest;
@@ -141,6 +142,13 @@ if (! function_exists('getInterestRate')) {
             return $interestRateData->interest_rate;
         }
         return config('app.interest_rate');
+    }
+}
+if(! function_exists('getAvailableSuperAdminCredit')){
+    function getAvailableSuperAdminCredit(){
+        $totalInvestment = Investment::sum('contributions');
+        $totalCreditSpendToCompanies = Company::sum('authorized_credit_limit');
+        return ($totalInvestment - $totalCreditSpendToCompanies);
     }
 }
 ?>

@@ -51,7 +51,7 @@
                 <div class="modal-body m-1">
                     <input type="hidden" name="interest_rate_id" id="interest_rate_id">
                     <div class="form-group mb-3">
-                        <label for="interest_rate" class="form-label">Interest Rate</label>
+                        <label for="interest_rate" class="form-label">Interest Rate <span class="text-danger"> *</span></label>
                         <input type="text" id="interest_rate" name="interest_rate" class="form-control" value="">
                         <span id="error_interest_rate" class="error text-danger"></span>
                     </div>

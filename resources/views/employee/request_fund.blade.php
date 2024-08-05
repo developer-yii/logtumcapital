@@ -63,22 +63,22 @@
                 </div>
                 <div class="modal-body m-1">
                     <div class="form-group mb-3">
-                        <label for="bank_name" class="form-label">Bank Name</label>
+                        <label for="bank_name" class="form-label">Bank Name <span class="text-danger"> *</span></label>
                         <input type="text" id="bank_name" name="bank_name" class="form-control" value="">
                         <span id="error_bank_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="account_number" class="form-label">Account Number</label>
+                        <label for="account_number" class="form-label">Account Number <span class="text-danger"> *</span></label>
                         <input type="text" id="account_number" name="account_number" class="form-control" value="">
                         <span id="error_account_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="amount" class="form-label">Amount</label>
+                        <label for="amount" class="form-label">Amount <span class="text-danger"> *</span></label>
                         <input type="number" id="amount" name="amount" min="1" class="form-control" value="">
                         <span id="error_amount" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="duration" class="form-label">Duration</label>
+                        <label for="duration" class="form-label">Duration <span class="text-danger"> *</span></label>
                         <div class="input-group input-group-merge">
                             <input type="number" id="duration" name="duration" min="1" class="form-control" value="">
                             <div class="input-group-text" data-password="false">

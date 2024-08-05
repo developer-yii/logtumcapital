@@ -55,39 +55,42 @@
                 <div class="modal-body m-1">
                     <input type="hidden" name="company_id" id="company_id">
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name<span class="text-danger"> *</span></label>
                         <input type="text" id="name" name="name" class="form-control" value="">
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="phone_number" class="form-label">Phone number</label>
+                        <label for="phone_number" class="form-label">Phone number<span class="text-danger"> *</span></label>
                         <input type="text" id="phone_number" name="phone_number" class="form-control" value="">
                         <span class="text-secondary">For example : +521234567890</span><br>
                         <span id="error_phone_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="address" class="form-label">Address</label>
+                        <label for="address" class="form-label">Address<span class="text-danger"> *</span></label>
                         <textarea cols="5" rows="5" name="address" id="address" class="form-control"></textarea>
                         <span id="error_address" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit</label>
+                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit<span class="text-danger"> *</span></label>
                         <input type="text" id="authorized_credit_limit" name="authorized_credit_limit" class="form-control" value="">
                         <span id="error_authorized_credit_limit" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="consetitutive_act_document" class="form-label">Constitutive act document</label>
+                        <label for="consetitutive_act_document" class="form-label">Constitutive act document<span class="text-danger"> *</span></label>
                         <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" value="">
+                        <div class="show-edit-document d-none" id="download_consetitutive_act_document"><a href="" download>Current Constitutive Act Document</a></div>
                         <span id="error_consetitutive_act_document" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="ine_document" class="form-label">INE document</label>
+                        <label for="ine_document" class="form-label">INE document<span class="text-danger"> *</span></label>
                         <input type="file" id="ine_document" name="ine_document" class="form-control" value="">
+                        <div class="show-edit-document d-none" id="download_ine_document"><a href="" download>Current INE Document</a></div>
                         <span id="error_ine_document" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="ioweyou_document" class="form-label">IOweYou document</label>
+                        <label for="ioweyou_document" class="form-label">IOweYou document<span class="text-danger"> *</span></label>
                         <input type="file" id="ioweyou_document" name="ioweyou_document" class="form-control" value="">
+                        <div class="show-edit-document d-none" id="download_ioweyou_document"><a href="" download>Current IOweYou Document</a></div>
                         <span id="error_ioweyou_document" class="error text-danger"></span>
                     </div>
                 </div>
@@ -106,6 +109,7 @@
         var getCompanyDetailsUrl = "{{ route('company.edit', ['id' => '__ID__']) }}";
         var deleteCompanyUrl = "{{ route('company.delete') }}";
         var changeCompanyStatusUrl = "{{ route('company.changeStatus') }}";
+        var basePath = "{{ asset('/storage') }}/";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

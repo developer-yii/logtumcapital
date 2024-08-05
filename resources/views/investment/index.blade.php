@@ -56,27 +56,27 @@
                 <div class="modal-body m-1">
                     <input type="hidden" name="investment_id" id="investment_id">
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
                         <input type="text" id="name" name="name" class="form-control" value="">
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="contributions" class="form-label">Contributions</label>
+                        <label for="contributions" class="form-label">Contributions <span class="text-danger"> *</span></label>
                         <input type="text" id="contributions" name="contributions" class="form-control" value="">
                         <span id="error_contributions" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="interest_rate" class="form-label">Interest rate</label>
+                        <label for="interest_rate" class="form-label">Interest rate<span class="text-danger"> *</span></label>
                         <input type="text" id="interest_rate" name="interest_rate" class="form-control" value="">
                         <span id="error_interest_rate" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="interest_earnings" class="form-label">Interest earnings</label>
+                        <label for="interest_earnings" class="form-label">Interest earnings<span class="text-danger"> *</span></label>
                         <input type="text" id="interest_earnings" name="interest_earnings" class="form-control" value="">
                         <span id="error_interest_earnings" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="total_amount" class="form-label">Total amount</label>
+                        <label for="total_amount" class="form-label">Total amount<span class="text-danger"> *</span></label>
                         <input type="text" id="total_amount" name="total_amount" class="form-control" value="">
                         <span id="error_total_amount" class="error text-danger"></span>
                     </div>

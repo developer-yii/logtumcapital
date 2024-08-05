@@ -43,7 +43,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>email</th>
+                                    <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Authorized Credit Limit</th>
                                     <th>Available Credit</th>
@@ -74,7 +74,7 @@
                     <input type="hidden" name="company_name" value="{{ $companyName }}">
                     <input type="hidden" name="current_limit" value="{{ $companyTotalCredit }}">
                     <div class="form-group mb-3">
-                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit</label>
+                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit<span class="text-danger"> *</span></label>
                         <input type="text" id="authorized_credit_limit" name="authorized_credit_limit" class="form-control" value="">
                         <span id="error_authorized_credit_limit" class="error text-danger"></span>
                     </div>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="modal-body m-1">
                     <div class="form-group mb-3">
-                        <label for="employee" class="form-label">Select Employee</label>
+                        <label for="employee" class="form-label">Select Employee<span class="text-danger"> *</span></label>
                         <select id="employee" name="employee" class="form-control form-select">
                             <option value="">Select Employee</option>
                             @foreach($employeeData as $employee)
@@ -110,7 +110,7 @@
                         <span id="error_employee" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit</label>
+                        <label for="authorized_credit_limit" class="form-label">Authorized credit limit<span class="text-danger"> *</span></label>
                         <input type="text" id="authorized_credit_limit" name="authorized_credit_limit" class="form-control" value="">
                         <span id="error_authorized_credit_limit" class="error text-danger"></span>
                     </div>

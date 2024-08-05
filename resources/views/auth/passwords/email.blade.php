@@ -22,7 +22,7 @@
                     <form method="POST" action="{{ route('password.email') }}">
                         @csrf
                         <div class="mb-3">
-                            <label for="email" class="form-label">E-mail Address</label>
+                            <label for="email" class="form-label">E-mail Address<span class="text-danger"> *</span></label>
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" required="" placeholder="Enter e-mail address">
                             @error('email')
                                 <span class="error text-danger" role="alert">

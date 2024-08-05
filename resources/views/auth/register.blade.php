@@ -5,7 +5,7 @@
     <div class="col-xxl-4 col-lg-5">
         <div class="card">
 
-            <div class="card-header py-4 text-center bg-primary">
+            <div class="card-header py-3 text-center bg-primary">
                 <a href="{{ route('register') }}">
                     <span><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo" height="50"></span>
                 </a>
@@ -14,34 +14,34 @@
             <div class="card-body p-4">
 
                 <div class="text-center w-75 m-auto">
-                    <h4 class="text-dark-50 text-center pb-0 fw-bold">{{ __('Register') }}</h4>
+                    <h4 class="text-dark-50 text-center pb-2 fw-bold">Register Your Company</h4>
                 </div>
 
                 <form method="POST" id="register_form" action="{{ route('store-company-details') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name<span class="text-danger"> *</span></label>
                         <input type="text" id="name" name="name" class="form-control" value="" autofocus>
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="phone_number" class="form-label">Phone number</label>
+                        <label for="phone_number" class="form-label">Phone number<span class="text-danger"> *</span></label>
                         <input type="text" id="phone_number" name="phone_number" class="form-control" value="">
                         <span class="text-secondary">For example : +521234567890</span><br>
                         <span id="error_phone_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="address" class="form-label">Address</label>
+                        <label for="address" class="form-label">Address<span class="text-danger"> *</span></label>
                         <textarea cols="5" rows="5" name="address" id="address" class="form-control"></textarea>
                         <span id="error_address" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="consetitutive_act_document" class="form-label">Constitutive act document</label>
+                        <label for="consetitutive_act_document" class="form-label">Constitutive act document<span class="text-danger"> *</span></label>
                         <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" value="">
                         <span id="error_consetitutive_act_document" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="ine_document" class="form-label">INE document</label>
+                        <label for="ine_document" class="form-label">INE document<span class="text-danger"> *</span></label>
                         <input type="file" id="ine_document" name="ine_document" class="form-control" value="">
                         <span id="error_ine_document" class="error text-danger"></span>
                     </div>

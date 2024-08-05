@@ -29,7 +29,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>email</th>
+                                    <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Actions</th>
                                 </tr>
@@ -55,7 +55,7 @@
                 <div class="modal-body m-1">
                     <input type="hidden" name="id" id="id">
                     <div class="form-group mb-3">
-                        <label for="first_name" class="form-label">First name</label>
+                        <label for="first_name" class="form-label">First name<span class="text-danger"> *</span></label>
                         <input type="text" id="first_name" name="first_name" class="form-control" value="">
                         <span id="error_first_name" class="error text-danger"></span>
                     </div>
@@ -65,33 +65,33 @@
                         <span id="error_middle_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="last_name" class="form-label">Last name</label>
+                        <label for="last_name" class="form-label">Last name<span class="text-danger"> *</span></label>
                         <input type="text" id="last_name" name="last_name" class="form-control" value="">
                         <span id="error_last_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="email" class="form-label">E-mail address</label>
+                        <label for="email" class="form-label">E-mail address<span class="text-danger"> *</span></label>
                         <input type="email" id="email" name="email" class="form-control" value="">
                         <span id="error_email" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="phone_number" class="form-label">Phone number</label>
+                        <label for="phone_number" class="form-label">Phone number<span class="text-danger"> *</span></label>
                         <input type="text" id="phone_number" name="phone_number" class="form-control" value="">
                         <span class="text-secondary">For example : +521234567890</span><br>
                         <span id="error_phone_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="address" class="form-label">Address</label>
+                        <label for="address" class="form-label">Address<span class="text-danger"> *</span></label>
                         <textarea cols="5" rows="5" name="address" id="address" class="form-control"></textarea>
                         <span id="error_address" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Password<span class="text-danger"> *</span></label>
                         <input type="password" id="password" name="password" class="form-control" value="">
                         <span id="error_password" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <label for="confirm_password" class="form-label">Confirm password<span class="text-danger"> *</span></label>
                         <input type="password" id="confirm_password" name="confirm_password" class="form-control" value="">
                         <span id="error_confirm_password" class="error text-danger"></span>
                     </div>

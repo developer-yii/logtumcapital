@@ -18,11 +18,16 @@ class CompanyAdminController extends Controller
         $companyId = !empty($request->cid) ? $request->cid : '';
         $companiesData = Company::select('id', 'name')->where('status', 2)->get();
         if ($request->ajax()) {
+            $companyAdminsData = User::select('users.*', 'companies.name as company_name')
+            ->leftjoin('companies', 'users.company_id', '=', 'companies.id')
+            ->where('role', 2);
+
             if (!empty($companyId)) {
-                $companyAdmins = User::where('role', 2)->where('company_id', $companyId);
-            } else {
-                $companyAdmins = User::where('role', 2);
+                $companyAdmins = $companyAdminsData->where('company_id', $companyId);
+            }else{
+                $companyAdmins = $companyAdminsData;
             }
+
             return Datatables::of($companyAdmins)
                 ->addIndexColumn()
                 ->addColumn('name', function($row){

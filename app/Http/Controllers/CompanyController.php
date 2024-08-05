@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Investment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -54,7 +55,17 @@ class CompanyController extends Controller
             $rules = [
                 'name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
-                'authorized_credit_limit' => 'required|numeric|min:0'
+                'authorized_credit_limit' => [
+                    'required',
+                    'numeric',
+                    'min:1',
+                    function($attribute, $value, $fail) {
+                        $availableCredit = getAvailableSuperAdminCredit();
+                        if ($value > $availableCredit) {
+                            $fail('You cannot assign a credit limit more than '.$availableCredit.'.');
+                        }
+                    }
+                ],
             ];
             if(!empty($request->company_id)){
                 $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number,'.$request->company_id];

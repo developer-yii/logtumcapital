@@ -16,6 +16,7 @@ $(document).ready(function () {
         },
         columns: [
             {data: 'DT_RowIndex', name:'id', orderable:false, sorting:false, className:'text-left'},
+            {data: 'company_name', name: 'company_name', orderable:false, sorting:false, className:'text-center'},
             {data: 'name', name: 'name', orderable:false, sorting:false, className:'text-center'},
             {data: 'email', name: 'email', orderable:false, sorting:false, className:'text-center'},
             {data: 'phone_number', name: 'phone_number', orderable:false, sorting:false, className:'text-center'},

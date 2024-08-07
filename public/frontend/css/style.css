@@ -339,10 +339,15 @@ header .top-header .reg-box .log-box ul li a span {
     padding: 30px 20px 20px;
     text-align: center;
     border-radius: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #interest .rate-box .box-box img {
     max-width: 150px;
+    margin: 0 auto;
 }
 
 #interest .rate-box .box-box h4 {
@@ -387,20 +392,21 @@ header .top-header .reg-box .log-box ul li a span {
 
 #approve .receive-bx .main-box {
     background: #fff;
-    padding: 79px 30px 30px;
+    padding: 80px 30px 30px;
     position: relative;
+    overflow: hidden;
 }
 
 #approve .receive-bx .main-box::after {
     content: '';
     position: absolute;
-    height: 200px;
-    width: 440px;
+    height: 210px;
+    width: 840px;
     background-image: url(../images/layer.png);
     background-size: cover;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    top: -12px;
+    left: 51%;
+    transform: translateX(-50%  );
 }
 
 #approve .receive-bx .main-box .send-box h2 {
@@ -581,3 +587,229 @@ footer .footer-box .icon-box ul li a i {
 }
 
 /* footer css end */
+
+
+/* ------ Contact page css start -------  */
+
+.over-bg {
+    background-position: center;
+    background-size: cover;
+    padding: 120px 0;
+    background-image: url(../images/breadcrumb_bg.jpg);
+}
+
+.text-center {
+    text-align: center!important;
+}
+
+.breadcrumb-content h2 {
+    font-size: 36px;
+    color: #3c3c45;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.breadcrumb-content .breadcrumb {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-bottom: 0;
+    list-style: none;
+    background-color: transparent;
+    border-radius: 0;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.breadcrumb-content .breadcrumb li {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2b2b35;
+}
+
+.breadcrumb-content .breadcrumb li.active {
+    color: #5271FF;
+    padding-left: 15px;
+}
+
+.breadcrumb-content .breadcrumb li a {
+    color: #2b2b35;
+}
+
+.breadcrumb-content .list-item+.list-item::before {
+    padding-right: 15px;
+    color: #2b2b35;
+    content: "|";
+}
+
+
+/* =================== */
+
+.section-title {
+    position: relative;
+}
+
+.contact-area {
+    padding-bottom: 0;
+}
+
+.contact-info-custom > p {
+    font-size: 14px;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.contact-info-list {
+    margin-top: 35px;
+}
+
+.contact-info-list li {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.contact-info-list li .icon {
+    width: 74px;
+    height: 74px;
+    border: 1px dashed #ada8a8;
+    text-align: center;
+    line-height: 74px;
+    border-radius: 50%;
+    font-size: 22px;
+    flex: 0 0 74px;
+    margin-right: 20px;
+    transition: .3s linear;
+}
+
+.contact-info-list li .content {
+    flex-grow: 1;
+}
+
+.contact-info-list li .content h5 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #282828;
+}
+
+.contact-info-list li .content p {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: #9c9c9c;
+}
+
+.contact-info-custom .section-title .sub-title {
+    color: #5271FF;
+}
+
+.section-title .title {
+    font-size: 36px;
+    text-transform: capitalize;
+    margin-bottom: 0;
+    color: #323232;
+}
+
+.contact-info-custom .section-title .line {
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.contact-info-custom > p {
+    font-size: 14px;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.contact-info-list li:hover .icon {
+    color: #fff;
+    border-color: #5271FF;
+}
+
+.contact-info-list li:hover .icon {
+    background: #5271FF;
+}
+
+.contact-info-list li .content p a {
+    color: #9c9c9c;
+}
+
+.contact-form-wrap-box .login-wrap {
+    background: #f3f3f3;
+    margin-left: 80px;
+    padding: 65px 60px 80px;
+    margin-bottom: -65px;
+}
+
+.contact-form-wrap-box .get-title {
+    font-size: 22px;
+    margin-bottom: 40px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.contact-form-wrap-box .login-form .form-grp {
+    margin-bottom: 25px;
+}
+
+.get-title {
+    position: relative;
+    font-size: 20px;
+    padding-bottom: 17px;
+    margin-bottom: 25px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.get-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-image: url(../images/title_line.png);
+    width: 57px;
+    height: 5px;
+}
+
+.contact-form-wrap-box .get-title > span {
+    color: #5271FF;
+}
+
+.login-form .form-grp label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6a6a6a;
+    margin-bottom: 10px;
+}
+
+.login-form .form-grp label > span {
+    color: red;
+    font-size: 14px;
+}
+
+.contact-form-wrap-box .login-form .form-grp input, 
+.contact-form-wrap-box .login-form .form-grp textarea {
+    width: 100%;
+    display: block;
+    border: 1px solid #ebebeb;
+    background: #fff;
+    border-radius: 3px;
+    padding: 13px 20px;
+    outline: none !important;
+    box-shadow: none !important ;
+}
+
+.login-form .btn {
+    padding: 12px 45px;
+    margin-top: 15px;
+    background-color: #5271FF;
+    color: #fff;
+}
+
+
+/* ------ Contact page css end -------  */

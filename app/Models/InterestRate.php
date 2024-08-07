@@ -15,6 +15,6 @@ class InterestRate extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'interest_rate',
+        'company_name', 'interest_rate',
     ];
 }

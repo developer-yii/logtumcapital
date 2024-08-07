@@ -7,7 +7,7 @@ $(document).ready(function () {
         serverSide: true,
         scrollX: true,
         "bLengthChange": false,
-        order: [7],
+        order: [9, 'desc'],
         ajax: {
             type: 'GET',
             url: getFundRequestsUrl,
@@ -25,7 +25,7 @@ $(document).ready(function () {
             {data: 'duration', name: 'duration', orderable:false, sorting:false, className:'text-center'},
             {data: 'ioweyou', name: 'ioweyou', orderable:false, sorting:false, className:'text-center'},
             {data: 'status', name: 'status', orderable:false, sorting:false, className:'text-center'},
-            {data: 'created_at', name: 'created_at', orderable:false, sorting:false, className:'text-end'},
+            {data: 'created_at', name: 'created_at', className:'text-end'},
         ],
     });
 

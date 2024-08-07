@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Loan;
 use App\Models\LoanCollection;
 use App\Models\LoanInstallment;
 use Illuminate\Http\Request;
@@ -129,12 +130,12 @@ class PaymentCollectorController extends Controller
     public function getPaymentCollections(Request $request){
         $user = auth()->user();
         $userIds = User::where('company_id', $user->company_id)->where('role', 4)->pluck('id');
-        $upcomingFriday = $this->getUpcomingFriday();
-        $fridayDate = isset($request->selectCollection)?$request->selectCollection:$upcomingFriday;
-        $collectedData = LoanCollection::select('created_at')->where('company_id', $user->company_id)->get();
+        $fridayDate = isset($request->selectCollection)?date('Y-m-d', strtotime($request->selectCollection)):$this->getUpcomingFriday();
         $collectionData = LoanInstallment::select('users.first_name', 'users.middle_name', 'users.last_name', 'loan_installments.installment_date', 'loan_installments.payment', 'loan_installments.status')
         ->leftjoin('users', 'loan_installments.user_id','=','users.id')
-        ->whereIn('user_id', $userIds)
+        ->whereIn('loan_installments.user_id', $userIds)
+        ->whereNull('loan_installments.deleted_at')
+        ->whereNull('users.deleted_at')
         ->where('loan_installments.installment_date', $fridayDate);
 
         if ($request->ajax()) {
@@ -149,15 +150,18 @@ class PaymentCollectorController extends Controller
                 ->editColumn('payment', function($row){
                     return currencyFormatter($row->payment);
                 })
-                ->addColumn('action', function($row){
-                    $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-primary btn-sm editPaymentCollector me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit payment collector details"><i class="mdi mdi-pencil-outline"></i></a>';
-                    // $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deletePaymentCollector" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company admin details"><i class="mdi mdi-delete-outline"></i></a>';
-                    return $btn;
+                ->editColumn('status', function($row){
+                    return LoanInstallment::getLoanInstallmentStatusName($row->status);
                 })
-                ->rawColumns(['action'])
+                // ->addColumn('action', function($row){
+                //     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-primary btn-sm editPaymentCollector me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit payment collector details"><i class="mdi mdi-pencil-outline"></i></a>';
+                //     // $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deletePaymentCollector" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company admin details"><i class="mdi mdi-delete-outline"></i></a>';
+                //     return $btn;
+                // })
+                // ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('payment_collector.payment_collections', compact('collectedData', 'fridayDate'));
+        return view('payment_collector.payment_collections', compact('fridayDate'));
     }
 
     // get upcoming friday date
@@ -172,6 +176,7 @@ class PaymentCollectorController extends Controller
 
     // store bank receipt
     public function storeBankReceipt(Request $request){
+        $user = auth()->user();
         $rules = [
             'amount' => 'required|numeric',
             'bank_receipt' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -188,13 +193,36 @@ class PaymentCollectorController extends Controller
             $path = $file->store('bank_receipts', 'public');
 
             $storeLoanInstallmentCollection = new LoanCollection();
-            $storeLoanInstallmentCollection->company_id = auth()->user()->company_id;
-            $storeLoanInstallmentCollection->collector_id = auth()->id();
+            $storeLoanInstallmentCollection->company_id = $user->company_id;
+            $storeLoanInstallmentCollection->collector_id = $user->id;
             $storeLoanInstallmentCollection->bank_receipt = $path;
             $storeLoanInstallmentCollection->amount = $request->amount;
-            if($storeLoanInstallmentCollection->save()){
-                $today = date('Y-m-d');
-                $updateLoanInstallments = LoanInstallment::where('installment_date', $today)->update(['status' => 2, 'loan_collection_id' => $storeLoanInstallmentCollection->id]);
+
+            if ($storeLoanInstallmentCollection->save()) {
+                $installmentDate = !empty($request->installment_date) ? date('Y-m-d', strtotime($request->installment_date)) : date('Y-m-d');
+                $updateLoanInstallments = LoanInstallment::where('installment_date', $installmentDate)
+                    ->update(['status' => 2, 'loan_collection_id' => $storeLoanInstallmentCollection->id]);
+
+                $completedInstallmentCount = LoanInstallment::where('loan_id', $request->loan_id)
+                    ->where('status', 2)
+                    ->count();
+
+                if ($completedInstallmentCount == 1) {
+                    // Additional logic if needed when there is exactly 1 completed installment
+                }
+
+                $pendingInstallmentCount = LoanInstallment::where('loan_id', $request->loan_id)
+                    ->where('status', 1)
+                    ->count();
+
+                if ($pendingInstallmentCount == 0) {
+                    $loan = Loan::find($request->loan_id); // Find the loan by id
+                    $loan->status = 4;
+                    $loan->save();
+
+                    LoanInstallment::where('loan_id', $loan->id)->delete(); // Deleting loan installments for the completed loan
+                }
+
                 return response()->json(['status' => true, 'message' => 'Bank receipt uploaded successfully.']);
             }
         }

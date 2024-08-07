@@ -57,7 +57,7 @@ class LoanRequestController extends Controller
                         return "<select class='change-fund-request-status form-select w-auto' data-id='".$row->id."'>
                             <option value='1' selected>Pending</option>
                             <option value='2'>Accept</option>
-                            <option value='6'>Reject</option>
+                            <option value='3'>Reject</option>
                         </select>";
                     }elseif($row->status == 2){
                         return 'Approved';
@@ -101,54 +101,54 @@ class LoanRequestController extends Controller
                 $weekText = 'week';
             }
 
-            $loanRequestData->status = $status;
-            if($loanRequestData->save()){
-                $employeeMailData = [];
-                $companyAdminMailData = [];
+            $employeeMailData = [];
+            $companyAdminMailData = [];
 
-                //  fund request accepted
-                if($status == 2){
+            //  fund request accepted
+            if($status == 2){
 
-                    // request accepted -> create loan
-                    $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id, $disbursement_date);
+                // request accepted -> create loan
+                $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id, $disbursement_date);
 
-                    //  create installments
-                    $this->createInstallments($responseLoanData);
+                //  create installments
+                $this->createInstallments($responseLoanData);
 
-                    if(!empty($responseLoanData->id)){
-                        $loanRequestData->loan_id = $responseLoanData->id;
-                        $loanRequestData->save();
-                    }
-
-                    $employeeMailData = [
-                        'subject' => 'Loan Request Approved',
-                        'message' => 'You request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
-                    ];
-
-                    $companyAdminMailData = [
-                        'subject' => 'Loan Request Approved',
-                        'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
-                    ];
-                }
-                // fund request rejected
-                elseif($status == 6){
-                    $employeeMailData = [
-                        'subject' => 'Loan Request Rejected',
-                        'message' => 'You request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
-                    ];
-
-                    $companyAdminMailData = [
-                        'subject' => 'Loan Request Rejected',
-                        'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
-                    ];
+                if(!empty($responseLoanData->id)){
+                    $loanRequestData->status = $status;
+                    $loanRequestData->loan_id = $responseLoanData->id;
+                    $loanRequestData->save();
                 }
 
-                Mail::to($user->email)->send(new SendFundRequestNotificationMail($employeeMailData));
-                if(!empty($companyAdminEmail)){
-                    Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
-                }
-                return ['status' => true, 'message' => 'Fund request status changed successfully.'];
+                $employeeMailData = [
+                    'subject' => 'Loan Request Approved',
+                    'message' => 'Your request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
+                ];
+
+                $companyAdminMailData = [
+                    'subject' => 'Loan Request Approved',
+                    'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
+                ];
             }
+            // fund request rejected
+            elseif($status == 3){
+                $loanRequestData->status = $status;
+                $loanRequestData->save();
+                $employeeMailData = [
+                    'subject' => 'Loan Request Rejected',
+                    'message' => 'Your request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
+                ];
+
+                $companyAdminMailData = [
+                    'subject' => 'Loan Request Rejected',
+                    'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
+                ];
+            }
+
+            Mail::to($user->email)->send(new SendFundRequestNotificationMail($employeeMailData));
+            if(!empty($companyAdminEmail)){
+                Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
+            }
+            return ['status' => true, 'message' => 'Fund request status changed successfully.'];
         }
         return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
     }
@@ -156,18 +156,24 @@ class LoanRequestController extends Controller
     // create loan when fund request accepted
     private function createLoan($loanRequest, $companyAdminId, $disbursement_date){
         $loanData = Loan::where('user_id', $loanRequest->user_id)->first();
+
         if(empty($loanData)){
             $loanData = new Loan;
             $loanData->user_id = $loanRequest->user_id;
             $loanData->company_id = $loanRequest->company_id;
             $loanData->company_admin_id = $companyAdminId;
-            $loanData->status = 4;
+            $loanData->status = 3;
+            $loanData->save();
         }
-        $totalPaidInstallments = LoanInstallment::where('loan_id', $loanRequest->loan_id)->where('status', 2)->sum('capital');
-        $totalPaidInstallmentsCount = LoanInstallment::where('loan_id', $loanRequest->loan_id)->where('status', 2)->count();
+
+        $totalPaidInstallments = LoanInstallment::where('loan_id', $loanData->id)
+            ->where('status', 2)
+            ->sum('capital');
+
         $totalLoanAmount = $loanData->amount;
-        $finalAmount = (($totalLoanAmount - $totalPaidInstallments) + $loanRequest->amount);
-        $finalDuration = ($loanData->duration - $totalPaidInstallmentsCount) + $loanRequest->duration;
+        $finalAmount = ($totalLoanAmount - $totalPaidInstallments) + $loanRequest->amount;
+        $finalDuration = $loanRequest->duration;
+
         $loanData->amount = $finalAmount;
         $loanData->duration = $finalDuration;
         $loanData->yearly_interest_rate =  getInterestRate();
@@ -234,7 +240,7 @@ class LoanRequestController extends Controller
             } else {
                 $ioweyouDocument = $loanRequestData->ioweyou;
             }
-            
+
             $loanRequestData->ioweyou = $ioweyouDocument;
             if($loanRequestData->save()){
                 $loanData = Loan::where('id', $loanRequestData->loan_id)->first();
@@ -259,6 +265,7 @@ class LoanRequestController extends Controller
                 'loans.created_at',
                 'loans.status',
                 'loans.ioweyou',
+                'loans.first_installment_date',
                 'companies.name as company_name',
                 DB::raw("CONCAT(users.first_name, ' ', IFNULL(CONCAT(users.middle_name, ' '), ''), users.last_name) as employee_name")
             )
@@ -267,6 +274,9 @@ class LoanRequestController extends Controller
 
             return DataTables::of($acceptedRequestLoans)
             ->addIndexColumn()
+            ->editColumn('amount', function($row){
+                return currencyFormatter($row->amount);
+            })
             ->editColumn('status',function($row){
                 if($row->status == 2){
                     return "<select class='change-loan-status form-select w-auto' data-id='".$row->id."'>
@@ -277,8 +287,8 @@ class LoanRequestController extends Controller
                     return 'Disbursed';
                 }
             })
-            ->editColumn('created_at',function($row){
-                return date('d-m-Y', strtotime($row->created_at));
+            ->editColumn('first_installment_date',function($row){
+                return Carbon::parse($row->first_installment_date)->subWeek(1)->format('d-m-Y');
             })
             ->addColumn('action', function($row){
                 $btn = "<button class='btn btn-primary btn-sm view-loan-details' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='More details' data-id='".$row->id."'><i class='mdi mdi-eye fs-4'></i></button>";
@@ -384,7 +394,7 @@ class LoanRequestController extends Controller
     public function rejectFundRequestStatus(Request $request){
         if(!empty($request->requestId) && !empty($request->status)){
             $loanRequestData = LoanRequest::where('id', $request->requestId)->first();
-            $response = $this->changeFundRequestStatus($loanRequestData, $request->status, null);   
+            $response = $this->changeFundRequestStatus($loanRequestData, $request->status, null);
             if(!empty($response['status']) && $response['status'] == true){
                 return response()->json($response);
             }

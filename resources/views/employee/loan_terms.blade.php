@@ -81,7 +81,7 @@
                                             echo "<td colspan=2></td>";
                                             echo "<td>".currencyFormatter(round($totalCapital))."</td>";
                                             echo "<td>".currencyFormatter($totalInterest)."</td>";
-                                            echo "<td>".currencyFormatter(round($totalPayment))."</td>";
+                                            echo "<td>".currencyFormatter($totalPayment)."</td>";
                                             echo "<td colspan=2></td>";
                                             echo "</tr>";
                                         }else{

@@ -37,22 +37,22 @@
             <div class="container">
                 <div class="header-box">
                     <div class="logo-box">
-                        <a href="#"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
+                        <a href="{{ url('/') }}"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
                     </div>
                     <div class="main-nav">
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="#services" class="active">Services</a>
+                                    <a href="{{ url('/').'#services' }}" class="active">Services</a>
                                 </li>
                                 <li>
-                                    <a href="#approve">How does it work</a>
+                                    <a href="{{ url('/').'#approve' }}">How does it work</a>
                                 </li>
                                 <li>
-                                    <a href="#banner">Loan Calculator</a>
+                                    <a href="{{ url('/').'#banner' }}">Loan Calculator</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Contact</a>
+                                    <a href="{{ route('contact') }}">Contact</a>
                                 </li>
                             </ul>
                         </nav>
@@ -76,7 +76,7 @@
                         <h2>Contáctenos</h2>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="list-item"><a href="https://logtum.com/frontend/home">Inicio</a></li>
+                                <li class="list-item"><a href="{{ url('/') }}">Inicio</a></li>
                                 <li class="list-item active" aria-current="page">Contáctenos</li>
                             </ol>
                         </nav>
@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-6">
-                    <div class="contact-form-wrap-box">
+                    {{-- <div class="contact-form-wrap-box">
                         <div class="login-wrap" style="margin-bottom: 0;">
                             <h3 class="get-title">Envía Tu <span>Solicitud</span></h3>
                             <form action="" class="login-form">
@@ -146,7 +146,7 @@
                                 <button type="submit" class="btn">Enviar</button>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -164,16 +164,16 @@
                     <div class="ft-menu">
                         <ul>
                             <li>
-                                <a href="#">Services</a>
+                                <a href="{{ url('/').'#services'}}">Services</a>
                             </li>
                             <li>
-                                <a href="#">How does it work</a>
+                                <a href="{{ url('/').'#approve'}}">How does it work</a>
                             </li>
                             <li>
-                                <a href="#">Loan Calculator</a>
+                                <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
                             </li>
                             <li>
-                                <a href="#">Contact</a>
+                                <a href="{{ route('contact') }}" class="{{ Request::routeIs('contact') ? 'active' : '' }}">Contact</a>
                             </li>
                         </ul>
                     </div>
@@ -197,7 +197,7 @@
     <script src="{{ asset('frontend/js/custom.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var weeklyInterestRate = 60.32 / 52.143;
+            var weeklyInterestRate = "{{ getInterestRate()/52 }}";
             var weeklyInterestPayment = 0;
 
             $('.range-slider').on('input', function() {

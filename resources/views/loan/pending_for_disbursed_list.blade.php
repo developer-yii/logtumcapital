@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Pending For Disbursed List";
-  $label = "Pending for disbursed";
+  $labelMain = "Disbursed Loans";
+  $label = "Disbursed loans";
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)

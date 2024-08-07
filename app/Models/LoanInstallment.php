@@ -28,7 +28,7 @@ class LoanInstallment extends Model
 
     // get loan installment status name
     public static function getLoanInstallmentStatusName($status){
-        $statuses = [0 => 'Pending', 1 => 'Paid'];
+        $statuses = [1 => 'Pending', 2 => 'Paid'];
         return $statuses[$status];
     }
 }

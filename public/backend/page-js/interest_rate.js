@@ -16,6 +16,7 @@ $(document).ready(function () {
         },
         columns: [
             {data: 'DT_RowIndex', name:'id', orderable:false, sorting:false, className:'text-left'},
+            {data: 'company_name', name: 'company_name', orderable:false, sorting:false, className:'text-center'},
             {data: 'interest_rate', name: 'interest_rate', orderable:false, sorting:false, className:'text-center'},
             {data: 'action', name: 'action', orderable:false, sorting:false, className:'text-end'},
         ],
@@ -67,6 +68,7 @@ $(document).ready(function () {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
                 $('#interest_rate_id').val(response.interestRateData.id);
+                $('#name').val(response.interestRateData.company_name);
                 $('#interest_rate').val(response.interestRateData.interest_rate);
                 $('#addModal').modal('show');
             }else{

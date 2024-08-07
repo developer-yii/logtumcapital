@@ -26,6 +26,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Name</th>
                                     <th>Interest Rate</th>
                                     <th>Action</th>
                                 </tr>
@@ -50,6 +51,11 @@
                 </div>
                 <div class="modal-body m-1">
                     <input type="hidden" name="interest_rate_id" id="interest_rate_id">
+                    <div class="form-group mb-3">
+                        <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
+                        <input type="text" id="name" name="name" class="form-control" value="" autocomplete>
+                        <span id="error_name" class="error text-danger"></span>
+                    </div>
                     <div class="form-group mb-3">
                         <label for="interest_rate" class="form-label">Interest Rate <span class="text-danger"> *</span></label>
                         <input type="text" id="interest_rate" name="interest_rate" class="form-control" value="">

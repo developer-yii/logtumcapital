@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Fund Requests";
-  $label = "Fund requests";
+  $labelMain = "Loan Requests";
+  $label = "Loan requests";
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)

@@ -104,7 +104,7 @@ if (!function_exists('currencyFormatter')) {
         }
         return $formattedAmount;
     }
-}              
+}
 if (!function_exists('getCompanyData')) {
     function getCompanyData($companyId)
     {

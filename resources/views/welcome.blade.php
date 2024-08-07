@@ -37,7 +37,7 @@
             <div class="container">
                 <div class="header-box">
                     <div class="logo-box">
-                        <a href="#"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
+                        <a href="{{ url('/') }}"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
                     </div>
                     <div class="main-nav">
                         <nav>
@@ -52,7 +52,7 @@
                                     <a href="#banner">Loan Calculator</a>
                                 </li>
                                 <li>
-                                    <a href="/contact">Contact</a>
+                                    <a href="{{ route('contact') }}" class="{{ Request::routeIs('contact') ? 'active' : '' }}">Contact</a>
                                 </li>
                             </ul>
                         </nav>
@@ -308,16 +308,16 @@
                     <div class="ft-menu">
                         <ul>
                             <li>
-                                <a href="#">Services</a>
+                                <a href="{{ url('/').'#services'}}">Services</a>
                             </li>
                             <li>
-                                <a href="#">How does it work</a>
+                                <a href="{{ url('/').'#approve'}}">How does it work</a>
                             </li>
                             <li>
-                                <a href="#">Loan Calculator</a>
+                                <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
                             </li>
                             <li>
-                                <a href="#">Contact</a>
+                                <a href="{{ route('contact') }}">Contact</a>
                             </li>
                         </ul>
                     </div>
@@ -343,6 +343,14 @@
         $(document).ready(function() {
             var weeklyInterestRate = 60.32 / 52.143;
             var weeklyInterestPayment = 0;
+
+            $('ul li a').on('click', function(e) {
+                // Remove 'active' class from all links
+                $('ul li a').removeClass('active');
+
+                // Add 'active' class to the clicked link
+                $(this).addClass('active');
+            });
 
             $('.range-slider').on('input', function() {
                 var sliderValue = $(this).val();

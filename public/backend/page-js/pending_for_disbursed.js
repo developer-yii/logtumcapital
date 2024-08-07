@@ -7,7 +7,7 @@ $(document).ready(function () {
         serverSide: true,
         scrollX: true,
         "bLengthChange": false,
-        // order: [6],
+        order: [6, 'desc'],
         ajax: {
             type: 'GET',
             url: getDisbursedPendingLoansUrl,
@@ -22,41 +22,42 @@ $(document).ready(function () {
             {data: 'amount', name: 'amount', orderable:false, sorting:false, className:'text-center'},
             {data: 'duration', name: 'duration', orderable:false, sorting:false, className:'text-center'},
             {data: 'status', name: 'status', orderable:false, sorting:false, className:'text-center'},
-            {data: 'created_at', name: 'created_at', orderable:false, sorting:false, className:'text-center'},
+            {data: 'first_installment_date', name: 'first_installment_date', className:'text-center'},
             {data: 'action', name: 'action', orderable:false, sorting:false, className:'text-end'},
         ],
     });
 
     // change loan status
     $('body').on('change', '.change-loan-status', function(){
-        var changedStatus = $(this).val();
-        if (confirm("Are you sure you want to change status?")) {
-            var postData = {
-                requestId : $(this).data('id'),
-                status : changedStatus
-            };
-            $.ajax({
-                url: changeLoanStatusUrl,
-                type: 'POST',
-                data: postData,
-                beforeSend: function() {
-                    $('.change-loan-status').prop('disabled', true);
-                    showLoader();
-                },
-                success:function(response){
-                    $('.change-loan-status').prop('disabled', false);
-                    hideLoader();
-                    if(response.status == true){
-                        pendingDisbursedLoansTable.draw();
-                        showToastMessage('success', response.message);
-                    }else{
-                        showToastMessage('error', response.message);
-                    }
-                }
-            });
-        }else{
-            pendingDisbursedLoansTable.draw();
-        }
+        alert('test');
+        // var changedStatus = $(this).val();
+        // if (confirm("Are you sure you want to change status?")) {
+        //     var postData = {
+        //         requestId : $(this).data('id'),
+        //         status : changedStatus
+        //     };
+        //     $.ajax({
+        //         url: changeLoanStatusUrl,
+        //         type: 'POST',
+        //         data: postData,
+        //         beforeSend: function() {
+        //             $('.change-loan-status').prop('disabled', true);
+        //             showLoader();
+        //         },
+        //         success:function(response){
+        //             $('.change-loan-status').prop('disabled', false);
+        //             hideLoader();
+        //             if(response.status == true){
+        //                 pendingDisbursedLoansTable.draw();
+        //                 showToastMessage('success', response.message);
+        //             }else{
+        //                 showToastMessage('error', response.message);
+        //             }
+        //         }
+        //     });
+        // }else{
+        //     pendingDisbursedLoansTable.draw();
+        // }
     });
 
     // get more details of loan

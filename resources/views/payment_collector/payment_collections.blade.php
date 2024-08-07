@@ -6,6 +6,7 @@
 @section('title', $labelMain)
 @push('css')
     <link href="{{asset('/')}}backend/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endpush
 @section('content')
 <div class="row mt-3 mb-3">
@@ -22,34 +23,12 @@
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="collected_date">Collections</label>
-                        <select class="form-select w-auto" id="collected_date">
-                            @if(count($collectedData) > 0)
-                                @foreach($collectedData as $collection)
-                                    @php
-                                        $dateValue = date('Y-m-d', strtotime($collection->created_at));
-                                        $dateDisplay = date('d-m-Y', strtotime($collection->created_at));
-                                    @endphp
-                                    <option value="{{ $dateValue }}" {{ ($dateValue == $fridayDate)?'selected':'' }}>{{ $dateDisplay }}</option>
-                                @endforeach
-                            @else
-                                @php
-                                    $dateValue = date('Y-m-d', strtotime($fridayDate));
-                                    $dateDisplay = date('d-m-Y', strtotime($fridayDate));
-                                @endphp
-                                <option value="{{ $dateValue }}" {{ ($dateValue == $fridayDate)?'selected':'' }}>{{ $dateDisplay }}</option>
-                            @endif
-                        </select>
+                        <label for="collection_date">Collections</label><br>
+                        <input type="text" id="collection_date" name="collection_date">
                     </div>
                     <div class="col" id="upload_bank_receipt_btn_section">
-                        @php
-                            $todayDate = date('Y-m-d');
-                            $hideShowBtn = (date('N', strtotime($todayDate)) == 5) ? true : false;
-                        @endphp
                         <div class="float-end">
-                            @if($hideShowBtn)
-                                <button class="btn btn-primary" id="upload_bank_receipt_btn">Upload Bank Receipt</button>
-                            @endif
+                            <button class="btn btn-primary d-none" id="upload_bank_receipt_btn">Upload Bank Receipt</button>
                         </div>
                     </div>
                 </div>
@@ -59,9 +38,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Employee Name</th>
-                                    <th>Installment Date</th>
-                                    <th class="text-end">Collect</th>
+                                    <th class="text-center">Employee Name</th>
+                                    <th class="text-center">Installment Date</th>
+                                    <th class="text-center">Collect</th>
+                                    <th class="text-end">Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -83,6 +63,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
+                    <input type="hidden" id="installment_date" name="installment_date" value="">
                     <div class="form-group mb-3">
                         <label for="bank_receipt" class="form-label">Bank Receipt</label>
                         <input type="file" id="bank_receipt" name="bank_receipt" class="form-control" value="">
@@ -109,5 +90,6 @@
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="{{asset('/')}}backend/js/vendor/jquery-ui.min.js"></script>
     <script src="{{asset('/')}}backend/page-js/payment_collection.js"></script>
 @endpush

@@ -55,7 +55,7 @@
                 <li class="side-nav-item {{ isActiveRouteMain(['loan.requests']) }}">
                     <a href="{{ route('loan.requests') }}" class="side-nav-link {{ isActiveRoute(['loan.requests']) }}">
                         <i class="mdi mdi-cash-plus fs-3"></i>
-                        <span>Pending Loans</span>
+                        <span>Loan Requests</span>
                     </a>
                 </li>
                 <li class="side-nav-item {{ isActiveRouteMain(['loan.pendingForDisbursed']) }}">
@@ -87,7 +87,7 @@
                 <li class="side-nav-item {{ isActiveRouteMain(['paymentcollector.getPaymentCollections']) }}">
                     <a href="{{ route('paymentcollector.getPaymentCollections') }}" class="side-nav-link {{ isActiveRoute(['paymentcollector.getPaymentCollections']) }}">
                         <i class="uil-users-alt fs-3"></i>
-                        <span>Amount to be charged</span>
+                        <span>Payment Collections</span>
                     </a>
                 </li>
             @elseif($user->role == 4)

@@ -43,16 +43,16 @@
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="#" class="active">Services</a>
+                                    <a href="#services" class="active">Services</a>
                                 </li>
                                 <li>
-                                    <a href="#">How does it work</a>
+                                    <a href="#approve">How it work</a>
                                 </li>
                                 <li>
-                                    <a href="#">Loan Calculator</a>
+                                    <a href="#banner">Loan Calculator</a>
                                 </li>
                                 <li>
-                                    <a href="#">Contact</a>
+                                    <a href="/contact">Contact</a>
                                 </li>
                             </ul>
                         </nav>
@@ -73,7 +73,7 @@
             <div class="container">
                 <div class="banner-box">
                     <div class="up-title">
-                        <h1>Calculate the payment <br>monthly of your loan</h1>
+                        <h1>Calculate the monthly <br>payment of your loan</h1>
                     </div>
                     <div class="loan-sec">
                         <div class="row align-items-center">
@@ -87,10 +87,8 @@
                                                 aria-valuemin="1" aria-valuemax="100000">
                                         </div>
                                         <p class="title-p">With weekly payment of</p>
-                                        <h3 id="weekly_interest_payment">$162</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste beatae
-                                            exercitationem praesentium eveniet vero fugit placeat ducimus quidem
-                                            cupiditate.</p>
+                                        <h3 id="weekly_interest_payment">$1,162</h3>
+                                        <p>You only need your ID and a proof of address</p>
                                         <div class="btn-submit">
                                             <a href="#">Submit</a>
                                         </div>
@@ -116,37 +114,49 @@
             <div class="container">
                 <div class="interest-box">
                     <div class="title-text">
-                        <h2><span>Comparison</span> of Annual interest Rates</h2>
+                        <h2><span>Comparison of</span> Annual interest Rates</h2>
                     </div>
                     <div class="rate-box">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="box-box">
-                                    <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
-                                    <h4>60.32%</h4>
-                                    <p>Fixed Annual Rate</p>
-                                    <div class="value-btn">
-                                        <button class="btn-val">Evaluate</button>
+                                    <div class="img-box">
+                                        <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
+                                    </div>
+                                    <div class="text-box">
+                                        <h4>60.32%</h4>
+                                        <p>Fixed Annual Rate</p>
+                                        <div class="value-btn">
+                                            <button class="btn-val">Evaluate</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="box-box">
-                                    <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
-                                    <h4>60.32%</h4>
-                                    <p>Fixed Annual Rate</p>
-                                    <div class="value-btn">
-                                        <button class="btn-val">Evaluate</button>
+                                    <div class="img-box">
+                                        <img src="{{ asset('frontend/images/compant2.png') }}" alt="compant2">
+                                    </div>
+                                    <div class="text-box">
+                                        <h4>72.80%</h4>
+                                        <p>Fixed Annual Rate</p>
+                                        <div class="value-btn">
+                                            <button class="btn-val">Evaluate</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="box-box">
-                                    <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
-                                    <h4>60.32%</h4>
-                                    <p>Fixed Annual Rate</p>
-                                    <div class="value-btn">
-                                        <button class="btn-val">Evaluate</button>
+                                    <div class="img-box">
+                                        <img src="{{ asset('frontend/images/compant1.png') }}" alt="compant1">
+                                    </div>
+                                    <div class="text-box">
+                                        <h4>71.10%</h4>
+                                        <p>Fixed Annual Rate</p>
+                                        <div class="value-btn">
+                                            <button class="btn-val">Evaluate</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -228,19 +238,19 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
                                     <h4>Personal Loan</h4>
-                                    <h6>You need funds for a</h6>
+                                    <h6>Need funds for</h6>
                                     <ul>
                                         <li>
-                                            <p>Personal project</p>
+                                            <p>a personal project,</p>
                                         </li>
                                         <li>
-                                            <p>Unexpected expense</p>
+                                            <p>unexpected expense, or</p>
                                         </li>
                                         <li>
-                                            <p>Special occasion</p>
+                                            <p>special occasion?</p>
                                         </li>
                                     </ul>
-                                    <p>Our loans personal offers rates of competitive interest</p>
+                                    <p>Our personal loans offer competitive interest rates.</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -249,34 +259,34 @@
                                     <h6>Life is full of surprises</h6>
                                     <ul>
                                         <li>
-                                            <p>Personal project</p>
+                                            <p>Medical bills</p>
                                         </li>
                                         <li>
-                                            <p>Unexpected expense</p>
+                                            <p>Car repairs</p>
                                         </li>
                                         <li>
-                                            <p>Special occasion</p>
+                                            <p>Home emergencies</p>
                                         </li>
                                     </ul>
-                                    <p>Our loans personal offers rates of competitive interest</p>
+                                    <p>We understand the urgency of your situation and strive to offer fast financing.</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
                                     <h4>Salary Advances</h4>
-                                    <h6>Our salary advances will help you</h6>
+                                    <h6>Our salary advances will help you:</h6>
                                     <ul>
                                         <li>
-                                            <p>Personal project</p>
+                                            <p>Bridge the gap between paydays</p>
                                         </li>
                                         <li>
-                                            <p>Unexpected expense</p>
+                                            <p>Reduce financial stress</p>
                                         </li>
                                         <li>
-                                            <p>Special occasion</p>
+                                            <p>Access funds to cover expenses</p>
                                         </li>
                                     </ul>
-                                    <p>Our loans personal offers rates of competitive interest</p>
+                                    <p>Say goodbye to financial stress and hello to peace of mind with our salary advance services.</p>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +303,7 @@
             <div class="container">
                 <div class="footer-box">
                     <div class="ft-logo">
-                        <a href="#"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
+                        <a href="#"><img src="{{ asset('frontend/images/logo-img2.png') }}" alt="logo-img"></a>
                     </div>
                     <div class="ft-menu">
                         <ul>

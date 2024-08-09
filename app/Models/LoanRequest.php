@@ -26,4 +26,17 @@ class LoanRequest extends Model
         'ioweyou',
         'status'
     ];
+
+    // get loan request status name
+    public static function getLoanRequestStatusName($status){
+        $statuses = [
+            1 => 'Pending',
+            2 => 'Approved',
+            3 => 'Rejected',
+            4 => 'Disbursed',
+            5 => 'Recovering',
+            6 => 'Completed'
+        ];
+        return $statuses[$status];
+    }
 }

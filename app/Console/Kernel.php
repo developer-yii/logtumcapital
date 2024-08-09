@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('db:backup')->cron('0 */12 * * *');
+        $schedule->command('loans:check')->dailyAt('00:01')->withoutOverlapping();
     }
 
     /**

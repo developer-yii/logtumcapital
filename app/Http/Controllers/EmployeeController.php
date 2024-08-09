@@ -194,7 +194,7 @@ class EmployeeController extends Controller
                     if ($employee->proof_of_address) {
                         Storage::delete($employee->proof_of_address);
                     }
-                    $proofOfAddress = $request->file('proof_of_address')->store('employee_documents');
+                    $proofOfAddress = $request->file('proof_of_address')->store('employee_documents', 'public');
                 } else {
                     $proofOfAddress = $employee->proof_of_address;
                 }
@@ -203,7 +203,7 @@ class EmployeeController extends Controller
                     if ($employee->ine_document) {
                         Storage::delete($employee->ine_document);
                     }
-                    $ineDocument = $request->file('ine_document')->store('employee_documents');
+                    $ineDocument = $request->file('ine_document')->store('employee_documents', 'public');
                 } else {
                     $ineDocument = $employee->ine_document;
                 }
@@ -212,7 +212,7 @@ class EmployeeController extends Controller
                     if ($employee->ine_document) {
                         Storage::delete($employee->ine_document);
                     }
-                    $ineDocument = $request->file('ine_document')->store('employee_documents');
+                    $ineDocument = $request->file('ine_document')->store('employee_documents', 'public');
                 } else {
                     $ineDocument = $employee->ine_document;
                 }
@@ -283,9 +283,13 @@ class EmployeeController extends Controller
 
     // show installment details
     public function loanTerms(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->first();
+        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', auth()->id())->first();
+        $loanStatusName = '';
+        if($loanData){
+            $loanStatusName = Loan::getLoanStatusName($loanData->status);
+        }
         $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
-        return view('employee.loan_terms', compact('loanInstallments','loanData'));
+        return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName'));
     }
 
     // show request fund page
@@ -304,13 +308,7 @@ class EmployeeController extends Controller
                     return date('d-m-Y', strtotime($row->created_at));
                 })
                 ->editColumn('status', function($row){
-                    if($row->status == 1){
-                        return 'Pending';
-                    }elseif($row->status == 2){
-                        return 'Approved';
-                    }else{
-                        return 'Rejected';
-                    }
+                    return Loan::getLoanStatusName($row->status);
                 })
                 ->rawColumns([])
                 ->make(true);
@@ -421,7 +419,7 @@ class EmployeeController extends Controller
                             $fail("You cannot exceed the company's total credit limit of ".currencyFormatter($availableCredit).'.');
                         }
                     }
-                    
+
                     if($request->employee){
                         $employeeCreditData = getEmployeeCreditsData($request->employee);
                         $usedEmployeeCredit = $employeeCreditData['usedCredit'];

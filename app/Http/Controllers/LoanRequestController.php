@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -59,10 +60,8 @@ class LoanRequestController extends Controller
                             <option value='2'>Accept</option>
                             <option value='3'>Reject</option>
                         </select>";
-                    }elseif($row->status == 2){
-                        return 'Approved';
                     }else{
-                        return 'Rejected';
+                        return LoanRequest::getLoanRequestStatusName($row->status);
                     }
                 })
                 ->editColumn('created_at',function($row){
@@ -111,7 +110,10 @@ class LoanRequestController extends Controller
                 $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id, $disbursement_date);
 
                 //  create installments
-                $this->createInstallments($responseLoanData);
+                $installmentResponse = $this->createInstallments($responseLoanData, $disbursement_date);
+                if(!$installmentResponse){
+                    return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
+                }
 
                 if(!empty($responseLoanData->id)){
                     $loanRequestData->status = $status;
@@ -162,7 +164,7 @@ class LoanRequestController extends Controller
             $loanData->user_id = $loanRequest->user_id;
             $loanData->company_id = $loanRequest->company_id;
             $loanData->company_admin_id = $companyAdminId;
-            $loanData->status = 3;
+            $loanData->status = 2;
             $loanData->save();
         }
 
@@ -187,8 +189,8 @@ class LoanRequestController extends Controller
     }
 
     // create installments
-    private function createInstallments($loanData){
-        $installments = LoanInstallment::where('loan_id',$loanData->id)->get();
+    private function createInstallments($loanData, $disbursement_date){
+        $installments = LoanInstallment::where('loan_id',$loanData->id)->whereDate('created_at', '>', $disbursement_date)->get();
         $installments->each(function ($installment) {
             $installment->delete();
         });
@@ -214,6 +216,47 @@ class LoanRequestController extends Controller
 
         return true;
     }
+
+    // private function createInstallments($loanData, $disbursement_date){
+    //     DB::beginTransaction();
+
+    //     try {
+    //         // Delete existing installments
+    //         LoanInstallment::where('loan_id', $loanData->id)
+    //             ->whereDate('created_at', '>', $disbursement_date)
+    //             ->delete();
+
+    //         // Calculate loan details
+    //         $loanInterest = ($loanData->amount * $loanData->loan_interest_rate) / 100;
+    //         $totalAmountToPay = $loanData->amount + $loanInterest;
+    //         $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate) / 100;
+    //         $weeklyCapitalDeduct = $loanData->amount / $loanData->duration;
+    //         $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+    //         $installmentDate = $loanData->first_installment_date;
+
+    //         // Create new installments
+    //         for ($i = 1; $i <= $loanData->duration; $i++) {
+    //             $loanInstallments = new LoanInstallment;
+    //             $loanInstallments->loan_id = $loanData->id;
+    //             $loanInstallments->user_id = $loanData->user_id;
+    //             $loanInstallments->installment_date = $installmentDate;
+    //             $loanInstallments->capital = $weeklyCapitalDeduct;
+    //             $loanInstallments->interest = $weeklyLoanInterestAmount;
+    //             $loanInstallments->payment = $installmentAmount;
+    //             $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
+    //             $loanInstallments->save();
+    //             $installmentDate = Carbon::parse($installmentDate)->addWeek()->toDateString();
+    //         }
+
+    //         DB::commit();
+    //         return true;
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         // Log the exception or handle it as needed
+    //         Log::error('Error creating installments: ' . $e->getMessage());
+    //         return false;
+    //     }
+    // }
 
     // upload ioweyou
     public function uploadIoweyou(Request $request){
@@ -278,14 +321,7 @@ class LoanRequestController extends Controller
                 return currencyFormatter($row->amount);
             })
             ->editColumn('status',function($row){
-                if($row->status == 2){
-                    return "<select class='change-loan-status form-select w-auto' data-id='".$row->id."'>
-                    <option value='2' selected>Accepted</option>
-                    <option value='3'>Disbursed</option>
-                    </select>";
-                }else{
-                    return 'Disbursed';
-                }
+                return Loan::getLoanStatusName($row->status);
             })
             ->editColumn('first_installment_date',function($row){
                 return Carbon::parse($row->first_installment_date)->subWeek(1)->format('d-m-Y');
@@ -301,83 +337,83 @@ class LoanRequestController extends Controller
     }
 
     // change loan status
-    public function changeLoanStatus(Request $request){
-        $loanData = Loan::where('id', $request->requestId)->first();
-        if(!empty($loanData)){
-            $user = User::select('company_id', 'first_name', 'middle_name', 'last_name', 'email')->where('id', $loanData->user_id)->first();
-            $fullName = '';
-            $companyAdminData = '';
-            $companyAdminEmail = '';
-            if(!empty($user)){
-                $companyAdminData = getCompanyAdminData($user->company_id);
+    // public function changeLoanStatus(Request $request){
+    //     $loanData = Loan::where('id', $request->requestId)->first();
+    //     if(!empty($loanData)){
+    //         $user = User::select('company_id', 'first_name', 'middle_name', 'last_name', 'email')->where('id', $loanData->user_id)->first();
+    //         $fullName = '';
+    //         $companyAdminData = '';
+    //         $companyAdminEmail = '';
+    //         if(!empty($user)){
+    //             $companyAdminData = getCompanyAdminData($user->company_id);
 
-                if(!empty($companyAdminData)){
-                    $companyAdminEmail = $companyAdminData->email;
-                }
+    //             if(!empty($companyAdminData)){
+    //                 $companyAdminEmail = $companyAdminData->email;
+    //             }
 
-                if($user->middle_name){
-                    $fullName = $user->first_name.' '.$user->middle_name.' '.$user->last_name;
-                }else{
-                    $fullName = $user->first_name.' '.$user->last_name;
+    //             if($user->middle_name){
+    //                 $fullName = $user->first_name.' '.$user->middle_name.' '.$user->last_name;
+    //             }else{
+    //                 $fullName = $user->first_name.' '.$user->last_name;
 
-                }
-            }
+    //             }
+    //         }
 
-            $weekText = 'weeks';
-            if($loanData->duration < 2){
-                $weekText = 'week';
-            }
+    //         $weekText = 'weeks';
+    //         if($loanData->duration < 2){
+    //             $weekText = 'week';
+    //         }
 
-            $loanData->status = $request->status;
-            if($loanData->save()){
-                $employeeMailData = [];
-                $companyAdminMailData = [];
+    //         $loanData->status = $request->status;
+    //         if($loanData->save()){
+    //             $employeeMailData = [];
+    //             $companyAdminMailData = [];
 
-                if($request->status == 3){
-                    $employeeMailData = [
-                        'subject' => 'Loan Request Disbursed',
-                        'message' => 'You request of fund amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been disbursed.'
-                    ];
+    //             if($request->status == 4){
+    //                 $employeeMailData = [
+    //                     'subject' => 'Loan Request Disbursed',
+    //                     'message' => 'You request of fund amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been disbursed.'
+    //                 ];
 
-                    $companyAdminMailData = [
-                        'subject' => 'Loan Request Disbursed',
-                        'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been disbursed.'
-                    ];
-                }
-                $installments = LoanInstallment::find($loanData->id);
-                if ($installments) {
-                    $installments->delete();
-                }
+    //                 $companyAdminMailData = [
+    //                     'subject' => 'Loan Request Disbursed',
+    //                     'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanData->amount).' for a duration of ' . $loanData->duration .' '.$weekText.' has been disbursed.'
+    //                 ];
+    //             }
+    //             $installments = LoanInstallment::find($loanData->id);
+    //             if ($installments) {
+    //                 $installments->delete();
+    //             }
 
-                $loanInterest = ($loanData->amount * $loanData->loan_interest_rate)/100;
-                $totalAmountToPay = $loanData->amount + $loanInterest;
-                $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate)/100;
-                $weeklyCapitalDeduct = ($loanData->amount / $loanData->duration);
-                $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
-                $installmentDate = $loanData->first_installment_date;
+    //             $loanInterest = ($loanData->amount * $loanData->loan_interest_rate)/100;
+    //             $totalAmountToPay = $loanData->amount + $loanInterest;
+    //             $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate)/100;
+    //             $weeklyCapitalDeduct = ($loanData->amount / $loanData->duration);
+    //             $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+    //             $installmentDate = $loanData->first_installment_date;
 
-                for($i = 1; $i <= $loanData->duration; $i++){
-                    $loanInstallments = new LoanInstallment;
-                    $loanInstallments->loan_id = $loanData->id;
-                    $loanInstallments->user_id = $loanData->user_id;
-                    $loanInstallments->installment_date = $installmentDate;
-                    $loanInstallments->capital = $weeklyCapitalDeduct;
-                    $loanInstallments->interest = $weeklyLoanInterestAmount;
-                    $loanInstallments->payment = $installmentAmount;
-                    $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
-                    $loanInstallments->save();
-                    $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
-                }
+    //             for($i = 1; $i <= $loanData->duration; $i++){
+    //                 $loanInstallments = new LoanInstallment;
+    //                 $loanInstallments->loan_id = $loanData->id;
+    //                 $loanInstallments->user_id = $loanData->user_id;
+    //                 $loanInstallments->installment_date = $installmentDate;
+    //                 $loanInstallments->capital = $weeklyCapitalDeduct;
+    //                 $loanInstallments->interest = $weeklyLoanInterestAmount;
+    //                 $loanInstallments->payment = $installmentAmount;
+    //                 $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
+    //                 $loanInstallments->save();
+    //                 $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
+    //             }
 
-                Mail::to($user->email)->send(new SendFundRequestNotificationMail($employeeMailData));
-                if(!empty($companyAdminEmail)){
-                    Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
-                }
-                return response()->json(['status' => true, 'message' => 'Loan request status changed successfully.']);
-            }
-        }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
-    }
+    //             Mail::to($user->email)->send(new SendFundRequestNotificationMail($employeeMailData));
+    //             if(!empty($companyAdminEmail)){
+    //                 Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
+    //             }
+    //             return response()->json(['status' => true, 'message' => 'Loan request status changed successfully.']);
+    //         }
+    //     }
+    //     return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+    // }
 
     // get more details of loan
     public function getLoanDetails(Request $request){

@@ -105,7 +105,7 @@ class CompanyController extends Controller
                 if ($company->consetitutive_act_document) {
                     Storage::delete($company->consetitutive_act_document);
                 }
-                $constitutiveActDocument = $request->file('consetitutive_act_document')->store('company_documents');
+                $constitutiveActDocument = $request->file('consetitutive_act_document')->store('company_documents', 'public');
             } else {
                 $constitutiveActDocument = $company->consetitutive_act_document;
             }
@@ -114,7 +114,7 @@ class CompanyController extends Controller
                 if ($company->ine_document) {
                     Storage::delete($company->ine_document);
                 }
-                $ineDocument = $request->file('ine_document')->store('company_documents');
+                $ineDocument = $request->file('ine_document')->store('company_documents', 'public');
             } else {
                 $ineDocument = $company->ine_document;
             }
@@ -123,7 +123,7 @@ class CompanyController extends Controller
                 if ($company->ioweyou_document) {
                     Storage::delete($company->ioweyou_document);
                 }
-                $ioweyouDocument = $request->file('ioweyou_document')->store('company_documents');
+                $ioweyouDocument = $request->file('ioweyou_document')->store('company_documents', 'public');
             } else {
                 $ioweyouDocument = $company->ioweyou_document;
             }

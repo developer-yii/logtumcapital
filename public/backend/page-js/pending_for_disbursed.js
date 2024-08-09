@@ -28,8 +28,7 @@ $(document).ready(function () {
     });
 
     // change loan status
-    $('body').on('change', '.change-loan-status', function(){
-        alert('test');
+    // $('body').on('change', '.change-loan-status', function(){
         // var changedStatus = $(this).val();
         // if (confirm("Are you sure you want to change status?")) {
         //     var postData = {
@@ -58,7 +57,7 @@ $(document).ready(function () {
         // }else{
         //     pendingDisbursedLoansTable.draw();
         // }
-    });
+    // });
 
     // get more details of loan
     $('body').on('click', '.view-loan-details', function(){

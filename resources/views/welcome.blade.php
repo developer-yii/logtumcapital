@@ -43,16 +43,16 @@
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="#services" class="active">Services</a>
+                                    <a href="{{ url('/').'#services'}}" class="active">Services</a>
                                 </li>
                                 <li>
-                                    <a href="#approve">How it work</a>
+                                    <a href="{{ url('/').'#approve'}}">How it works</a>
                                 </li>
                                 <li>
-                                    <a href="#banner">Loan Calculator</a>
+                                    <a href="{{ url('/').'#banner' }}">Loan Calculator</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('contact') }}" class="{{ Request::routeIs('contact') ? 'active' : '' }}">Contact</a>
+                                    <a href="{{ route('contact') }}">Contact</a>
                                 </li>
                             </ul>
                         </nav>
@@ -89,8 +89,8 @@
                                         <p class="title-p">With weekly payment of</p>
                                         <h3 id="weekly_interest_payment">$1,162</h3>
                                         <p>You only need your ID and a proof of address</p>
-                                        <div class="btn-submit">
-                                            <a href="#">Submit</a>
+                                        <div class="btn-submit text-center">
+                                            <a href="{{ route('register') }}">Register</a>
                                         </div>
                                     </div>
                                 </div>
@@ -118,24 +118,33 @@
                     </div>
                     <div class="rate-box">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="box-box">
-                                    <div class="img-box">
-                                        <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
-                                    </div>
-                                    <div class="text-box">
-                                        <h4>60.32%</h4>
-                                        <p>Fixed Annual Rate</p>
-                                        <div class="value-btn">
-                                            <button class="btn-val">Evaluate</button>
+                            @php
+                                $companyLogos = [asset('frontend/images/logo-img.png'), asset('frontend/images/compant2.png'), asset('frontend/images/compant1.png')];
+                                $i = 0;
+                            @endphp
+                            @foreach($interestRateData as $interest)
+                                <div class="col-md-4">
+                                    <div class="box-box">
+                                        <div class="img-box">
+                                            <img src="{{ $companyLogos[$i] }}" alt="logo-img">
+                                        </div>
+                                        <div class="text-box">
+                                            <h4>{{ $interest->interest_rate.'%' }}</h4>
+                                            <p>Fixed Annual Rate</p>
+                                            <div class="value-btn">
+                                                <button class="btn-val">Evaluate</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
+                                @php
+                                    $i++;
+                                @endphp
+                            @endforeach
+                            {{-- <div class="col-md-4">
                                 <div class="box-box">
                                     <div class="img-box">
-                                        <img src="{{ asset('frontend/images/compant2.png') }}" alt="compant2">
+                                        <img src="{{ $companyLogos[1] }}" alt="compant2">
                                     </div>
                                     <div class="text-box">
                                         <h4>72.80%</h4>
@@ -149,7 +158,7 @@
                             <div class="col-md-4">
                                 <div class="box-box">
                                     <div class="img-box">
-                                        <img src="{{ asset('frontend/images/compant1.png') }}" alt="compant1">
+                                        <img src="{{ $companyLogos[2] }}" alt="compant1">
                                     </div>
                                     <div class="text-box">
                                         <h4>71.10%</h4>
@@ -159,7 +168,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -227,7 +236,7 @@
                                         interest rates that are lower than traditional banks. our goal is to make the
                                         loan is accessible to everyone.</p>
                                     <div class="reg-btn">
-                                        <a href="#">Register</a>
+                                        <a href="{{ route('register') }}">Register</a>
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +320,7 @@
                                 <a href="{{ url('/').'#services'}}">Services</a>
                             </li>
                             <li>
-                                <a href="{{ url('/').'#approve'}}">How does it work</a>
+                                <a href="{{ url('/').'#approve'}}">How it works</a>
                             </li>
                             <li>
                                 <a href="{{ url('/').'#banner'}}">Loan Calculator</a>

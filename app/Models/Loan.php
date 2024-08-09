@@ -32,13 +32,12 @@ class Loan extends Model
     // get loan status name
     public static function getLoanStatusName($status){
         $statuses = [
-            1 => 'pending',
-            2 => 'approved',
-            3 => 'partial disbursed',
-            4 => 'disbursed',
-            5 => 'completed',
-            6 => 'defaulted',
-            7 => 'rejected'
+            1 => 'Pending',
+            2 => 'Approved',
+            3 => 'Rejected',
+            4 => 'Disbursed',
+            5 => 'Recovering',
+            6 => 'Completed'
         ];
         return $statuses[$status];
     }

@@ -56,7 +56,7 @@
                                             echo "<td></td>";
                                             echo "<td></td>";
                                             echo "<td>".currencyFormatter($loanData->amount)."</td>";
-                                            echo "<td>Disbursed</td>";
+                                            echo "<td>".$loanStatusName."</td>";
                                             echo "</tr>";
                                             $totalCapital = 0;
                                             $totalInterest = 0;

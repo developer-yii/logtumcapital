@@ -1,6 +1,6 @@
 <div class="leftside-menu">
     <a href="{{ route('dashboard') }}" class="logo text-center logo-light bg-white">
-        <span class="logo-lg">
+        <span class="logo-lg bg-white">
             <img src="{{ asset('/') }}frontend/images/logo-img.png" alt="" height="50">
         </span>
         <span class="logo-sm">
@@ -8,10 +8,10 @@
         </span>
     </a>
     <a href="{{ route('dashboard') }}" class="logo text-center logo-dark">
-        <span class="logo-lg">
+        <span class="logo-lg bg-white">
             <img src="{{ asset('/') }}frontend/images/logo-img.png" alt="" height="16">
         </span>
-        <span class="logo-sm">
+        <span class="logo-sm bg-white">
             <img src="{{ asset('/') }}frontend/images/logo-img.png" alt="" height="16">
         </span>
     </a>

@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class LoanInstallmentBkp extends Model
+{
+    use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'loan_id',
+        'loan_collection_id',
+        'installment_date',
+        'capital',
+        'interest',
+        'payment',
+        'balance',
+        'status'
+    ];
+
+    // get loan installment status name
+    public static function getLoanInstallmentStatusName($status){
+        $statuses = [1 => 'Pending', 2 => 'Paid'];
+        return $statuses[$status];
+    }
+}

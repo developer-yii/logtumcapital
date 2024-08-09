@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="36x36" href="{{asset('/')}}backend/images/favicon-36x36.png">
     <link rel="icon" type="image/png" sizes="48x48" href="{{asset('/')}}backend/images/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/')}}backend/images/apple-icon-180x180.png">
-    <title>{{ config('app.name') }} | Welcome</title>
+    <title>{{ config('app.name') }} | Contact</title>
 </head>
 
 <body>
@@ -43,16 +43,16 @@
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="{{ url('/').'#services' }}" class="active">Services</a>
+                                    <a href="{{ url('/').'#services' }}">Services</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/').'#approve' }}">How does it work</a>
+                                    <a href="{{ url('/').'#approve' }}">How it works</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/').'#banner' }}">Loan Calculator</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('contact') }}">Contact</a>
+                                    <a href="{{ route('contact') }}" class="{{ Request::routeIs('contact') ? 'active' : '' }}">Contact</a>
                                 </li>
                             </ul>
                         </nav>
@@ -96,7 +96,7 @@
                         <div class="section-title text-left mb-25">
                             <span class="sub-title">Información de Contacto</span>
                             <h2 class="title">Nuestra Dirección de Soporte</h2>
-                            <div class="line"><img src="https://logtum.com/frontend/img/images/title_line.png" alt=""></div>
+                            <div class="line"><img src="{{ asset('/frontend/images/title_line.png') }}" alt=""></div>
                         </div>
                         <p>No dude en contactarnos en cualquier momento. Es nuestro placer servirle.</p>
                         <ul class="contact-info-list">
@@ -167,7 +167,7 @@
                                 <a href="{{ url('/').'#services'}}">Services</a>
                             </li>
                             <li>
-                                <a href="{{ url('/').'#approve'}}">How does it work</a>
+                                <a href="{{ url('/').'#approve'}}">How it works</a>
                             </li>
                             <li>
                                 <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
@@ -195,27 +195,6 @@
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/js/custom.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            var weeklyInterestRate = "{{ getInterestRate()/52 }}";
-            var weeklyInterestPayment = 0;
-
-            $('.range-slider').on('input', function() {
-                var sliderValue = $(this).val();
-                $('h2#current_slider_value').html('$' + parseFloat(sliderValue).toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }));
-
-                weeklyInterestPayment = Math.round((sliderValue * weeklyInterestRate) / 100);
-                $('h3#weekly_interest_payment').html('$' + weeklyInterestPayment.toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }));
-            });
-
-        });
-    </script>
 </body>
 
 </html>

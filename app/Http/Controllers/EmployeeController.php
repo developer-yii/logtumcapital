@@ -29,7 +29,7 @@ class EmployeeController extends Controller
                     ->join('companies', 'users.company_id', '=', 'companies.id')
                     ->where('users.role', 4)
                     ->where('users.company_id', $request->cid)
-                    ->get(); // Added get() to execute the query
+                    ->get();
             } else {
                 $loginUserCompanyId = !empty(auth()->user()->company_id) ? auth()->user()->company_id : '';
                 $query = User::select('users.*', 'companies.name as company_name')
@@ -194,7 +194,7 @@ class EmployeeController extends Controller
                     if ($employee->proof_of_address) {
                         Storage::delete($employee->proof_of_address);
                     }
-                    $proofOfAddress = $request->file('proof_of_address')->store('employee_documents');
+                    $proofOfAddress = $request->file('proof_of_address')->store('employee_documents', 'public');
                 } else {
                     $proofOfAddress = $employee->proof_of_address;
                 }
@@ -203,7 +203,7 @@ class EmployeeController extends Controller
                     if ($employee->ine_document) {
                         Storage::delete($employee->ine_document);
                     }
-                    $ineDocument = $request->file('ine_document')->store('employee_documents');
+                    $ineDocument = $request->file('ine_document')->store('employee_documents', 'public');
                 } else {
                     $ineDocument = $employee->ine_document;
                 }
@@ -212,7 +212,7 @@ class EmployeeController extends Controller
                     if ($employee->ine_document) {
                         Storage::delete($employee->ine_document);
                     }
-                    $ineDocument = $request->file('ine_document')->store('employee_documents');
+                    $ineDocument = $request->file('ine_document')->store('employee_documents', 'public');
                 } else {
                     $ineDocument = $employee->ine_document;
                 }
@@ -283,14 +283,36 @@ class EmployeeController extends Controller
 
     // show installment details
     public function loanTerms(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->first();
-        $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
-        return view('employee.loan_terms', compact('loanInstallments','loanData'));
+        $userId = auth()->id();
+        if(isset($request->uid) && isset($request->lid)){
+            $userId = $request->uid;
+            $loanId = $request->lid;
+            $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('id', $loanId)->where('user_id', $userId)->where('status', 6)->withTrashed()->first();
+            $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->where('loan_id', $loanId)->where('status',6)->sum('amount');
+            $loanStatusName = '';
+            $loanInstallments = [];
+            if($loanData){
+                $loanStatusName = Loan::getLoanStatusName($loanData->status);
+                $loanInstallments = LoanInstallment::where('loan_id', $loanId)->where('user_id', $userId)->get();
+            }
+            return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName', 'totalLoanAmountAsOfToday'));
+        }else if(isset($request->uid)){
+            $userId = $request->uid;
+        }
+        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', $userId)->where('status', 4)->first();
+        $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->whereIn('status',[2,4,5])->sum('amount');
+        $loanStatusName = '';
+        $loanInstallments = [];
+        if($loanData){
+            $loanStatusName = Loan::getLoanStatusName($loanData->status);
+            $loanInstallments = LoanInstallment::where('user_id', $userId)->get();
+        }
+        return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName', 'totalLoanAmountAsOfToday'));
     }
 
     // show request fund page
     public function requestFund(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->first();
+        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->whereNotIn('status', [3,6])->first();
         $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
         if ($request->ajax()) {
             $user = auth()->user();
@@ -304,13 +326,7 @@ class EmployeeController extends Controller
                     return date('d-m-Y', strtotime($row->created_at));
                 })
                 ->editColumn('status', function($row){
-                    if($row->status == 1){
-                        return 'Pending';
-                    }elseif($row->status == 2){
-                        return 'Approved';
-                    }else{
-                        return 'Rejected';
-                    }
+                    return Loan::getLoanStatusName($row->status);
                 })
                 ->rawColumns([])
                 ->make(true);
@@ -421,7 +437,7 @@ class EmployeeController extends Controller
                             $fail("You cannot exceed the company's total credit limit of ".currencyFormatter($availableCredit).'.');
                         }
                     }
-                    
+
                     if($request->employee){
                         $employeeCreditData = getEmployeeCreditsData($request->employee);
                         $usedEmployeeCredit = $employeeCreditData['usedCredit'];

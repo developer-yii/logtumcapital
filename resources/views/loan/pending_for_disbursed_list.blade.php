@@ -87,7 +87,7 @@
 @push('js')
     <script>
         var getDisbursedPendingLoansUrl = "{{ route('loan.pendingForDisbursed') }}";
-        var changeLoanStatusUrl = "{{ route('loan.changeLoanStatus') }}";
+        // var changeLoanStatusUrl = "loan.changeLoanStatus";
         var viewLoanDetailsUrl = "{{ route('loan.getLoanDetails') }}";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>

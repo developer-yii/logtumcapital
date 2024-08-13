@@ -95,11 +95,11 @@ class RegisterController extends Controller
             $company = new Company;
 
             if ($request->hasFile('consetitutive_act_document')) {
-                $constitutiveActDocument = $request->file('consetitutive_act_document')->store('company_documents');
+                $constitutiveActDocument = $request->file('consetitutive_act_document')->store('company_documents', 'public');
             }
 
             if ($request->hasFile('ine_document')) {
-                $ineDocument = $request->file('ine_document')->store('company_documents');
+                $ineDocument = $request->file('ine_document')->store('company_documents', 'public');
             }
 
             $data = [

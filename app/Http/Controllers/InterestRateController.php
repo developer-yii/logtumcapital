@@ -30,7 +30,6 @@ class InterestRateController extends Controller
     // store and update interest rate
     public function store(Request $request){
         $rules = [
-            'name' => 'required',
             'interest_rate' => 'required|numeric|gt:0|max:100'
         ];
 
@@ -43,7 +42,6 @@ class InterestRateController extends Controller
         if(!empty($request->interest_rate_id)){
             $interestRateData = InterestRate::where('id', $request->interest_rate_id)->first();
             if($interestRateData){
-                $interestRateData->company_name = $request->name;
                 $interestRateData->interest_rate = $request->interest_rate;
                 if($interestRateData->save()){
                     return response()->json(['status' => true, 'message' => 'Interest rate updated successfully.']);

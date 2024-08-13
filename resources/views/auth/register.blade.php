@@ -7,7 +7,7 @@
 
             <div class="card-header py-3 text-center bg-primary">
                 <a href="{{ route('register') }}">
-                    <span><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo" height="50"></span>
+                    <span><img src="{{ asset('frontend/images/LOGO.png') }}" alt="logo" height="50"></span>
                 </a>
             </div>
 

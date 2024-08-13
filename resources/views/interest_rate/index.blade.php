@@ -52,8 +52,8 @@
                 <div class="modal-body m-1">
                     <input type="hidden" name="interest_rate_id" id="interest_rate_id">
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
-                        <input type="text" id="name" name="name" class="form-control" value="" autocomplete>
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="" autocomplete readonly>
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">

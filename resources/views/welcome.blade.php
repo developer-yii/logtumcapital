@@ -1,72 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
-    <link rel="icon" type="image/png" sizes="36x36" href="{{asset('/')}}backend/images/favicon-36x36.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="{{asset('/')}}backend/images/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/')}}backend/images/apple-icon-180x180.png">
-    <title>{{ config('app.name') }} | Welcome</title>
-</head>
-
-<body>
-    <!-- header start -->
-    <header>
-        <div class="top-header">
-            <div class="container">
-                <div class="reg-box">
-                    <div class="mail-box">
-                        <a href="mailto:info.logtum@gmail.com">info.logtum@gmail.com</a>
-                    </div>
-                    <div class="log-box">
-                        <ul>
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><span class="text-white">|</span></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-part">
-            <div class="container">
-                <div class="header-box">
-                    <div class="logo-box">
-                        <a href="{{ url('/') }}"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
-                    </div>
-                    <div class="main-nav">
-                        <nav>
-                            <ul>
-                                <li>
-                                    <a href="#services" class="active">Services</a>
-                                </li>
-                                <li>
-                                    <a href="#approve">How it work</a>
-                                </li>
-                                <li>
-                                    <a href="#banner">Loan Calculator</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('contact') }}" class="{{ Request::routeIs('contact') ? 'active' : '' }}">Contact</a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <div class="click-bar">
-                            <i class="fa-solid fa-bars click-menu"></i>
-                            <i class="fa-solid fa-xmark cancel-menu"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- header end -->
-
+@extends('layouts.app')
+@section('title', 'Welcome')
+@section('content')
     <!-- banner start -->
     <section id="banner" class="home">
         <div class="banner-part">
@@ -89,8 +23,8 @@
                                         <p class="title-p">With weekly payment of</p>
                                         <h3 id="weekly_interest_payment">$1,162</h3>
                                         <p>You only need your ID and a proof of address</p>
-                                        <div class="btn-submit">
-                                            <a href="#">Submit</a>
+                                        <div class="btn-submit text-center">
+                                            <a href="{{ route('register') }}">Register</a>
                                         </div>
                                     </div>
                                 </div>
@@ -118,24 +52,33 @@
                     </div>
                     <div class="rate-box">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="box-box">
-                                    <div class="img-box">
-                                        <img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img">
-                                    </div>
-                                    <div class="text-box">
-                                        <h4>60.32%</h4>
-                                        <p>Fixed Annual Rate</p>
-                                        <div class="value-btn">
-                                            <button class="btn-val">Evaluate</button>
+                            @php
+                                $companyLogos = [asset('frontend/images/LOGTUM_INTREST_RATE_LOGO.png'), asset('frontend/images/CITIBANAMEX_LOGO.png'), asset('frontend/images/BBVA_LOGO.png')];
+                                $i = 0;
+                            @endphp
+                            @foreach($interestRateData as $interest)
+                                <div class="col-md-4">
+                                    <div class="box-box">
+                                        <div class="img-box">
+                                            <img src="{{ $companyLogos[$i] }}" alt="logo-img">
+                                        </div>
+                                        <div class="text-box">
+                                            <h4>{{ $interest->interest_rate.'%' }}</h4>
+                                            <p>Fixed Annual Rate</p>
+                                            <div class="value-btn">
+                                                <button class="btn-val">Evaluate</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
+                                @php
+                                    $i++;
+                                @endphp
+                            @endforeach
+                            {{-- <div class="col-md-4">
                                 <div class="box-box">
                                     <div class="img-box">
-                                        <img src="{{ asset('frontend/images/compant2.png') }}" alt="compant2">
+                                        <img src="{{ $companyLogos[1] }}" alt="compant2">
                                     </div>
                                     <div class="text-box">
                                         <h4>72.80%</h4>
@@ -149,7 +92,7 @@
                             <div class="col-md-4">
                                 <div class="box-box">
                                     <div class="img-box">
-                                        <img src="{{ asset('frontend/images/compant1.png') }}" alt="compant1">
+                                        <img src="{{ $companyLogos[2] }}" alt="compant1">
                                     </div>
                                     <div class="text-box">
                                         <h4>71.10%</h4>
@@ -159,7 +102,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -173,7 +116,7 @@
         <div class="approve-part">
             <div class="container">
                 <div class="approve-box">
-                    <div class="title-box">
+                    {{-- <div class="title-box">
                         <h2>Loan Approval Process</h2>
                     </div>
                     <div class="receive-bx">
@@ -202,7 +145,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+                    <img src="{{ asset('frontend/images/LOAN_APPROVAL.png') }}">
                 </div>
             </div>
         </div>
@@ -227,7 +171,7 @@
                                         interest rates that are lower than traditional banks. our goal is to make the
                                         loan is accessible to everyone.</p>
                                     <div class="reg-btn">
-                                        <a href="#">Register</a>
+                                        <a href="{{ route('register') }}">Register</a>
                                     </div>
                                 </div>
                             </div>
@@ -296,49 +240,8 @@
         </div>
     </section>
     <!-- our-services sec end -->
-
-    <!-- footer start -->
-    <footer>
-        <div class="footer-part">
-            <div class="container">
-                <div class="footer-box">
-                    <div class="ft-logo">
-                        <a href="#"><img src="{{ asset('frontend/images/logo-img2.png') }}" alt="logo-img"></a>
-                    </div>
-                    <div class="ft-menu">
-                        <ul>
-                            <li>
-                                <a href="{{ url('/').'#services'}}">Services</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/').'#approve'}}">How does it work</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('contact') }}">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="icon-box">
-                        <ul>
-                            <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                            <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li>
-                            <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- footer end -->
-
-
-
-    <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/custom.js') }}"></script>
+@endsection
+@push('js')
     <script>
         $(document).ready(function() {
             var weeklyInterestRate = 60.32 / 52.143;
@@ -368,6 +271,4 @@
 
         });
     </script>
-</body>
-
-</html>
+@endpush

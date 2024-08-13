@@ -6,7 +6,7 @@
 @section('title', $labelMain)
 @push('css')
     <link href="{{asset('/')}}backend/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="{{asset('/')}}backend/css/vendor/jquery-ui.css" rel="stylesheet" type="text/css" />
 @endpush
 @section('content')
 <div class="row mt-3 mb-3">

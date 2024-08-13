@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Loan;
 use App\Models\LoanCollection;
 use App\Models\LoanInstallment;
+use App\Models\LoanInstallmentBkp;
+use App\Models\LoanRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class PaymentCollectorController extends Controller
 {
@@ -134,7 +138,6 @@ class PaymentCollectorController extends Controller
         $collectionData = LoanInstallment::select('users.first_name', 'users.middle_name', 'users.last_name', 'loan_installments.installment_date', 'loan_installments.payment', 'loan_installments.status')
         ->leftjoin('users', 'loan_installments.user_id','=','users.id')
         ->whereIn('loan_installments.user_id', $userIds)
-        ->whereNull('loan_installments.deleted_at')
         ->whereNull('users.deleted_at')
         ->where('loan_installments.installment_date', $fridayDate);
 
@@ -200,32 +203,65 @@ class PaymentCollectorController extends Controller
 
             if ($storeLoanInstallmentCollection->save()) {
                 $installmentDate = !empty($request->installment_date) ? date('Y-m-d', strtotime($request->installment_date)) : date('Y-m-d');
-                $updateLoanInstallments = LoanInstallment::where('installment_date', $installmentDate)
-                    ->update(['status' => 2, 'loan_collection_id' => $storeLoanInstallmentCollection->id]);
+                $updateLoanInstallments = LoanInstallment::where('installment_date', $installmentDate)->update(['status' => 2, 'loan_collection_id' => $storeLoanInstallmentCollection->id]);
 
-                $completedInstallmentCount = LoanInstallment::where('loan_id', $request->loan_id)
-                    ->where('status', 2)
-                    ->count();
-
-                if ($completedInstallmentCount == 1) {
-                    // Additional logic if needed when there is exactly 1 completed installment
+                // store loan installments backup
+                $installmentBkpResponse = $this->storeLoanInstallmentBkp($installmentDate);
+                if(!$installmentBkpResponse){
+                    Log::info('Something went wrong while saving loan installment backup for date : '.$installmentDate);
                 }
 
-                $pendingInstallmentCount = LoanInstallment::where('loan_id', $request->loan_id)
-                    ->where('status', 1)
-                    ->count();
+                $loanInstallments = LoanInstallment::select(
+                    'loan_id',
+                    DB::raw('SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as pendingInstallmentCount'),
+                    DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as completedInstallmentCount')
+                )
+                ->groupBy('loan_id')
+                ->get();
 
-                if ($pendingInstallmentCount == 0) {
-                    $loan = Loan::find($request->loan_id); // Find the loan by id
-                    $loan->status = 4;
-                    $loan->save();
-
-                    LoanInstallment::where('loan_id', $loan->id)->delete(); // Deleting loan installments for the completed loan
+                foreach($loanInstallments as $installment){
+                    if ($installment->completedInstallmentCount == 1) {
+                        $this->updateLoanRequestStatus($installment->loan_id, 5);
+                    }
+                    if ($installment->pendingInstallmentCount <= 0) {
+                        $loan = Loan::where('id',$installment->loan_id)->first();
+                        if($loan){
+                            $loan->status = 6;
+                            $loan->save();
+                            $loan->delete();
+                        }
+                        $this->updateLoanRequestStatus($installment->loan_id, 6);
+                    }
                 }
-
                 return response()->json(['status' => true, 'message' => 'Bank receipt uploaded successfully.']);
             }
         }
         return response()->json(['status' => false, 'message' => 'Failed to upload bank receipt.']);
+    }
+
+    // store backup of loan installments
+    private function storeLoanInstallmentBkp($installmentDate){
+        $paidLoanInstallments = LoanInstallment::where('installment_date', $installmentDate)->get();
+        foreach($paidLoanInstallments as $installment){
+            $storeInstallmentBkp = new LoanInstallmentBkp();
+            $storeInstallmentBkp->user_id = $installment->user_id;
+            $storeInstallmentBkp->loan_id = $installment->loan_id;
+            $storeInstallmentBkp->loan_collection_id = $installment->loan_collection_id;
+            $storeInstallmentBkp->installment_date = $installmentDate;
+            $storeInstallmentBkp->capital = $installment->capital;
+            $storeInstallmentBkp->interest = $installment->interest;
+            $storeInstallmentBkp->payment = $installment->payment;
+            $storeInstallmentBkp->balance = $installment->balance;
+            $storeInstallmentBkp->status = $installment->status;
+            $storeInstallmentBkp->save();
+        }
+        return true;
+    }
+
+    // update loan requets status
+    private function updateLoanRequestStatus($loanId, $status){
+        $loanRequestData = LoanRequest::where('loan_id', $loanId)->update(['status' => $status]);
+
+        return true;
     }
 }

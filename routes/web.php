@@ -10,6 +10,7 @@ use App\Http\Controllers\InterestRateController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\PaymentCollectorController;
+use App\Models\InterestRate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $interestRateData = InterestRate::all();
+    return view('welcome', compact('interestRateData'));
 });
 Route::get('/contact', function () {
     return view('contact');
@@ -62,8 +64,9 @@ Route::middleware(['checkrole:Super Admin'])->group(function () {
         Route::post('/reject-fund-request-status', [LoanRequestController::class, 'rejectFundRequestStatus'])->name('loan.rejectFundRequestStatus');
         Route::post('/upload-ioweyou', [LoanRequestController::class, 'uploadIoweyou'])->name('loan.uploadIoweyou');
         Route::get('/pending-for-disbursed', [LoanRequestController::class, 'pendingForDisbursed'])->name('loan.pendingForDisbursed');
-        Route::post('/change-loan-status', [LoanRequestController::class, 'changeLoanStatus'])->name('loan.changeLoanStatus');
+        // Route::post('/change-loan-status', [LoanRequestController::class, 'changeLoanStatus'])->name('loan.changeLoanStatus');
         Route::get('/get-loan-details', [LoanRequestController::class, 'getLoanDetails'])->name('loan.getLoanDetails');
+        Route::get('/completed-loans', [LoanRequestController::class, 'completedLoans'])->name('loan.completedLoans');
     });
     Route::prefix('interest-rate')->group(function () {
         Route::get('/get', [InterestRateController::class, 'get'])->name('interestrate.get');
@@ -95,9 +98,13 @@ Route::middleware(['checkrole:Company Admin'])->group(function () {
     });
 });
 
-Route::middleware(['checkrole:Employee'])->group(function () {
+Route::middleware(['checkrole:Super Admin,Employee'])->group(function () {
     Route::prefix('employee')->group(function () {
         Route::get('/loan-terms', [EmployeeController::class, 'loanTerms'])->name('employee.loanTerms');
+    });
+});
+Route::middleware(['checkrole:Employee'])->group(function () {
+    Route::prefix('employee')->group(function () {
         Route::get('/request-fund', [EmployeeController::class, 'requestFund'])->name('employee.requestFund');
         Route::post('/store-fund-request', [EmployeeController::class, 'storeFundRequest'])->name('employee.storeFundRequest');
     });

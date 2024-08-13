@@ -24,10 +24,16 @@
                     <div class="col-md-12">
                         @php
                             $loanAmount = !empty($loanData->amount)?$loanData->amount:0;
+                            $user = isset($_GET['uid']) ? \App\Models\User::find($_GET['uid']) : auth()->user();
                         @endphp
-                        <h4>Name : {{ auth()->user()->first_name." ".auth()->user()->last_name }}</h4>
-                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
-                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount) }}</h5>
+                        <h4>Name : {{ $user->first_name." ".$user->last_name }}</h4>
+                        @if(isset($_GET['uid']) && isset($_GET['lid']))
+                            <h5>Debit As of Today : {{ currencyFormatter(0) }}</h5>
+                            <h5>Credit Available : {{ currencyFormatter($user->authorized_credit_limit) }}</h5>
+                        @else
+                            <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
+                            <h5>Credit Available : {{ currencyFormatter($user->authorized_credit_limit - $loanAmount) }}</h5>
+                        @endif
                     </div>
                 </div>
                 <div class="row">
@@ -55,8 +61,8 @@
                                             echo "<td></td>";
                                             echo "<td></td>";
                                             echo "<td></td>";
-                                            echo "<td>".currencyFormatter($loanData->amount)."</td>";
-                                            echo "<td>Disbursed</td>";
+                                            echo "<td>".currencyFormatter($totalLoanAmountAsOfToday)."</td>";
+                                            echo "<td>".$loanStatusName."</td>";
                                             echo "</tr>";
                                             $totalCapital = 0;
                                             $totalInterest = 0;
@@ -79,7 +85,7 @@
                                             }
                                             echo "<tr>";
                                             echo "<td colspan=2></td>";
-                                            echo "<td>".currencyFormatter(round($totalCapital))."</td>";
+                                            echo "<td>".currencyFormatter(round($totalLoanAmountAsOfToday))."</td>";
                                             echo "<td>".currencyFormatter($totalInterest)."</td>";
                                             echo "<td>".currencyFormatter($totalPayment)."</td>";
                                             echo "<td colspan=2></td>";

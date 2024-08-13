@@ -29,7 +29,7 @@ class EmployeeController extends Controller
                     ->join('companies', 'users.company_id', '=', 'companies.id')
                     ->where('users.role', 4)
                     ->where('users.company_id', $request->cid)
-                    ->get(); // Added get() to execute the query
+                    ->get();
             } else {
                 $loginUserCompanyId = !empty(auth()->user()->company_id) ? auth()->user()->company_id : '';
                 $query = User::select('users.*', 'companies.name as company_name')
@@ -283,19 +283,36 @@ class EmployeeController extends Controller
 
     // show installment details
     public function loanTerms(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', auth()->id())->where('status', 4)->first();
+        $userId = auth()->id();
+        if(isset($request->uid) && isset($request->lid)){
+            $userId = $request->uid;
+            $loanId = $request->lid;
+            $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('id', $loanId)->where('user_id', $userId)->where('status', 6)->withTrashed()->first();
+            $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->where('loan_id', $loanId)->where('status',6)->sum('amount');
+            $loanStatusName = '';
+            $loanInstallments = [];
+            if($loanData){
+                $loanStatusName = Loan::getLoanStatusName($loanData->status);
+                $loanInstallments = LoanInstallment::where('loan_id', $loanId)->where('user_id', $userId)->get();
+            }
+            return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName', 'totalLoanAmountAsOfToday'));
+        }else if(isset($request->uid)){
+            $userId = $request->uid;
+        }
+        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', $userId)->where('status', 4)->first();
+        $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->whereIn('status',[2,4,5])->sum('amount');
         $loanStatusName = '';
         $loanInstallments = [];
         if($loanData){
             $loanStatusName = Loan::getLoanStatusName($loanData->status);
-            $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
+            $loanInstallments = LoanInstallment::where('user_id', $userId)->get();
         }
-        return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName'));
+        return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName', 'totalLoanAmountAsOfToday'));
     }
 
     // show request fund page
     public function requestFund(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->first();
+        $loanData = Loan::select('first_installment_date', 'amount')->where('user_id', auth()->id())->whereNotIn('status', [3,6])->first();
         $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
         if ($request->ajax()) {
             $user = auth()->user();

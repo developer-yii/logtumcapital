@@ -139,8 +139,7 @@ class PaymentCollectorController extends Controller
         ->leftjoin('users', 'loan_installments.user_id','=','users.id')
         ->whereIn('loan_installments.user_id', $userIds)
         ->whereNull('users.deleted_at')
-        ->where('loan_installments.installment_date', $fridayDate)
-        ->withTrashed();
+        ->where('loan_installments.installment_date', $fridayDate);
 
         if ($request->ajax()) {
             return Datatables::of($collectionData)
@@ -232,7 +231,6 @@ class PaymentCollectorController extends Controller
                             $loan->delete();
                         }
                         $this->updateLoanRequestStatus($installment->loan_id, 6);
-                        LoanInstallment::where('loan_id', $loan->id)->delete();
                     }
                 }
                 return response()->json(['status' => true, 'message' => 'Bank receipt uploaded successfully.']);
@@ -254,6 +252,7 @@ class PaymentCollectorController extends Controller
             $storeInstallmentBkp->interest = $installment->interest;
             $storeInstallmentBkp->payment = $installment->payment;
             $storeInstallmentBkp->balance = $installment->balance;
+            $storeInstallmentBkp->status = $installment->status;
             $storeInstallmentBkp->save();
         }
         return true;
@@ -261,13 +260,8 @@ class PaymentCollectorController extends Controller
 
     // update loan requets status
     private function updateLoanRequestStatus($loanId, $status){
-        $loanRequestData = LoanRequest::where('loan_id', $loanId)
-        ->orderBy('created_at', 'desc')
-        ->first();
-        $loanRequestData->status = $status;
-        if($loanRequestData->save()){
-            return true;
-        }
-        return false;
+        $loanRequestData = LoanRequest::where('loan_id', $loanId)->update(['status' => $status]);
+
+        return true;
     }
 }

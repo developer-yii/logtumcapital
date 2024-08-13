@@ -1,72 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
-    <link rel="icon" type="image/png" sizes="36x36" href="{{asset('/')}}backend/images/favicon-36x36.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="{{asset('/')}}backend/images/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/')}}backend/images/apple-icon-180x180.png">
-    <title>{{ config('app.name') }} | Welcome</title>
-</head>
-
-<body>
-    <!-- header start -->
-    <header>
-        <div class="top-header">
-            <div class="container">
-                <div class="reg-box">
-                    <div class="mail-box">
-                        <a href="mailto:info.logtum@gmail.com">info.logtum@gmail.com</a>
-                    </div>
-                    <div class="log-box">
-                        <ul>
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><span class="text-white">|</span></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-part">
-            <div class="container">
-                <div class="header-box">
-                    <div class="logo-box">
-                        <a href="{{ url('/') }}"><img src="{{ asset('frontend/images/logo-img.png') }}" alt="logo-img"></a>
-                    </div>
-                    <div class="main-nav">
-                        <nav>
-                            <ul>
-                                <li>
-                                    <a href="{{ url('/').'#services'}}" class="active">Services</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/').'#approve'}}">How it works</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/').'#banner' }}">Loan Calculator</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('contact') }}">Contact</a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <div class="click-bar">
-                            <i class="fa-solid fa-bars click-menu"></i>
-                            <i class="fa-solid fa-xmark cancel-menu"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- header end -->
-
+@extends('layouts.app')
+@section('title', 'Welcome')
+@section('content')
     <!-- banner start -->
     <section id="banner" class="home">
         <div class="banner-part">
@@ -119,7 +53,7 @@
                     <div class="rate-box">
                         <div class="row">
                             @php
-                                $companyLogos = [asset('frontend/images/logo-img.png'), asset('frontend/images/compant2.png'), asset('frontend/images/compant1.png')];
+                                $companyLogos = [asset('frontend/images/LOGTUM_INTREST_RATE_LOGO.png'), asset('frontend/images/CITIBANAMEX_LOGO.png'), asset('frontend/images/BBVA_LOGO.png')];
                                 $i = 0;
                             @endphp
                             @foreach($interestRateData as $interest)
@@ -182,7 +116,7 @@
         <div class="approve-part">
             <div class="container">
                 <div class="approve-box">
-                    <div class="title-box">
+                    {{-- <div class="title-box">
                         <h2>Loan Approval Process</h2>
                     </div>
                     <div class="receive-bx">
@@ -211,7 +145,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+                    <img src="{{ asset('frontend/images/LOAN_APPROVAL.png') }}">
                 </div>
             </div>
         </div>
@@ -305,49 +240,8 @@
         </div>
     </section>
     <!-- our-services sec end -->
-
-    <!-- footer start -->
-    <footer>
-        <div class="footer-part">
-            <div class="container">
-                <div class="footer-box">
-                    <div class="ft-logo">
-                        <a href="#"><img src="{{ asset('frontend/images/logo-img2.png') }}" alt="logo-img"></a>
-                    </div>
-                    <div class="ft-menu">
-                        <ul>
-                            <li>
-                                <a href="{{ url('/').'#services'}}">Services</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/').'#approve'}}">How it works</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('contact') }}">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="icon-box">
-                        <ul>
-                            <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                            <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li>
-                            <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- footer end -->
-
-
-
-    <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/custom.js') }}"></script>
+@endsection
+@push('js')
     <script>
         $(document).ready(function() {
             var weeklyInterestRate = 60.32 / 52.143;
@@ -377,6 +271,4 @@
 
         });
     </script>
-</body>
-
-</html>
+@endpush

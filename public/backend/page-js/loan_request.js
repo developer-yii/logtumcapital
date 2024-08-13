@@ -1,4 +1,26 @@
+function getUpcomingFriday() {
+    var today = new Date();
+    var dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    var daysUntilFriday = 5 - dayOfWeek; // 5 is Friday
+    if (daysUntilFriday < 0) {
+        daysUntilFriday += 7; // go to the next week's Friday
+    }
+    var upcomingFriday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilFriday);
+    return upcomingFriday;
+}
+
 $(document).ready(function () {
+    $('#disbursement_date').datepicker({
+        beforeShowDay: function(date) {
+            return [date.getDay() == 5];
+        },
+        dateFormat: 'dd-mm-yy',
+        minDate: new Date(2024, 6, 1),
+        defaultDate: getUpcomingFriday(),
+    });
+
+    $("#disbursement_date").datepicker("setDate", getUpcomingFriday());
+
     // Initialize DataTable
     let fundRequestTable = $('#requested_fund_table').DataTable({
         searching: false,

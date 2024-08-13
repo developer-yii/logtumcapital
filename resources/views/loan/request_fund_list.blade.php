@@ -6,6 +6,7 @@
 @section('title', $labelMain)
 @push('css')
     <link href="{{asset('/')}}backend/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('/')}}backend/css/vendor/jquery-ui.css" rel="stylesheet" type="text/css" />
 @endpush
 @section('content')
 <div class="row mt-3 mb-3">
@@ -60,7 +61,7 @@
                     <input type="hidden" id="status" name="status" value="">
                     <div class="form-group mb-3">
                         <label for="disbursement_date" class="form-label">Disbursement date</label>
-                        <input type="date" id="disbursement_date" name="disbursement_date" class="form-control" value="">
+                        <input type="text" id="disbursement_date" name="disbursement_date" class="form-control">
                         <span id="error_disbursement_date" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
@@ -100,5 +101,6 @@
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="{{asset('/')}}backend/js/vendor/jquery-ui.min.js"></script>
     <script src="{{asset('/')}}backend/page-js/loan_request.js"></script>
 @endpush

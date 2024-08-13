@@ -110,7 +110,7 @@ class LoanRequestController extends Controller
                 $responseLoanData = $this->createLoan($loanRequestData, $companyAdminData->id, $disbursement_date);
 
                 //  create installments
-                $installmentResponse = $this->createInstallments($responseLoanData, $disbursement_date);
+                $installmentResponse = $this->createInstallments($loanRequestData, $responseLoanData, $disbursement_date);
                 if(!$installmentResponse){
                     return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
                 }
@@ -155,7 +155,6 @@ class LoanRequestController extends Controller
         return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
     }
 
-    // create loan when Loan request accepted
     private function createLoan($loanRequest, $companyAdminId, $disbursement_date){
         $loanData = Loan::where('user_id', $loanRequest->user_id)->first();
 
@@ -172,23 +171,26 @@ class LoanRequestController extends Controller
             ->where('status', 2)
             ->sum('capital');
 
+        $totalInstallmentAfterLoanDisbursed = LoanInstallment::whereDate('installment_date', '>', $disbursement_date)
+            ->where('status', 1)
+            ->count();
+
         $totalLoanAmount = $loanData->amount;
-        $finalAmount = ($totalLoanAmount - $totalPaidInstallments) + $loanRequest->amount;
+        $finalAmount = !empty($totalLoanAmount)?$totalLoanAmount + $loanRequest->amount: $loanRequest->amount;
         // $finalAmount = $loanRequest->amount;
-        $finalDuration = $loanRequest->duration;
+        $finalDuration = !empty($loanData->duration)? (($loanData->duration - $totalInstallmentAfterLoanDisbursed) + $loanRequest->duration) : $loanRequest->duration;
 
         $loanData->amount = $finalAmount;
         $loanData->duration = $finalDuration;
         $loanData->yearly_interest_rate =  getInterestRate();
         $loanData->weekly_interest_rate =  getInterestRate()/52;
-        $loanData->loan_interest_rate = (getInterestRate()/52) * $finalDuration;
+        $loanData->loan_interest_rate = (getInterestRate()/52) * $loanRequest->duration;
         $loanData->first_installment_date = Carbon::parse($disbursement_date)->copy()->addWeek(1)->format('Y-m-d');
-        $loanData->last_installment_date = Carbon::parse($loanData->first_installment_date)->copy()->addWeeks($finalDuration)->format('Y-m-d');
+        $loanData->last_installment_date = Carbon::parse($loanData->first_installment_date)->copy()->addWeeks($loanRequest->duration)->format('Y-m-d');
         $loanData->save();
 
         return $loanData;
     }
-
     // create installments
     // private function createInstallments($loanData, $disbursement_date){
     //     $installments = LoanInstallment::where('loan_id',$loanData->id)->whereDate('created_at', '>', $disbursement_date)->get();
@@ -217,87 +219,87 @@ class LoanRequestController extends Controller
 
     //     return true;
     // }
-    private function createInstallments($loanData, $disbursement_date)
-    {
-        $pendingInstallments = [];
-        $j = 1;
-        $oldInstallmentTotal = 0;
-        $newInstallments = [];
-        $beforeDisbursedPaidInstallments = LoanInstallment::where('loan_id', $loanData->id)
-            ->whereDate('installment_date', '<=', $disbursement_date)
-            ->where('status', 2)
-            ->delete();
-        // Fetch existing installments created after the disbursement date
-        $beforeDisbursedInstallments = LoanInstallment::where('loan_id', $loanData->id)
-            ->whereDate('installment_date', '<=', $disbursement_date)
-            ->where('status', 1)
-            ->get();
+    // private function createInstallments($loanData, $disbursement_date)
+    // {
+    //     $pendingInstallments = [];
+    //     $j = 1;
+    //     $oldInstallmentTotal = 0;
+    //     $newInstallments = [];
+    //     $beforeDisbursedPaidInstallments = LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '<=', $disbursement_date)
+    //         ->where('status', 2)
+    //         ->delete();
+    //     // Fetch existing installments created after the disbursement date
+    //     $beforeDisbursedInstallments = LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '<=', $disbursement_date)
+    //         ->where('status', 1)
+    //         ->get();
 
-        $oldInstallmentCapitalTotal = 0;
-        
-        foreach($beforeDisbursedInstallments as $installment){
-            $pendingInstallments[] = [
-                'loan_id' => $installment->loan_id,
-                'user_id' => $installment->user_id,
-                'installment_date' => $installment->installment_date,
-                'capital' => $installment->capital,
-                'interest' => $installment->interest,
-                'payment' => $installment->payment,
-                'balance' => ($loanData->amount - ($installment->capital * $j)),
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ];
-            $oldInstallmentCapitalTotal += $installment->capital;
-            $j++;
-            $installment->delete();
-        }
-        
-        $afterInstallments = LoanInstallment::where('loan_id', $loanData->id)
-            ->whereDate('installment_date', '>', $disbursement_date)
-            ->delete();
-            
-        if (!empty($pendingInstallments)) {
-            Log::info('array till disbursement date : '.json_encode($pendingInstallments));
-            LoanInstallment::insert($pendingInstallments);
-        }
+    //     $oldInstallmentCapitalTotal = 0;
 
-        // Calculate interest and installment amounts
-        $finalAmount = $loanData->amount - $oldInstallmentCapitalTotal;
-        $loanInterest = ($finalAmount * $loanData->loan_interest_rate) / 100;
-        $totalAmountToPay = $finalAmount + $loanInterest;
-        $weeklyLoanInterestAmount = ($finalAmount * $loanData->weekly_interest_rate) / 100;
-        $weeklyCapitalDeduct = $finalAmount / $loanData->duration;
-        $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
-        $installmentDate = $loanData->first_installment_date;
+    //     foreach($beforeDisbursedInstallments as $installment){
+    //         $pendingInstallments[] = [
+    //             'loan_id' => $installment->loan_id,
+    //             'user_id' => $installment->user_id,
+    //             'installment_date' => $installment->installment_date,
+    //             'capital' => $installment->capital,
+    //             'interest' => $installment->interest,
+    //             'payment' => $installment->payment,
+    //             'balance' => ($loanData->amount - ($installment->capital * $j)),
+    //             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+    //             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+    //         ];
+    //         $oldInstallmentCapitalTotal += $installment->capital;
+    //         $j++;
+    //         $installment->delete();
+    //     }
 
-        // Create new installments
-        for ($i = 1; $i <= $loanData->duration; $i++) {
-            $newInstallments[] = [
-                'loan_id' => $loanData->id,
-                'user_id' => $loanData->user_id,
-                'installment_date' => $installmentDate,
-                'capital' => $weeklyCapitalDeduct,
-                'interest' => $weeklyLoanInterestAmount,
-                'payment' => $installmentAmount,
-                'balance' => $finalAmount - (($weeklyCapitalDeduct * $i) + $oldInstallmentTotal),
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ];
-            // Increment the installment date by one week
-            $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
-        }
+    //     $afterInstallments = LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '>', $disbursement_date)
+    //         ->delete();
 
-        // Insert pending installments into the database
-        if (!empty($newInstallments)) {
-            Log::info('new installment array : '.json_encode($newInstallments));
-            LoanInstallment::insert($newInstallments);
-        }
+    //     if (!empty($pendingInstallments)) {
+    //         Log::info('array till disbursement date : '.json_encode($pendingInstallments));
+    //         LoanInstallment::insert($pendingInstallments);
+    //     }
 
-        // Return true or the pending installments array, as needed
-        return true;
-    }
+    //     // Calculate interest and installment amounts
+    //     $finalAmount = $loanData->amount - $oldInstallmentCapitalTotal;
+    //     $loanInterest = ($finalAmount * $loanData->loan_interest_rate) / 100;
+    //     $totalAmountToPay = $finalAmount + $loanInterest;
+    //     $weeklyLoanInterestAmount = ($finalAmount * $loanData->weekly_interest_rate) / 100;
+    //     $weeklyCapitalDeduct = $finalAmount / $loanData->duration;
+    //     $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+    //     $installmentDate = $loanData->first_installment_date;
 
-    // another version 
+    //     // Create new installments
+    //     for ($i = 1; $i <= $loanData->duration; $i++) {
+    //         $newInstallments[] = [
+    //             'loan_id' => $loanData->id,
+    //             'user_id' => $loanData->user_id,
+    //             'installment_date' => $installmentDate,
+    //             'capital' => $weeklyCapitalDeduct,
+    //             'interest' => $weeklyLoanInterestAmount,
+    //             'payment' => $installmentAmount,
+    //             'balance' => $finalAmount - (($weeklyCapitalDeduct * $i) + $oldInstallmentTotal),
+    //             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+    //             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+    //         ];
+    //         // Increment the installment date by one week
+    //         $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
+    //     }
+
+    //     // Insert pending installments into the database
+    //     if (!empty($newInstallments)) {
+    //         Log::info('new installment array : '.json_encode($newInstallments));
+    //         LoanInstallment::insert($newInstallments);
+    //     }
+
+    //     // Return true or the pending installments array, as needed
+    //     return true;
+    // }
+
+    // another version
     // private function createInstallments($loanData, $disbursement_date)
     // {
     //     $pendingInstallments = [];
@@ -379,6 +381,55 @@ class LoanRequestController extends Controller
     //     return true;
     // }
 
+    private function createInstallments($loanRequestData, $loanData, $disbursement_date)
+    {
+        $newInstallments = [];
+
+        $totalLoanAmountAsOfToday = LoanRequest::where('user_id', auth()->id())->whereIn('status',[2,4,5])->sum('amount');
+
+        $afterDisburesdDateInstallmentsTotal = LoanInstallment::where('loan_id', $loanData->id)
+            ->whereDate('installment_date', '>', $disbursement_date)
+            ->sum('capital');
+
+        $afterInstallments = LoanInstallment::where('loan_id', $loanData->id)
+            ->whereDate('installment_date', '>', $disbursement_date)
+            ->delete();
+
+        // Calculate interest and installment amounts
+        $finalAmount = $loanRequestData->amount + $afterDisburesdDateInstallmentsTotal;
+        $loanInterest = ($finalAmount * $loanData->loan_interest_rate) / 100;
+        $totalAmountToPay = $finalAmount + $loanInterest;
+        $weeklyLoanInterestAmount = ($finalAmount * $loanData->weekly_interest_rate) / 100;
+        $weeklyCapitalDeduct = $finalAmount / $loanRequestData->duration;
+        $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+        $installmentDate = $loanData->first_installment_date;
+
+        // Create new installments
+        for ($i = 1; $i <= $loanRequestData->duration; $i++) {
+            $newInstallments[] = [
+                'loan_id' => $loanData->id,
+                'user_id' => $loanData->user_id,
+                'installment_date' => $installmentDate,
+                'capital' => $weeklyCapitalDeduct,
+                'interest' => $weeklyLoanInterestAmount,
+                'payment' => $installmentAmount,
+                'balance' => $finalAmount - ($weeklyCapitalDeduct * $i),
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+            // Increment the installment date by one week
+            $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
+        }
+
+        // Insert pending installments into the database
+        if (!empty($newInstallments)) {
+            LoanInstallment::insert($newInstallments);
+        }
+
+        // Return true or the pending installments array, as needed
+        return true;
+    }
+
     // upload ioweyou
     public function uploadIoweyou(Request $request){
         if($request->ajax()){
@@ -395,6 +446,7 @@ class LoanRequestController extends Controller
             }
 
             $loanRequestData = LoanRequest::where('id', $request->fund_request_id)->first();
+            $request->disbursement_date = \Carbon\Carbon::parse($request->disbursement_date)->format('Y-m-d');
             $changeFundRequestResponse = $this->changeFundRequestStatus($loanRequestData, $request->status, $request->disbursement_date);
             if ($request->hasFile('ioweyou_document')) {
                 if ($loanRequestData->ioweyou) {
@@ -425,6 +477,7 @@ class LoanRequestController extends Controller
             $acceptedRequestLoans = Loan::select(
                 'loans.id',
                 'loans.amount',
+                'loans.user_id',
                 'loans.duration',
                 'loans.created_at',
                 'loans.status',
@@ -449,7 +502,7 @@ class LoanRequestController extends Controller
                 return Carbon::parse($row->first_installment_date)->subWeek(1)->format('d-m-Y');
             })
             ->addColumn('action', function($row){
-                $btn = "<button class='btn btn-primary btn-sm view-loan-details' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='More details' data-id='".$row->id."'><i class='mdi mdi-eye fs-4'></i></button>";
+                $btn = "<button class='btn btn-primary btn-sm view-loan-details' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='More details' data-id='".$row->id."'><i class='mdi mdi-eye fs-4'></i></button><a href=".route('employee.loanTerms').'?uid='.$row->user_id." class='btn btn-primary btn-sm view-loan-installments ms-2' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='Loan Installments details' data-id='".$row->user_id."' target='_blank'><i class='mdi mdi-bank-transfer-in fs-4'></i></a>";
                 return $btn;
             })
             ->rawColumns(['status', 'action'])
@@ -558,5 +611,46 @@ class LoanRequestController extends Controller
             }
         }
         return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+    }
+
+    // completed loans
+    public function completedLoans(Request $request){
+        if ($request->ajax()) {
+            $completedLoans = Loan::select(
+                'loans.*',
+                'companies.name as company_name',
+                DB::raw("CONCAT(users.first_name, ' ', IFNULL(CONCAT(users.middle_name, ' '), ''), users.last_name) as employee_name")
+            )
+            ->join('companies', 'loans.company_id', '=', 'companies.id')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->orderBy('created_at', 'desc')
+            ->where('loans.status', 6)
+            ->withTrashed();
+
+            return DataTables::of($completedLoans)
+                ->addIndexColumn()
+                ->editColumn('amount',function($row){
+                    return currencyFormatter($row->amount);
+                })
+                ->editColumn('ioweyou',function($row){
+                    if(!empty($row->ioweyou)){
+                        $extension = strtolower(pathinfo($row->ioweyou, PATHINFO_EXTENSION));
+                        $img= asset('storage').'/'.$row->ioweyou;
+                        // if($extension == 'pdf'){
+                            return '<a class="btn custom-btn" href="'.$img.'" download>Download</a>';
+                        // }
+                        // return "<img class='enlarge-image pe-auto' href='".$img."' height='50px' width='50px'>";
+                    }else{
+                        return '-';
+                    }
+                })
+                ->addColumn('action', function($row){
+                    $btn = "<a href=".route('employee.loanTerms').'?uid='.$row->user_id.'&lid='.$row->id." class='btn btn-primary btn-sm view-loan-installments ms-2' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='Loan Installments details' data-id='".$row->user_id."' target='_blank'><i class='mdi mdi-bank-transfer-in fs-4'></i></a>";
+                    return $btn;
+                })
+                ->rawColumns(['ioweyou', 'action'])
+                ->make(true);
+        }
+        return view('loan.completed_loans');
     }
 }

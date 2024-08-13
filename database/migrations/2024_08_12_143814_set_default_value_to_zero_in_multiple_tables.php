@@ -35,8 +35,8 @@ return new class extends Migration
         Schema::table('loan_installments', function (Blueprint $table) {
             $table->decimal('capital', 15, 2)->default(0)->change();
             $table->decimal('interest', 15, 2)->default(0)->change();
-            $table->decimal('payment', 5, 2)->default(0)->change();
-            $table->decimal('balance', 5, 2)->default(0)->change();
+            $table->decimal('payment', 15, 2)->default(0)->change();
+            $table->decimal('balance', 15, 2)->default(0)->change();
         });
 
         Schema::table('loan_requests', function (Blueprint $table) {
@@ -76,8 +76,8 @@ return new class extends Migration
         Schema::table('loan_installments', function (Blueprint $table) {
             $table->decimal('capital', 15, 2)->nullable()->change();
             $table->decimal('interest', 15, 2)->nullable()->change();
-            $table->decimal('payment', 5, 2)->nullable()->change();
-            $table->decimal('balance', 5, 2)->nullable()->change();
+            $table->decimal('payment', 15, 2)->nullable()->change();
+            $table->decimal('balance', 15, 2)->nullable()->change();
         });
 
         Schema::table('loan_requests', function (Blueprint $table) {

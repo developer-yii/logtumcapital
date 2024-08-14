@@ -24,13 +24,31 @@ class BackupDatabase extends Command
         Log::info('DB backup started');
         try
         {
-            $filename = "backup-" . Carbon::now()->format('Y-m-d-H-i') ."-". env('APP_ENV'). ".sql";
-            $file_path = storage_path() . "/app/public/db_backups/" . $filename;
-            $command = 'mysqldump --user=' . env('DB_USERNAME') .' --password="' . env('DB_PASSWORD') . '" --host=' . env('DB_HOST') . ' ' . env('DB_DATABASE') . ' > ' .$file_path;
+            $filename = "backup-" . Carbon::now()->format('Y-m-d-H-i') ."-". config('app.env'). ".sql";
+            $file_path = storage_path() . "/app/db_backups/" . $filename;
+            $defaultConnection = config('database.default');
+            $connectionDetails = config("database.connections.$defaultConnection");
+
+            if (!empty($connectionDetails)) {
+                // Extract individual details with fallback to environment variables
+                $databaseName = isset($connectionDetails['database']) ? $connectionDetails['database'] : env('DB_DATABASE');
+                $username     = isset($connectionDetails['username']) ? $connectionDetails['username'] : env('DB_USERNAME');
+                $password     = isset($connectionDetails['password']) ? $connectionDetails['password'] : env('DB_PASSWORD');
+                $host         = isset($connectionDetails['host']) ? $connectionDetails['host'] : env('DB_HOST');
+            } else {
+                // Fallback to environment variables if no connection details found
+                $databaseName = env('DB_DATABASE');
+                $username     = env('DB_USERNAME');
+                $password     = env('DB_PASSWORD');
+                $host         = env('DB_HOST');
+            }
+
+            $command = 'mysqldump --user=' . $username .' --password="' . $password . '" --host=' . $host . ' ' . $databaseName . ' > ' .$file_path;
+            // $command = 'mysqldump --user=' . env('DB_USERNAME') .' --password="' . env('DB_PASSWORD') . '" --host=' . env('DB_HOST') . ' ' . env('DB_DATABASE') . ' > ' .$file_path;
 
             $response = NULL;
             $output  = NULL;
-            $path = storage_path('app/public/db_backups');
+            $path = storage_path('app/db_backups');
             $check_directory_exists = (File::isDirectory($path))?true:false;
             if($check_directory_exists == false){
                 File::makeDirectory($path, 0777, true, true);

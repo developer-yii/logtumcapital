@@ -81,8 +81,8 @@ class RegisterController extends Controller
                 'name' => 'required|string|max:255',
                 'phone_number' => ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number'],
                 'address' => 'required|string|max:255',
-                'consetitutive_act_document' => ['required','file','mimes:pdf,jpeg,jpg,png','max:5120'],
-                'ine_document' => ['required','file','mimes:pdf,jpeg,png','max:5120'],
+                'consetitutive_act_document' => ['required','mimes:pdf,jpeg,jpg,png','max:5120'],
+                'ine_document' => ['required','mimes:pdf,jpeg,png','max:5120'],
             ];
 
             // Validate the request data

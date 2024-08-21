@@ -46,8 +46,8 @@
                                     <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Authorized Credit Limit</th>
-                                    <th>Available Credit</th>
                                     <th>Used Credit</th>
+                                    <th>Available Credit</th>
                                     <th>INE</th>
                                     <th>Proof Of Address</th>
                                 </tr>

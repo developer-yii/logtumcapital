@@ -7,6 +7,11 @@
 @push('css')
     <link href="{{asset('/')}}backend/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
     <link href="{{asset('/')}}backend/css/vendor/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <style>
+        #total_amount{
+            padding-right: 20rem;
+        }
+    </style>
 @endpush
 @section('content')
 <div class="row mt-3 mb-3">
@@ -47,6 +52,9 @@
                         </table>
                     </div>
                 </div>
+                <div class="row mt-3">
+                    <span id="total_amount" class="text-end fw-bolder"> TOTAL: {{ currencyFormatter(0) }}</span>
+                </div>
             </div>
         </div>
     </div
@@ -73,6 +81,11 @@
                         <label for="amount" class="form-label">Amount</label>
                         <input type="text" id="amount" name="amount" class="form-control" value="">
                         <span id="error_amount" class="error text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="note" class="form-label">Note</label>
+                        <textarea id="note" name="note" class="form-control"></textarea>
+                        <span id="error_note" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">

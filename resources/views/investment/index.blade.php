@@ -80,6 +80,17 @@
                         <input type="text" id="total_amount" name="total_amount" class="form-control" value="">
                         <span id="error_total_amount" class="error text-danger"></span>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="investment_contract" class="form-label">Investment Contract<span class="text-danger"> *</span></label>
+                        <input type="file" id="investment_contract" name="investment_contract" class="form-control">
+                        <div class="show-edit-document d-none" id="download_investment_contract"><a href="" download>Current Investment Contarct</a></div>
+                        <span id="error_investment_contract" class="error text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="note" class="form-label">Note<span class="text-danger"> *</span></label>
+                        <textarea id="note" name="note" class="note form-control"></textarea>
+                        <span id="error_note" class="error text-danger"></span>
+                    </div>
                 </div>
                 <div class="d-block modal-footer">
                     <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
@@ -95,6 +106,7 @@
         var getInvestmentsUrl = "{{ route('investment.get') }}";
         var getInvestmentDetailsUrl = "{{ route('investment.edit', ['id' => '__ID__']) }}";
         var deleteInvestmentUrl = "{{ route('investment.delete') }}";
+        var basePath = "{{ asset('/storage') }}/";
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

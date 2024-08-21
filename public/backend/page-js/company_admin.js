@@ -96,7 +96,7 @@ $(document).ready(function () {
 
     // Delete company
     $('body').on('click', '.deleteCompanyAdmin', function () {
-        if (confirm("Are you sure you want to delete?")) {
+        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
             var postData = {
                 companyAdminId : $(this).data('id'),
             };

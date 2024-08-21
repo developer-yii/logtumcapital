@@ -35,7 +35,7 @@ class CompanyAdminController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-primary btn-sm editCompanyAdmin me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit company admin details"><i class="mdi mdi-pencil-outline"></i></a>';
-                    // $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteCompanyAdmin" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company admin details"><i class="mdi mdi-delete-outline"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteCompanyAdmin" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company admin details"><i class="mdi mdi-delete-outline"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])

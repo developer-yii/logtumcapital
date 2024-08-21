@@ -30,6 +30,7 @@
                                     <th>Name</th>
                                     <th>Phone Number</th>
                                     <th>Authorized Credit Limit</th>
+                                    <th>IOweYou Expiry Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -92,6 +93,11 @@
                         <input type="file" id="ioweyou_document" name="ioweyou_document" class="form-control" value="">
                         <div class="show-edit-document d-none" id="download_ioweyou_document"><a href="" download>Current IOweYou Document</a></div>
                         <span id="error_ioweyou_document" class="error text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="ioweyou_expiry_date" class="form-label">IOweYou Expiry Date<span class="text-danger"> *</span></label>
+                        <input type="date" id="ioweyou_expiry_date" name="ioweyou_expiry_date" class="form-control" value="">
+                        <span id="error_ioweyou_expiry_date" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">

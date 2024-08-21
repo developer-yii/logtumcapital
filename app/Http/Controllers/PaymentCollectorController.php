@@ -183,6 +183,7 @@ class PaymentCollectorController extends Controller
         $rules = [
             'amount' => 'required|numeric',
             'bank_receipt' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'note' => 'nullable'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -200,6 +201,7 @@ class PaymentCollectorController extends Controller
             $storeLoanInstallmentCollection->collector_id = $user->id;
             $storeLoanInstallmentCollection->bank_receipt = $path;
             $storeLoanInstallmentCollection->amount = $request->amount;
+            $storeLoanInstallmentCollection->note = !empty($request->note)?$request->note:'';
 
             if ($storeLoanInstallmentCollection->save()) {
                 $installmentDate = !empty($request->installment_date) ? date('Y-m-d', strtotime($request->installment_date)) : date('Y-m-d');

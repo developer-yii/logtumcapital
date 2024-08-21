@@ -21,6 +21,9 @@ class CompanyController extends Controller
                 ->editColumn('authorized_credit_limit', function($row){
                     return currencyFormatter($row->authorized_credit_limit);
                 })
+                ->editColumn('ioweyou_expiry_date', function($row){
+                    return date('d-m-Y', strtotime($row->ioweyou_expiry_date));
+                })
                 ->editColumn('status', function($row){
                     if($row->status == 1){
                         return "<select class='change-status form-select w-auto' data-id='".$row->id."'>
@@ -39,7 +42,7 @@ class CompanyController extends Controller
                 ->addColumn('action', function($row){
                     $btn = '<a href="'.route('employee.get').'?cid='.$row->id.'" data-id="'.$row->id.'" class="btn btn-primary btn-sm viewEmployees me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View employees"><i class="uil uil-users-alt"></i></a>';
                     $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm editCompany me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit company details"><i class="mdi mdi-pencil-outline"></i></a>';
-                    // $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteCompany" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company details"><i class="mdi mdi-delete-outline"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteCompany" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete company details"><i class="mdi mdi-delete-outline"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['status','action'])
@@ -55,38 +58,39 @@ class CompanyController extends Controller
             $rules = [
                 'name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
+                'phone_number' => ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number'],
+                'ioweyou_expiry_date' => ['required','date']
             ];
             if(!empty($request->company_id)){
                 $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number,'.$request->company_id];
-                $rules['consetitutive_act_document'] = ['nullable','file','mimes:pdf,jpeg,jpg,png','max:5120'];
-                $rules['ine_document'] = ['nullable','file','mimes:pdf,jpeg,png','max:5120'];
-                $rules['ioweyou_document'] = ['nullable','file','mimes:pdf,jpeg,png','max:5120'];
+                $rules['consetitutive_act_document'] = ['nullable','mimes:pdf,jpeg,jpg,png','max:5120'];
+                $rules['ine_document'] = ['nullable','mimes:pdf,jpeg,png','max:5120'];
+                $rules['ioweyou_document'] = ['nullable','mimes:pdf,jpeg,png','max:5120'];
                 $rules['authorized_credit_limit'] = [
                     'required',
                     'numeric',
                     'min:1',
-                    function($attribute, $value, $fail) use($request){
-                        $availableCredit = getAvailableSuperAdminCredit($request->company_id);
-                        if ($value > $availableCredit) {
-                            $fail('Current available credit limit is : '.$availableCredit.'.');
-                        }
-                    }
+                    // function($attribute, $value, $fail) use($request){
+                    //     $availableCredit = getAvailableSuperAdminCredit($request->company_id);
+                    //     if ($value > $availableCredit) {
+                    //         $fail('Current available credit limit is : '.$availableCredit.'.');
+                    //     }
+                    // }
                 ];
             }else{
-                $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:companies,phone_number'];
-                $rules['consetitutive_act_document'] = ['required','file','mimes:pdf,jpeg,jpg,png','max:5120'];
-                $rules['ine_document'] = ['required','file','mimes:pdf,jpeg,png','max:5120'];
-                $rules['ioweyou_document'] = ['required','file','mimes:pdf,jpeg,png','max:5120'];
+                $rules['consetitutive_act_document'] = ['required','mimes:pdf,jpeg,jpg,png','max:5120'];
+                $rules['ine_document'] = ['required','mimes:pdf,jpeg,png','max:5120'];
+                $rules['ioweyou_document'] = ['required','mimes:pdf,jpeg,png','max:5120'];
                 $rules['authorized_credit_limit'] = [
                     'required',
                     'numeric',
                     'min:1',
-                    function($attribute, $value, $fail) {
-                        $availableCredit = getAvailableSuperAdminCredit();
-                        if ($value > $availableCredit) {
-                            $fail('Current available credit limit is : '.$availableCredit.'.');
-                        }
-                    }
+                    // function($attribute, $value, $fail) {
+                    //     $availableCredit = getAvailableSuperAdminCredit();
+                    //     if ($value > $availableCredit) {
+                    //         $fail('Current available credit limit is : '.$availableCredit.'.');
+                    //     }
+                    // }
                 ];
             }
 
@@ -135,6 +139,7 @@ class CompanyController extends Controller
                 'address' => $request->address,
                 'authorized_credit_limit' => $request->authorized_credit_limit,
                 'status' => $request->status,
+                'ioweyou_expiry_date' => $request->ioweyou_expiry_date
             ];
 
             // Only add document fields to $data if new files are uploaded

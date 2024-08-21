@@ -45,8 +45,8 @@ $(document).ready(function () {
             {data: 'email', name: 'email', orderable:false, sorting:false, className:'text-center'},
             {data: 'phone_number', name: 'phone_number', orderable:false, sorting:false, className:'text-center'},
             {data: 'authorized_credit_limit', name: 'authorized_credit_limit', orderable:false, sorting:false, className:'text-center'},
-            {data: 'available_credit_limit', name: 'available_credit_limit', orderable:false, sorting:false, className:'text-center'},
             {data: 'used_credit_limit', name: 'used_credit_limit', orderable:false, sorting:false, className:'text-center'},
+            {data: 'available_credit_limit', name: 'available_credit_limit', orderable:false, sorting:false, className:'text-center'},
             {data: 'ine', name: 'ine', orderable:false, sorting:false, className:'text-center'},
             {data: 'proof_of_address', name: 'proof_of_address', orderable:false, sorting:false, className:'text-end'},
         ],
@@ -134,7 +134,7 @@ $(document).ready(function () {
 
     // Delete employee
     $('body').on('click', '.deleteEmployee', function () {
-        if (confirm("Are you sure you want to delete?")) {
+        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
             var postData = {
                 employeeId : $(this).data('id'),
             };

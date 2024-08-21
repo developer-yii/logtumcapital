@@ -21,5 +21,7 @@ class Investment extends Model
         'interest_rate',
         'interest_earnings',
         'total_amount',
+        'investment_contract',
+        'note'
     ];
 }

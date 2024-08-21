@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Validator;
-
+use App\Models\LoanCollection;
 class LoanRequestController extends Controller
 {
     // get loan requests
@@ -186,7 +186,7 @@ class LoanRequestController extends Controller
         $loanData->weekly_interest_rate =  getInterestRate()/52;
         $loanData->loan_interest_rate = (getInterestRate()/52) * $loanRequest->duration;
         $loanData->first_installment_date = Carbon::parse($disbursement_date)->copy()->addWeek(1)->format('Y-m-d');
-        $loanData->last_installment_date = Carbon::parse($loanData->first_installment_date)->copy()->addWeeks($loanRequest->duration)->format('Y-m-d');
+        $loanData->last_installment_date = Carbon::parse($loanData->first_installment_date)->copy()->addWeeks(($loanRequest->duration - 1))->format('Y-m-d');
         $loanData->save();
 
         return $loanData;
@@ -435,7 +435,7 @@ class LoanRequestController extends Controller
         if($request->ajax()){
             $rules = [
                 'disbursement_date' => ['required', 'date'],
-                'ioweyou_document' => ['required','file','mimes:pdf,jpeg,png','max:5120'],
+                'ioweyou_document' => ['required','mimes:pdf,jpeg,png','max:5120'],
             ];
 
             // Validate the request data
@@ -652,5 +652,46 @@ class LoanRequestController extends Controller
                 ->make(true);
         }
         return view('loan.completed_loans');
+    }
+
+    // loan installment collections
+    public function loanInstallmentCollection(Request $request){
+        if ($request->ajax()) {
+            $installmentCollectionData = LoanCollection::select(
+                    'loan_collections.*',
+                    'companies.name as company_name',
+                    DB::raw("CONCAT(users.first_name, ' ', users.middle_name, ' ', users.last_name) as collector_name")
+                )
+                ->join('companies', 'loan_collections.company_id', '=', 'companies.id')
+                ->join('users', 'loan_collections.collector_id', '=', 'users.id') // Fixed the join condition
+                ->orderBy('loan_collections.created_at', 'desc')
+                ->withTrashed();
+
+            return DataTables::of($installmentCollectionData)
+                ->addIndexColumn()
+                ->editColumn('amount', function($row){
+                    return currencyFormatter($row->amount);
+                })
+                ->editColumn('bank_receipt', function($row) {
+                    if ($row->bank_receipt) {
+                        return '<a href="'.asset('storage/'.$row->bank_receipt).'" target="_blank" download>Download</a>';
+                    } else {
+                        return '<a href="javascript:void(0)" target="_blank">Download</a>';
+                    }
+                })
+                ->editColumn('note', function($row){
+                    if($row->note){
+                        return '<button class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.$row->note.'"><i class="mdi mdi-information-outline fs-4"></i></button>';
+                    }else{
+                        return '-';
+                    }
+                })
+                ->editColumn('created_at', function($row){
+                    return date('d-m-Y', strtotime($row->created_at));
+                })
+                ->rawColumns(['bank_receipt', 'note'])
+                ->make(true);
+        }
+        return view('loan.installment_collections');
     }
 }

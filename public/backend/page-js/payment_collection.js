@@ -47,14 +47,22 @@ $(document).ready(function () {
         "drawCallback": function(settings) {
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            // Check the number of rows in the table
-            var api = this.api();
-            var rows = api.rows({ page: 'current' }).nodes().length;
+            let api = this.api();
+            let total = 0;
 
-            // Get the button element
-            var $button = $('#upload_bank_receipt_btn'); // Replace with your button's ID or selector
+            // Iterate through the payment column data
+            api.rows({ page: 'current' }).data().each(function(row) {
+                let payment = parseFloat(row.payment.replace(/[^0-9.-]+/g,"")) || 0; // Parse and clean the payment value
+                total += payment;
+            });
 
-            // Disable or enable the button based on the number of rows
+            // Update the total amount in the HTML
+            $('#total_amount').text('TOTAL: $' + total.toFixed(2));
+
+            // Enable/disable button based on row count
+            let rows = api.rows({ page: 'current' }).nodes().length;
+            let $button = $('#upload_bank_receipt_btn');
+
             if (rows > 0) {
                 $button.removeClass('d-none'); // Enable the button
             } else {

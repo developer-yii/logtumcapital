@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Investment;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -30,7 +31,7 @@ class InvestmentController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm editInvestment me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit investment details"><i class="mdi mdi-pencil-outline"></i></a>';
-                    // $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteInvestment" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete investment details"><i class="mdi mdi-delete-outline"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteInvestment" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete investment details"><i class="mdi mdi-delete-outline"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -49,7 +50,12 @@ class InvestmentController extends Controller
                 'interest_rate' => 'required|numeric|min:1|max:100',
                 'interest_earnings' => 'required|numeric',
                 'total_amount' => 'required|numeric',
+                'investment_contract' => 'required|max:5120',
+                'note' => 'nullable',
             ];
+            if(!empty($request->investment_id)){
+                $rules['investment_contract'] = 'nullable|max:5120';
+            }
 
             // Validate the request data
             $validator = Validator::make($request->all(), $rules);
@@ -61,6 +67,15 @@ class InvestmentController extends Controller
             // Find existing investment or create a new instance
             $investment = Investment::find($request->investment_id) ?? new Investment();
 
+            if ($request->hasFile('investment_contract')) {
+                if ($investment->investment_contract) {
+                    Storage::delete($investment->investment_contract);
+                }
+                $investmentDocument = $request->file('investment_contract')->store('investment_documents', 'public');
+            } else {
+                $investmentDocument = $investment->investment_contract;
+            }
+
             // Prepare data for updating/creating the investment record
             $data = [
                 'name' => $request->name,
@@ -68,7 +83,12 @@ class InvestmentController extends Controller
                 'interest_rate' => $request->interest_rate,
                 'interest_earnings' => $request->interest_earnings,
                 'total_amount' => $request->total_amount,
+                'note' => !empty($request->note)?$request->note:''
             ];
+
+            if ($investmentDocument) {
+                $data['investment_contract'] = $investmentDocument;
+            }
 
             // Update or create the investment record
             $investment->fill($data);

@@ -76,6 +76,12 @@
                         <span>Completed Loans</span>
                     </a>
                 </li>
+                <li class="side-nav-item {{ isActiveRouteMain(['loan.collectedInstallments']) }}">
+                    <a href="{{ route('loan.collectedInstallments') }}" class="side-nav-link {{ isActiveRoute(['loan.collectedInstallments']) }}">
+                        <i class="uil-money-stack fs-3"></i>
+                        <span>Collected Installments</span>
+                    </a>
+                </li>
             @elseif($user->role == 2)
                 <li class="side-nav-item {{ isActiveRouteMain(['employee.getCompanyEmployees']) }}">
                     <a href="{{ route('employee.getCompanyEmployees') }}" class="side-nav-link {{ isActiveRoute(['employee.getCompanyEmployees']) }}">

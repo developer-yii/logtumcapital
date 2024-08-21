@@ -29,6 +29,8 @@ $(document).ready(function () {
     $('#add-new-btn').click(function () {
         $('#add-form').trigger("reset");
         $('#addModal .modal-title span').html('Add');
+        $('.show-edit-document').addClass('d-none');
+        $('.show-edit-document a').attr('href', '');
         $('#investment_id').val('');
         $('.error').html('');
     });
@@ -87,6 +89,10 @@ $(document).ready(function () {
                 $('#interest_rate').val(response.data.investmentDetails.interest_rate);
                 $('#interest_earnings').val(response.data.investmentDetails.interest_earnings);
                 $('#total_amount').val(response.data.investmentDetails.total_amount);
+                $('#note').val(response.data.investmentDetails.note);
+                let investment_contract = basePath + response.data.investmentDetails.investment_contract;
+                $('#download_investment_contract a').attr('href', investment_contract);
+                $('.show-edit-document').removeClass('d-none');
                 $('#addModal').modal('show');
             }else{
                 showToastMessage('error', response.message);
@@ -97,7 +103,7 @@ $(document).ready(function () {
 
     // Delete investment
     $('body').on('click', '.deleteInvestment', function () {
-        if (confirm("Are you sure you want to delete?")) {
+        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
             var postData = {
                 investmentId : $(this).data('id'),
             };

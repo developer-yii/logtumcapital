@@ -52,6 +52,7 @@ class EmployeeController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm editEmployee me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit employee details"><i class="mdi mdi-pencil-outline"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" class="edit btn btn-danger btn-sm deleteEmployee me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete employee details"><i class="mdi mdi-delete-outline"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -163,15 +164,15 @@ class EmployeeController extends Controller
                     $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:users,phone_number,'.$request->employee_id];
                     $rules['password'] = ['nullable','min:8','max:255'];
                     $rules['confirm_password'] = ['same:password'];
-                    $rules['proof_of_address'] = ['nullable','file','mimes:pdf,jpeg,jpg,png','max:5120'];
-                    $rules['ine_document'] = ['nullable','file','mimes:pdf,jpeg,png','max:5120'];
+                    $rules['proof_of_address'] = ['nullable','mimes:pdf,jpeg,jpg,png','max:5120'];
+                    $rules['ine_document'] = ['nullable','mimes:pdf,jpeg,png','max:5120'];
                 }else{
                     $rules['email'] = ['required','email','max:255','unique:users,email'];
                     $rules['phone_number'] = ['required','string','max:20','regex:/^\+\d{1,3}\d{9,14}$/','unique:users,phone_number'];
                     $rules['password'] = ['required','min:8','max:255'];
                     $rules['confirm_password'] = ['required','same:password'];
-                    $rules['proof_of_address'] = ['required','file','mimes:pdf,jpeg,jpg,png','max:5120'];
-                    $rules['ine_document'] = ['required','file','mimes:pdf,jpeg,png','max:5120'];
+                    $rules['proof_of_address'] = ['required','mimes:pdf,jpeg,jpg,png','max:5120'];
+                    $rules['ine_document'] = ['required','mimes:pdf,jpeg,png','max:5120'];
                 }
             }else{
                 $rules = [
@@ -299,13 +300,13 @@ class EmployeeController extends Controller
         }else if(isset($request->uid)){
             $userId = $request->uid;
         }
-        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', $userId)->where('status', 4)->first();
-        $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->whereIn('status',[2,4,5])->sum('amount');
+        $loanData = Loan::select('id', 'first_installment_date', 'amount', 'status')->where('user_id', $userId)->whereIn('status', [2,4])->first();
+        $totalLoanAmountAsOfToday = LoanRequest::where('user_id', $userId)->whereIn('status',[2, 4, 5])->sum('amount');
         $loanStatusName = '';
         $loanInstallments = [];
         if($loanData){
             $loanStatusName = Loan::getLoanStatusName($loanData->status);
-            $loanInstallments = LoanInstallment::where('user_id', $userId)->get();
+            $loanInstallments = LoanInstallment::where('loan_id', $loanData->id)->where('user_id', $userId)->get();
         }
         return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName', 'totalLoanAmountAsOfToday'));
     }
@@ -415,7 +416,7 @@ class EmployeeController extends Controller
             }
             $superAdminMailData = [
                 'subject' => 'Change Authorized Credit Limit Request',
-                'message' => $request->company_name . ' requested to update the authorized credit limit from the current limit of ' . currencyFormatter($request->current_limit) . ' to the new limit of ' . currencyFormatter($request->authorized_credit_limit) . '.'
+                'message' => $request->company_name . ' requested to increase the authorized credit limit by ' . currencyFormatter($request->authorized_credit_limit) . '. Current credit limt is : '.currencyFormatter($request->current_limit).'.'
             ];
             Mail::to(config('app.super_admin_mail'))->send(new SendFundRequestNotificationMail($superAdminMailData));
             return response()->json(['status' => true, 'message' => 'Your request of increase credit limit sent successfully.']);

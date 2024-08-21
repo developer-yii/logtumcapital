@@ -19,6 +19,7 @@ $(document).ready(function () {
             {data: 'name', name: 'name', orderable:false, sorting:false, className:'text-center'},
             {data: 'phone_number', name: 'phone_number', orderable:false, sorting:false, className:'text-center'},
             {data: 'authorized_credit_limit', name: 'authorized_credit_limit', orderable:false, sorting:false, className:'text-center'},
+            {data: 'ioweyou_expiry_date', name: 'ioweyou_expiry_date', orderable:false, sorting:false, className:'text-center'},
             {data: 'status', name: 'status', orderable:false, sorting:false, className:'text-center'},
             {data: 'action', name: 'action', orderable:false, sorting:false, className:'text-end'},
         ],
@@ -94,6 +95,7 @@ $(document).ready(function () {
                 $('#download_ine_document a').attr('href', ine_doc);
                 $('#download_ioweyou_document a').attr('href', ioweyou_doc);
                 $('.show-edit-document').removeClass('d-none');
+                $('#ioweyou_expiry_date').val(response.data.companyDetails.ioweyou_expiry_date);
                 // console.log(basePath + response.data.companyDetails.consetutive_act);
                 // console.log(basePath + response.data.companyDetails.ine);
                 // console.log(basePath + response.data.companyDetails.ioweyou);
@@ -107,7 +109,7 @@ $(document).ready(function () {
 
     // Delete company
     $('body').on('click', '.deleteCompany', function () {
-        if (confirm("Are you sure you want to delete?")) {
+        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
             var postData = {
                 companyId : $(this).data('id'),
             };

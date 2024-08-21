@@ -21,6 +21,7 @@ class Company extends Model
         'authorized_credit_limit',
         'consetutive_act',
         'ine',
-        'ioweyou'
+        'ioweyou',
+        'ioweyou_expiry_date'
     ];
 }

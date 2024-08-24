@@ -283,12 +283,13 @@ class EmployeeController extends Controller
 
     // show installment details
     public function loanTerms(Request $request){
-        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', auth()->id())->first();
+        $loanData = Loan::select('first_installment_date', 'amount', 'status')->where('user_id', auth()->id())->where('status', 4)->first();
         $loanStatusName = '';
+        $loanInstallments = [];
         if($loanData){
             $loanStatusName = Loan::getLoanStatusName($loanData->status);
+            $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
         }
-        $loanInstallments = LoanInstallment::where('user_id', auth()->id())->get();
         return view('employee.loan_terms', compact('loanInstallments','loanData', 'loanStatusName'));
     }
 

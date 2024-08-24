@@ -73,7 +73,7 @@ class LoanRequestController extends Controller
         return view('loan.request_fund_list');
     }
 
-    // change fund request status
+    // change Loan request status
     private function changeFundRequestStatus($loanRequestData, $status, $disbursement_date=null){
         if(!empty($loanRequestData) && !empty($status)){
             $user = User::select('company_id', 'first_name', 'middle_name', 'last_name', 'email')->where('id', $loanRequestData->user_id)->first();
@@ -103,7 +103,7 @@ class LoanRequestController extends Controller
             $employeeMailData = [];
             $companyAdminMailData = [];
 
-            //  fund request accepted
+            //  Loan request accepted
             if($status == 2){
 
                 // request accepted -> create loan
@@ -131,7 +131,7 @@ class LoanRequestController extends Controller
                     'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
                 ];
             }
-            // fund request rejected
+            // Loan request rejected
             elseif($status == 3){
                 $loanRequestData->status = $status;
                 $loanRequestData->save();
@@ -150,12 +150,12 @@ class LoanRequestController extends Controller
             if(!empty($companyAdminEmail)){
                 Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
             }
-            return ['status' => true, 'message' => 'Fund request status changed successfully.'];
+            return ['status' => true, 'message' => 'Loan request status changed successfully.'];
         }
         return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
     }
 
-    // create loan when fund request accepted
+    // create loan when Loan request accepted
     private function createLoan($loanRequest, $companyAdminId, $disbursement_date){
         $loanData = Loan::where('user_id', $loanRequest->user_id)->first();
 
@@ -174,6 +174,7 @@ class LoanRequestController extends Controller
 
         $totalLoanAmount = $loanData->amount;
         $finalAmount = ($totalLoanAmount - $totalPaidInstallments) + $loanRequest->amount;
+        // $finalAmount = $loanRequest->amount;
         $finalDuration = $loanRequest->duration;
 
         $loanData->amount = $finalAmount;
@@ -189,73 +190,193 @@ class LoanRequestController extends Controller
     }
 
     // create installments
-    private function createInstallments($loanData, $disbursement_date){
-        $installments = LoanInstallment::where('loan_id',$loanData->id)->whereDate('created_at', '>', $disbursement_date)->get();
-        $installments->each(function ($installment) {
+    // private function createInstallments($loanData, $disbursement_date){
+    //     $installments = LoanInstallment::where('loan_id',$loanData->id)->whereDate('created_at', '>', $disbursement_date)->get();
+    //     $installments->each(function ($installment) {
+    //         $installment->delete();
+    //     });
+    //     $loanInterest = ($loanData->amount * $loanData->loan_interest_rate)/100;
+    //     $totalAmountToPay = $loanData->amount + $loanInterest;
+    //     $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate)/100;
+    //     $weeklyCapitalDeduct = ($loanData->amount / $loanData->duration);
+    //     $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+    //     $installmentDate = $loanData->first_installment_date;
+
+    //     for($i = 1; $i <= $loanData->duration; $i++){
+    //         $loanInstallments = new LoanInstallment;
+    //         $loanInstallments->loan_id = $loanData->id;
+    //         $loanInstallments->user_id = $loanData->user_id;
+    //         $loanInstallments->installment_date = $installmentDate;
+    //         $loanInstallments->capital = $weeklyCapitalDeduct;
+    //         $loanInstallments->interest = $weeklyLoanInterestAmount;
+    //         $loanInstallments->payment = $installmentAmount;
+    //         $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
+    //         $loanInstallments->save();
+    //         $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
+    //     }
+
+    //     return true;
+    // }
+    private function createInstallments($loanData, $disbursement_date)
+    {
+        $pendingInstallments = [];
+        $j = 1;
+        $oldInstallmentTotal = 0;
+        $newInstallments = [];
+        $beforeDisbursedPaidInstallments = LoanInstallment::where('loan_id', $loanData->id)
+            ->whereDate('installment_date', '<=', $disbursement_date)
+            ->where('status', 2)
+            ->delete();
+        // Fetch existing installments created after the disbursement date
+        $beforeDisbursedInstallments = LoanInstallment::where('loan_id', $loanData->id)
+            ->whereDate('installment_date', '<=', $disbursement_date)
+            ->where('status', 1)
+            ->get();
+
+        $oldInstallmentCapitalTotal = 0;
+        
+        foreach($beforeDisbursedInstallments as $installment){
+            $pendingInstallments[] = [
+                'loan_id' => $installment->loan_id,
+                'user_id' => $installment->user_id,
+                'installment_date' => $installment->installment_date,
+                'capital' => $installment->capital,
+                'interest' => $installment->interest,
+                'payment' => $installment->payment,
+                'balance' => ($loanData->amount - ($installment->capital * $j)),
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+            $oldInstallmentCapitalTotal += $installment->capital;
+            $j++;
             $installment->delete();
-        });
-        $loanInterest = ($loanData->amount * $loanData->loan_interest_rate)/100;
-        $totalAmountToPay = $loanData->amount + $loanInterest;
-        $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate)/100;
-        $weeklyCapitalDeduct = ($loanData->amount / $loanData->duration);
+        }
+        
+        $afterInstallments = LoanInstallment::where('loan_id', $loanData->id)
+            ->whereDate('installment_date', '>', $disbursement_date)
+            ->delete();
+            
+        if (!empty($pendingInstallments)) {
+            Log::info('array till disbursement date : '.json_encode($pendingInstallments));
+            LoanInstallment::insert($pendingInstallments);
+        }
+
+        // Calculate interest and installment amounts
+        $finalAmount = $loanData->amount - $oldInstallmentCapitalTotal;
+        $loanInterest = ($finalAmount * $loanData->loan_interest_rate) / 100;
+        $totalAmountToPay = $finalAmount + $loanInterest;
+        $weeklyLoanInterestAmount = ($finalAmount * $loanData->weekly_interest_rate) / 100;
+        $weeklyCapitalDeduct = $finalAmount / $loanData->duration;
         $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
         $installmentDate = $loanData->first_installment_date;
 
-        for($i = 1; $i <= $loanData->duration; $i++){
-            $loanInstallments = new LoanInstallment;
-            $loanInstallments->loan_id = $loanData->id;
-            $loanInstallments->user_id = $loanData->user_id;
-            $loanInstallments->installment_date = $installmentDate;
-            $loanInstallments->capital = $weeklyCapitalDeduct;
-            $loanInstallments->interest = $weeklyLoanInterestAmount;
-            $loanInstallments->payment = $installmentAmount;
-            $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
-            $loanInstallments->save();
+        // Create new installments
+        for ($i = 1; $i <= $loanData->duration; $i++) {
+            $newInstallments[] = [
+                'loan_id' => $loanData->id,
+                'user_id' => $loanData->user_id,
+                'installment_date' => $installmentDate,
+                'capital' => $weeklyCapitalDeduct,
+                'interest' => $weeklyLoanInterestAmount,
+                'payment' => $installmentAmount,
+                'balance' => $finalAmount - (($weeklyCapitalDeduct * $i) + $oldInstallmentTotal),
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+            // Increment the installment date by one week
             $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
         }
 
+        // Insert pending installments into the database
+        if (!empty($newInstallments)) {
+            Log::info('new installment array : '.json_encode($newInstallments));
+            LoanInstallment::insert($newInstallments);
+        }
+
+        // Return true or the pending installments array, as needed
         return true;
     }
 
-    // private function createInstallments($loanData, $disbursement_date){
-    //     DB::beginTransaction();
+    // another version 
+    // private function createInstallments($loanData, $disbursement_date)
+    // {
+    //     $pendingInstallments = [];
+    //     $oldInstallmentCapitalTotal = 0;
+    //     $newInstallments = [];
+    //     $j = 1;
 
-    //     try {
-    //         // Delete existing installments
-    //         LoanInstallment::where('loan_id', $loanData->id)
-    //             ->whereDate('created_at', '>', $disbursement_date)
-    //             ->delete();
+    //     // Delete installments with status 2 (paid) on or before the disbursement date
+    //     LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '<=', $disbursement_date)
+    //         ->where('status', 2)
+    //         ->delete();
 
-    //         // Calculate loan details
-    //         $loanInterest = ($loanData->amount * $loanData->loan_interest_rate) / 100;
-    //         $totalAmountToPay = $loanData->amount + $loanInterest;
-    //         $weeklyLoanInterestAmount = ($loanData->amount * $loanData->weekly_interest_rate) / 100;
-    //         $weeklyCapitalDeduct = $loanData->amount / $loanData->duration;
-    //         $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
-    //         $installmentDate = $loanData->first_installment_date;
+    //     // Fetch and process unpaid installments created on or before the disbursement date
+    //     $beforeDisbursedInstallments = LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '<=', $disbursement_date)
+    //         ->where('status', 1)
+    //         ->get();
 
-    //         // Create new installments
-    //         for ($i = 1; $i <= $loanData->duration; $i++) {
-    //             $loanInstallments = new LoanInstallment;
-    //             $loanInstallments->loan_id = $loanData->id;
-    //             $loanInstallments->user_id = $loanData->user_id;
-    //             $loanInstallments->installment_date = $installmentDate;
-    //             $loanInstallments->capital = $weeklyCapitalDeduct;
-    //             $loanInstallments->interest = $weeklyLoanInterestAmount;
-    //             $loanInstallments->payment = $installmentAmount;
-    //             $loanInstallments->balance = $loanData->amount - ($weeklyCapitalDeduct * $i);
-    //             $loanInstallments->save();
-    //             $installmentDate = Carbon::parse($installmentDate)->addWeek()->toDateString();
-    //         }
-
-    //         DB::commit();
-    //         return true;
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         // Log the exception or handle it as needed
-    //         Log::error('Error creating installments: ' . $e->getMessage());
-    //         return false;
+    //     foreach ($beforeDisbursedInstallments as $installment) {
+    //         $pendingInstallments[] = [
+    //             'loan_id' => $installment->loan_id,
+    //             'user_id' => $installment->user_id,
+    //             'installment_date' => $installment->installment_date,
+    //             'capital' => $installment->capital,
+    //             'interest' => $installment->interest,
+    //             'payment' => $installment->payment,
+    //             'balance' => $loanData->amount - ($installment->capital * $j),
+    //             'created_at' => Carbon::now(),
+    //             'updated_at' => Carbon::now(),
+    //         ];
+    //         $oldInstallmentCapitalTotal += $installment->capital;
+    //         $j++;
+    //         $installment->delete();
     //     }
+
+    //     // Delete installments created after the disbursement date
+    //     LoanInstallment::where('loan_id', $loanData->id)
+    //         ->whereDate('installment_date', '>', $disbursement_date)
+    //         ->delete();
+
+    //     // Insert the pending installments into the database
+    //     if (!empty($pendingInstallments)) {
+    //         Log::info('Array till disbursement date: ' . json_encode($pendingInstallments));
+    //         LoanInstallment::insert($pendingInstallments);
+    //     }
+
+    //     // Calculate interest and installment amounts for new installments
+    //     $finalAmount = $loanData->amount - $oldInstallmentCapitalTotal;
+    //     $loanInterest = ($finalAmount * $loanData->loan_interest_rate) / 100;
+    //     $totalAmountToPay = $finalAmount + $loanInterest;
+    //     $weeklyLoanInterestAmount = ($finalAmount * $loanData->weekly_interest_rate) / 100;
+    //     $weeklyCapitalDeduct = $finalAmount / $loanData->duration;
+    //     $installmentAmount = $weeklyCapitalDeduct + $weeklyLoanInterestAmount;
+    //     $installmentDate = $loanData->first_installment_date;
+
+    //     // Create new installments
+    //     for ($i = 1; $i <= $loanData->duration; $i++) {
+    //         $newInstallments[] = [
+    //             'loan_id' => $loanData->id,
+    //             'user_id' => $loanData->user_id,
+    //             'installment_date' => $installmentDate,
+    //             'capital' => $weeklyCapitalDeduct,
+    //             'interest' => $weeklyLoanInterestAmount,
+    //             'payment' => $installmentAmount,
+    //             'balance' => $finalAmount - (($weeklyCapitalDeduct * $i) + $oldInstallmentCapitalTotal),
+    //             'created_at' => Carbon::now(),
+    //             'updated_at' => Carbon::now(),
+    //         ];
+    //         $installmentDate = Carbon::parse($installmentDate)->addWeek()->format('Y-m-d');
+    //     }
+
+    //     // Insert the new installments into the database
+    //     if (!empty($newInstallments)) {
+    //         Log::info('New installment array: ' . json_encode($newInstallments));
+    //         LoanInstallment::insert($newInstallments);
+    //     }
+
+    //     return true;
     // }
 
     // upload ioweyou
@@ -313,7 +434,8 @@ class LoanRequestController extends Controller
                 DB::raw("CONCAT(users.first_name, ' ', IFNULL(CONCAT(users.middle_name, ' '), ''), users.last_name) as employee_name")
             )
             ->join('companies', 'loans.company_id', '=', 'companies.id')
-            ->join('users', 'loans.user_id', '=', 'users.id');
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->where('loans.status', 4);
 
             return DataTables::of($acceptedRequestLoans)
             ->addIndexColumn()

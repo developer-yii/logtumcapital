@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Validator;
 use App\Models\LoanCollection;
+use PDF;
 class LoanRequestController extends Controller
 {
     // get loan requests
@@ -693,5 +694,33 @@ class LoanRequestController extends Controller
                 ->make(true);
         }
         return view('loan.installment_collections');
+    }
+
+    //  download pdf
+    public function generatePdf()
+    {
+        $loanData = Loan::select(
+            'loans.*',
+            DB::raw('concat(users.first_name, " ", users.last_name) as employee_name'),
+            DB::raw('ROUND((loans.amount * loans.weekly_interest_rate / 100), 2) as payment'),
+            'companies.name as company_name',
+            DB::raw('DATE_SUB(loans.first_installment_date, INTERVAL 1 WEEK) as disbursed_date')
+        )
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('companies', 'loans.company_id', '=', 'companies.id')
+        ->whereIn('loans.status', [2, 4, 5])
+        ->get();
+
+        $totalLoans = $loanData->count();
+        $totalLoanAmount = $loanData->sum('amount');
+        $totalPayment = $loanData->sum('payment');
+
+        $data = ['title' => 'Loan List', 'loanData' => $loanData, 'totalLoans' => $totalLoans, 'totalLoanAmount' => $totalLoanAmount, 'totalPayment' => $totalPayment];
+
+        // Load a view file to generate the PDF
+        $pdf = PDF::loadView('loan_list_pdf', $data);
+
+        // Return the generated PDF as a download
+        return $pdf->download('loan_list_'.time().'.pdf');
     }
 }

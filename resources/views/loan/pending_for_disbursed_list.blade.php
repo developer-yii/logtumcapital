@@ -13,6 +13,7 @@
         <h4 class="page-title">{{ $labelMain }}</h4>
     </div>
     <div class="col-md-6">
+        <a href="{{ route('generate.pdf') }}" class="btn btn-primary float-end" id="download_pdf">Print PDF</a>
     </div>
 </div>
 

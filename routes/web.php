@@ -68,6 +68,7 @@ Route::middleware(['checkrole:Super Admin'])->group(function () {
         Route::get('/get-loan-details', [LoanRequestController::class, 'getLoanDetails'])->name('loan.getLoanDetails');
         Route::get('/completed-loans', [LoanRequestController::class, 'completedLoans'])->name('loan.completedLoans');
         Route::get('/collected-installments', [LoanRequestController::class, 'loanInstallmentCollection'])->name('loan.collectedInstallments');
+        Route::get('/generate-pdf', [LoanRequestController::class, 'generatePdf'])->name('generate.pdf');
     });
     Route::prefix('interest-rate')->group(function () {
         Route::get('/get', [InterestRateController::class, 'get'])->name('interestrate.get');

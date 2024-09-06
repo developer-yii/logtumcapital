@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let companiesTable = $('#companies_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -109,7 +110,7 @@ $(document).ready(function () {
 
     // Delete company
     $('body').on('click', '.deleteCompany', function () {
-        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
+        if (confirm(deleteCompanyConfirmMsg)) {
             var postData = {
                 companyId : $(this).data('id'),
             };
@@ -128,7 +129,7 @@ $(document).ready(function () {
 
     // change status of company
     $('body').on('change', '.change-status', function(){
-        if (confirm("Are you sure you want to change status of company?")) {
+        if (confirm(changeStatusMsg)) {
             var postData = {
                 companyId : $(this).data('id'),
                 status: $(this).val(),

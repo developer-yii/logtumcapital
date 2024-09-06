@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let companyAdminsTable = $('#company_admins_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -96,7 +97,7 @@ $(document).ready(function () {
 
     // Delete company
     $('body').on('click', '.deleteCompanyAdmin', function () {
-        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
+        if (confirm(deleteCompanyAdminConfirmMsg)) {
             var postData = {
                 companyAdminId : $(this).data('id'),
             };

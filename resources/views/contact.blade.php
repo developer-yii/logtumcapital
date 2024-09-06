@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Contact')
+@section('title', __("transaltion.Contact"))
 @section('content')
     <!-- innaerBanner start -->
     <section class="innaerBanner over-bg">

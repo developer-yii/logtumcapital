@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Loan Requests";
-  $label = "request for loan";
+  $labelMain = __("translation.Loan Requests");
+  $label = __("translation.request for loan");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -13,7 +13,7 @@
         <h4 class="page-title">{{ $labelMain }}</h4>
     </div>
     <div class="col-md-6">
-        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addModal" id="add-new-btn"><i class="uil-plus"></i> Add {{ $label }}</button>
+        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addModal" id="add-new-btn"><i class="uil-plus"></i>{{ __("translation.Add") }} {{ $label }}</button>
     </div>
 </div>
 
@@ -26,9 +26,9 @@
                         @php
                             $loanAmount = !empty($loanData->amount)?$loanData->amount:0;
                         @endphp
-                        <h4>Name : {{ auth()->user()->first_name." ".auth()->user()->last_name }}</h4>
-                        <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
-                        <h5>Credit Available : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount) }}</h5>
+                        <h4>{{ __("translation.Name") }} : {{ auth()->user()->first_name." ".auth()->user()->last_name }}</h4>
+                        <h5>{{ __("translation.Debit As of Today") }} : {{ currencyFormatter($loanAmount) }}</h5>
+                        <h5>{{ __("translation.Credit Available") }} : {{ currencyFormatter(auth()->user()->authorized_credit_limit - $loanAmount) }}</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -37,10 +37,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Amount</th>
-                                    <th>Duration (in weeks)</th>
-                                    <th>Date</th>
-                                    <th class="text-end">Status</th>
+                                    <th>{{ __("translation.Amount") }}</th>
+                                    <th>{{ __("translation.Duration (in weeks)")}}</th>
+                                    <th>{{ __("translation.Date") }}</th>
+                                    <th class="text-end">{{ __("translation.Status") }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -58,39 +58,39 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><span>Add</span> {{$label}}</h4>
+                    <h4 class="modal-title"><span>{{ __("translation.Add") }}</span> {{$label}}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
                     <div class="form-group mb-3">
-                        <label for="bank_name" class="form-label">Bank Name <span class="text-danger"> *</span></label>
+                        <label for="bank_name" class="form-label">{{ __("translation.Bank Name") }} <span class="text-danger"> *</span></label>
                         <input type="text" id="bank_name" name="bank_name" class="form-control" value="">
                         <span id="error_bank_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="account_number" class="form-label">Account Number <span class="text-danger"> *</span></label>
+                        <label for="account_number" class="form-label">{{ __("translation.Account Number") }} <span class="text-danger"> *</span></label>
                         <input type="text" id="account_number" name="account_number" class="form-control" value="">
                         <span id="error_account_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="amount" class="form-label">Amount <span class="text-danger"> *</span></label>
+                        <label for="amount" class="form-label">{{ __("translation.Amount") }} <span class="text-danger"> *</span></label>
                         <input type="number" id="amount" name="amount" min="1" class="form-control" value="">
                         <span id="error_amount" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="duration" class="form-label">Duration <span class="text-danger"> *</span></label>
+                        <label for="duration" class="form-label">{{ __("translation.Duration") }} <span class="text-danger"> *</span></label>
                         <div class="input-group input-group-merge">
                             <input type="number" id="duration" name="duration" min="1" class="form-control" value="">
                             <div class="input-group-text" data-password="false">
-                                weeks
+                                {{ __("translation.weeks") }}
                             </div>
                         </div>
                         <span id="error_duration" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">
-                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">Save</button>
+                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">{{ __("translation.Cancel") }}</button>
+                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">{{ __("translation.Save") }}</button>
                 </div>
             </div>
         </form>

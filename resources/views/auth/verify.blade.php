@@ -1,5 +1,5 @@
 @extends('layouts.login')
-
+@section('title', __('translation.Verify'))
 @section('content')
 <div class="row justify-content-center">
     <div class="col-xxl-4 col-lg-5">
@@ -14,21 +14,21 @@
             <div class="card-body p-4">
 
                 <div class="text-center w-75 m-auto">
-                    <h4 class="text-dark-50 text-center mt-0 fw-bold">{{ __('Verify Your Email Address') }}</h4>
+                    <h4 class="text-dark-50 text-center mt-0 fw-bold">{{ __('translation.Verify Your Email Address') }}</h4>
                 </div>
 
                 @if (session('resent'))
                     <div class="alert alert-success" role="alert">
-                        {{ __('A fresh verification link has been sent to your email address.') }}
+                        {{ __('translation.A fresh verification link has been sent to your email address.') }}
                     </div>
                 @endif
                 <p class="text-muted mb-2">
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
+                    {{ __('translation.Before proceeding, please check your email for a verification link.') }}
+                    {{ __('translation.If you did not receive the email') }},
                 </p>
                 <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                     @csrf
-                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('translation.click here to request another') }}</button>.
                 </form>
             </div>
         </div>

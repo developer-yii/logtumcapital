@@ -94,10 +94,10 @@ class InvestmentController extends Controller
             $investment->fill($data);
 
             if ($investment->save()) {
-                return response()->json(['status' => true, 'message' => 'Investment details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Investment details stored successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store investment details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to store investment details.")]);
     }
 
     // edit investment details
@@ -107,7 +107,7 @@ class InvestmentController extends Controller
         if(!empty($investmentData)){
             return response()->json(['status'=>true, 'message'=>'Success.', 'data'=>['investmentDetails' => $investmentData]]);
         }
-        return response()->json(['status' => false, 'message' => 'Failed to get investment details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to get investment details.")]);
     }
 
     // delete investment details
@@ -116,13 +116,13 @@ class InvestmentController extends Controller
         if($request->investmentId){
             $investmentData = Investment::find($request->investmentId);
             if (!$investmentData) {
-                return response()->json(['status' => false, 'message' => 'Investment not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Investment not found.")]);
             }
 
             if ($investmentData->delete()) {
-                return response()->json(['status' => true, 'message' => 'Investment details deleted successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Investment details deleted successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to delete investment details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to delete investment details.")]);
     }
 }

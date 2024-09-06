@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Loan Requests";
-  $label = "Loan requests";
+  $labelMain = __("translation.Loan Requests");
+  $label = __("translation.Loan requests");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -26,12 +26,12 @@
                             <thead>
                                 <tr>
                                     <th class="text-start">#</th>
-                                    <th class="text-center">Company Name</th>
-                                    <th class="text-center">Employee Name</th>
-                                    <th class="text-center">Amount</th>
-                                    <th class="text-center">Duration (in weeks)</th>
-                                    <th class="text-center">IOweYou</th>
-                                    <th class="text-end">Action</th>
+                                    <th class="text-center">{{ __("translation.Company Name") }}</th>
+                                    <th class="text-center">{{ __("translation.Employee Name") }}</th>
+                                    <th class="text-center">{{ __("translation.Amount") }}</th>
+                                    <th class="text-center">{{ __("translation.Duration (in weeks)") }}</th>
+                                    <th class="text-center">{{ __("translation.IOweYou") }}</th>
+                                    <th class="text-end">{{ __("translation.Actions") }}</th>
                                 </tr>
                             </thead>
                         </table>

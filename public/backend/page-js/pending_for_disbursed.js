@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let pendingDisbursedLoansTable = $('#disbursed_pending_loans').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,

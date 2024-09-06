@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Welcome')
+@section('title', __("translation.Welcome"))
 @section('content')
     <!-- banner start -->
     <section id="banner" class="home">
@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="banner-box">
                     <div class="up-title">
-                        <h1>Calculate the monthly <br>payment of your loan</h1>
+                        <h1>{{ __("translation.Calculate the monthly") }} <br>{{ __("translation.payment of your loan") }}</h1>
                     </div>
                     <div class="loan-sec">
                         <div class="row align-items-center">
@@ -20,11 +20,11 @@
                                                 class="w-100 form-control-range range-slider" aria-valuenow="14000"
                                                 aria-valuemin="1" aria-valuemax="100000">
                                         </div>
-                                        <p class="title-p">With weekly payment of</p>
+                                        <p class="title-p">{{ __("translation.With weekly payment of") }}</p>
                                         <h3 id="weekly_interest_payment">$1,162</h3>
-                                        <p>You only need your ID and a proof of address</p>
+                                        <p>{{ __("translation.You only need your ID and a proof of address") }}</p>
                                         <div class="btn-submit text-center">
-                                            <a href="{{ route('register') }}">Register</a>
+                                            <a href="{{ route('register') }}">{{ __("translation.Register") }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -48,7 +48,7 @@
             <div class="container">
                 <div class="interest-box">
                     <div class="title-text">
-                        <h2><span>Comparison of</span> Annual interest Rates</h2>
+                        <h2><span>{{ __("translation.Comparison of") }}</span> {{ __("translation.Annual interest Rates") }}</h2>
                     </div>
                     <div class="rate-box">
                         <div class="row">
@@ -64,9 +64,9 @@
                                         </div>
                                         <div class="text-box">
                                             <h4>{{ $interest->interest_rate.'%' }}</h4>
-                                            <p>Fixed Annual Rate</p>
+                                            <p>{{ __("translation.Fixed Annual Rate") }}</p>
                                             <div class="value-btn">
-                                                <button class="btn-val">Evaluate</button>
+                                                <button class="btn-val">{{ __("translation.Evaluate") }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -162,16 +162,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="left-box">
-                                    <h2>Our Services</h2>
+                                    <h2>{{ __("translation.Our Services") }}</h2>
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="right-box">
-                                    <p>We offer convenient money lending solution and reliable. With competitive
-                                        interest rates that are lower than traditional banks. our goal is to make the
-                                        loan is accessible to everyone.</p>
+                                    <p>{{ __("translation.We offer convenient money lending solution and reliable. With competitive interest rates that are lower than traditional banks. our goal is to make the loan is accessible to everyone.") }}</p>
                                     <div class="reg-btn">
-                                        <a href="{{ route('register') }}">Register</a>
+                                        <a href="{{ route('register') }}">{{ __("translation.Register") }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -181,56 +179,56 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
-                                    <h4>Personal Loan</h4>
-                                    <h6>Need funds for</h6>
+                                    <h4>{{ __("translation.Personal Loan") }}</h4>
+                                    <h6>{{ __("translation.Need funds for") }}</h6>
                                     <ul>
                                         <li>
-                                            <p>a personal project,</p>
+                                            <p>{{ __("translation.a personal project,") }}</p>
                                         </li>
                                         <li>
-                                            <p>unexpected expense, or</p>
+                                            <p>{{ __("translation.unexpected expense, or") }}</p>
                                         </li>
                                         <li>
-                                            <p>special occasion?</p>
+                                            <p>{{ __("translation.special occasion?") }}</p>
                                         </li>
                                     </ul>
-                                    <p>Our personal loans offer competitive interest rates.</p>
+                                    <p>{{ __("translation.Our personal loans offer competitive interest rates.") }}</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
-                                    <h4>Emergency Loan</h4>
-                                    <h6>Life is full of surprises</h6>
+                                    <h4>{{ __("translation.Emergency Loan") }}</h4>
+                                    <h6>{{ __("translation.Life is full of surprises") }}</h6>
                                     <ul>
                                         <li>
-                                            <p>Medical bills</p>
+                                            <p>{{ __("translation.Medical bills") }}</p>
                                         </li>
                                         <li>
-                                            <p>Car repairs</p>
+                                            <p>{{ __("translation.Car repairs") }}</p>
                                         </li>
                                         <li>
-                                            <p>Home emergencies</p>
+                                            <p>{{ __("translation.Home emergencies") }}</p>
                                         </li>
                                     </ul>
-                                    <p>We understand the urgency of your situation and strive to offer fast financing.</p>
+                                    <p>{{ __("translation.We understand the urgency of your situation and strive to offer fast financing.") }}</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
-                                    <h4>Salary Advances</h4>
-                                    <h6>Our salary advances will help you:</h6>
+                                    <h4>{{ __("translation.Salary Advances") }}</h4>
+                                    <h6>{{ __("translation.Our salary advances will help you:") }}</h6>
                                     <ul>
                                         <li>
-                                            <p>Bridge the gap between paydays</p>
+                                            <p>{{ __("translation.Bridge the gap between paydays") }}</p>
                                         </li>
                                         <li>
-                                            <p>Reduce financial stress</p>
+                                            <p>{{ __("translation.Reduce financial stress") }}</p>
                                         </li>
                                         <li>
-                                            <p>Access funds to cover expenses</p>
+                                            <p>{{ __("translation.Access funds to cover expenses") }}</p>
                                         </li>
                                     </ul>
-                                    <p>Say goodbye to financial stress and hello to peace of mind with our salary advance services.</p>
+                                    <p>{{ __("translation.Say goodbye to financial stress and hello to peace of mind with our salary advance services.") }}</p>
                                 </div>
                             </div>
                         </div>

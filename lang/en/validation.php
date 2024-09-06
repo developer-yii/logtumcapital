@@ -186,6 +186,37 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        "name" => "name",
+        "email" => "email",
+        "password" => "password",
+        "phone_number" => "phone number",
+        "address" => "address",
+        "consetitutive_act_document" => "constitutive act document",
+        "ine_document" => "ine document",
+        "company" => "company",
+        "first_name" => "first name",
+        "middle_name" => "middle name",
+        "last_name" => "last name",
+        "address" => "address",
+        "confirm_password" => "confirm password",
+        "ioweyou_expiry_date" => "ioweyou expiry date",
+        "ioweyou_document" => "ioweyou document",
+        "authorized_credit_limit" => "authorized credit limit",
+        "bank_name" => "bank name",
+        "account_number" => "account number",
+        "amount" => "amount",
+        "duration" => "duration",
+        "employee" => "employee",
+        "interest_rate" => "interest rate",
+        "contributions" => "contributions",
+        "interest_earnings" => "interest earnings",
+        "total_amount" => "total amount",
+        "investment_contract" => "investment contract",
+        "note" => "note",
+        "disbursement_date" => "disbursement date",
+        "bank_receipt" => "bank receipt",
+        "proof_of_address" => "proof of address",
+    ],
 
 ];

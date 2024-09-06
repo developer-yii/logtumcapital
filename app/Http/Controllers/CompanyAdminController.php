@@ -98,10 +98,10 @@ class CompanyAdminController extends Controller
             $companyAdmin->fill($data);
 
             if ($companyAdmin->save()) {
-                return response()->json(['status' => true, 'message' => 'Company admin details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Company admin details stored successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store company admin details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to store company admin details.")]);
     }
 
     // edit company admin details
@@ -111,7 +111,7 @@ class CompanyAdminController extends Controller
         if(!empty($companyAdminData)){
             return response()->json(['status'=>true, 'message'=>'Success.', 'data'=>['companyAdminDetails' => $companyAdminData]]);
         }
-        return response()->json(['status' => false, 'message' => 'Failed to get company admin details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to get company admin details.")]);
     }
 
     // delete company admin details
@@ -120,13 +120,13 @@ class CompanyAdminController extends Controller
         if($request->companyAdminId){
             $companyAdminData = User::find($request->companyAdminId);
             if (!$companyAdminData) {
-                return response()->json(['status' => false, 'message' => 'Company admin not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Company admin not found.")]);
             }
 
             if ($companyAdminData->delete()) {
-                return response()->json(['status' => true, 'message' => 'Company admin details deleted successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Company admin details deleted successfully.") ]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to delete company admin details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to delete company admin details.") ]);
     }
 }

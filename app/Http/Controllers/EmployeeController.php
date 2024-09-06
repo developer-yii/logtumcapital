@@ -250,10 +250,10 @@ class EmployeeController extends Controller
             $employee->fill($data);
 
             if ($employee->save()) {
-                return response()->json(['status' => true, 'message' => 'Employee details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Employee details stored successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store employee details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to store employee details.")]);
     }
 
     // edit employee details
@@ -263,7 +263,7 @@ class EmployeeController extends Controller
         if(!empty($employeeData)){
             return response()->json(['status'=>true, 'message'=>'Success.', 'data'=>['employeeDetails' => $employeeData]]);
         }
-        return response()->json(['status' => false, 'message' => 'Failed to get employee details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to get employee details.")]);
     }
 
     // delete employee details
@@ -272,14 +272,14 @@ class EmployeeController extends Controller
         if($request->employeeId){
             $employeeData = User::find($request->employeeId);
             if (!$employeeData) {
-                return response()->json(['status' => false, 'message' => 'Employee not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Employee not found.")]);
             }
 
             if ($employeeData->delete()) {
-                return response()->json(['status' => true, 'message' => 'Employee details deleted successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Employee details deleted successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to delete employee details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to delete employee details.")]);
     }
 
     // show installment details
@@ -347,7 +347,7 @@ class EmployeeController extends Controller
                         $employeeCreditData = getEmployeeCreditsData($user->id);
                         $availableEmployeeCredit = $employeeCreditData['availableCredit'];
                         if ($value > $availableEmployeeCredit) {
-                            $fail('The ' . $attribute . ' must not exceed your credit limit.');
+                            $fail(__('translation.The :attribute must not exceed your credit limit.', ['attribute' => $attribute]));
                         }
                     },
                 ],
@@ -381,25 +381,25 @@ class EmployeeController extends Controller
                 $companyInfo = getCompanyData($user->company_id);
                 $weekText = '';
                 if($saveLoanRequest->duration == 1){
-                    $weekText = 'week';
+                    $weekText = __('translation.week');
                 }else{
-                    $weekText = 'weeks';
+                    $weekText = __('translation.weeks');
                 }
                 $companyAdminMailData = [
-                    'subject' => 'New Fund Request',
-                    'message' => $fullName.' requested funds amounting to '.currencyFormatter($saveLoanRequest->amount).' for a duration of ' . $saveLoanRequest->duration .' '. $weekText .'.'
+                    'subject' => __("translation.New Fund Request"),
+                    'message' => __("translation.:fullname requested funds amounting to :amount for a duration of :duration :weektext .", ['fullname' => $fullName, 'amount' => currencyFormatter($saveLoanRequest->amount), 'duration' => $saveLoanRequest->duration, 'weektext' => $weekText]),
                 ];
 
                 $superAdminMailData = [
-                    'subject' => 'New Fund Request',
-                    'message' => 'Employee : ' . $fullName . ' from company : ' . $companyInfo->name . ' requested funds amounting to '.currencyFormatter($saveLoanRequest->amount).' for a duration of ' . $saveLoanRequest->duration .' '.$weekText.'.'
+                    'subject' => __("translation.New Fund Request"),
+                    'message' => __("translation.Employee : :fullname from company : :companyname requested funds amounting to :amount for a duration of :duration :week .", ['fullname' => $fullName, 'companyname' => $companyInfo->name, 'amount' => currencyFormatter($saveLoanRequest->amount), 'duration' => $saveLoanRequest->duration, 'weektext' => $weekText]),
                 ];
                 Mail::to($companyAdminMail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
                 Mail::to($superAdminMail)->send(new SendFundRequestNotificationMail($superAdminMailData));
-                return response()->json(['status' => true, 'message' => 'Your fund request received successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Your fund request received successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 
     // send request of company limit change
@@ -415,13 +415,13 @@ class EmployeeController extends Controller
                 return response()->json(['status' => 'error', 'message' => $validator->errors()]);
             }
             $superAdminMailData = [
-                'subject' => 'Change Authorized Credit Limit Request',
-                'message' => $request->company_name . ' requested to increase the authorized credit limit by ' . currencyFormatter($request->authorized_credit_limit) . '. Current credit limt is : '.currencyFormatter($request->current_limit).'.'
+                'subject' => __("translation.Change Authorized Credit Limit Request"),
+                'message' => __("translation.:companyname requested to increase the authorized credit limit by :creditlimit . Current credit limt is : :currentcreditlimit .", ['companyname' => $request->company_name, 'creditlimit' => currencyFormatter($request->authorized_credit_limit), 'currentcreditlimit'])
             ];
             Mail::to(config('app.super_admin_mail'))->send(new SendFundRequestNotificationMail($superAdminMailData));
-            return response()->json(['status' => true, 'message' => 'Your request of increase credit limit sent successfully.']);
+            return response()->json(['status' => true, 'message' => __("translation.Your request of increase credit limit sent successfully.")]);
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 
     // change employee credit limit
@@ -435,7 +435,7 @@ class EmployeeController extends Controller
                         $companyCreditData = getCompanyCreditsData($user->company_id);
                         $availableCredit = $companyCreditData['availableCredit'];
                         if($value > $availableCredit){
-                            $fail("You cannot exceed the company's total credit limit of ".currencyFormatter($availableCredit).'.');
+                            $fail(__("translation.You cannot exceed the company's total credit limit of :creditlimit .", ['creditlimit' => currencyFormatter($availableCredit)]));
                         }
                     }
 
@@ -443,7 +443,7 @@ class EmployeeController extends Controller
                         $employeeCreditData = getEmployeeCreditsData($request->employee);
                         $usedEmployeeCredit = $employeeCreditData['usedCredit'];
                         if($value < $usedEmployeeCredit){
-                            $fail('You cannot set the credit limit lower than '.currencyFormatter($usedEmployeeCredit).'.');
+                            $fail(__("translation.You cannot set the credit limit lower than :creditlimit.", ['creditlimit' => currencyFormatter($usedEmployeeCredit)]));
                         }
                     }
                 }]
@@ -457,8 +457,8 @@ class EmployeeController extends Controller
 
             $updateUserData = User::where('id', $request->employee)->update(['authorized_credit_limit' => $request->authorized_credit_limit]);
 
-            return response()->json(['status' => true, 'message' => 'Credit limit of employee updated successfully.']);
+            return response()->json(['status' => true, 'message' => __("translation.Credit limit of employee updated successfully.")]);
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 }

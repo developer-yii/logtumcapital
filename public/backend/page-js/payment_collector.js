@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let paymentCollectorsTable = $('#payment_collectors_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -96,7 +97,7 @@ $(document).ready(function () {
 
     // Delete payment collector
     $('body').on('click', '.deletePaymentCollector', function () {
-        if (confirm("Are you sure you want to delete?")) {
+        if (confirm(deleteConfirmMsg)) {
             var postData = {
                 paymentCollectorId : $(this).data('id'),
             };

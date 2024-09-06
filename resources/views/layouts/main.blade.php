@@ -75,6 +75,10 @@
     {{-- jquery toast message js --}}
     <script src="{{asset('/')}}backend/js/pages/jquery.toast.min.js"></script>
 
+    <script>
+        var current_language = @json(config('app.locale'));
+    </script>
+
     <script src="{{asset('/')}}backend/js/pages/custom.js?{{cacheclear()}}"></script>
 
     @if(Session::has('status'))

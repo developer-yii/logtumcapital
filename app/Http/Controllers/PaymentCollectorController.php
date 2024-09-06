@@ -98,10 +98,10 @@ class PaymentCollectorController extends Controller
             $paymentCollector->fill($data);
 
             if ($paymentCollector->save()) {
-                return response()->json(['status' => true, 'message' => 'Payment collector details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Payment collector details stored successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store payment collector details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to store payment collector details.")]);
     }
 
     // edit payment collector details
@@ -111,7 +111,7 @@ class PaymentCollectorController extends Controller
         if(!empty($paymentCollectorData)){
             return response()->json(['status'=>true, 'message'=>'Success.', 'data'=>['paymentCollectorDetails' => $paymentCollectorData]]);
         }
-        return response()->json(['status' => false, 'message' => 'Failed to get payment collector details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to get payment collector details.")]);
     }
 
     // // delete payment collector details
@@ -120,14 +120,14 @@ class PaymentCollectorController extends Controller
         if($request->paymentCollectorId){
             $paymentCollectorData = User::find($request->paymentCollectorId);
             if (!$paymentCollectorData) {
-                return response()->json(['status' => false, 'message' => 'Payment collector not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Payment collector not found.")]);
             }
 
             if ($paymentCollectorData->delete()) {
-                return response()->json(['status' => true, 'message' => 'Payment collector details deleted successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Payment collector details deleted successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to delete payment collector details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to delete payment collector details.")]);
     }
 
     // get upcoming payment collections
@@ -235,10 +235,10 @@ class PaymentCollectorController extends Controller
                         $this->updateLoanRequestStatus($installment->loan_id, 6);
                     }
                 }
-                return response()->json(['status' => true, 'message' => 'Bank receipt uploaded successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Bank receipt uploaded successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to upload bank receipt.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to upload bank receipt.")]);
     }
 
     // store backup of loan installments

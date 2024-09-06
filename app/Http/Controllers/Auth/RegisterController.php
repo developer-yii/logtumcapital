@@ -119,11 +119,11 @@ class RegisterController extends Controller
             $company->fill($data);
 
             if ($company->save()) {
-                $mailData = ['subject' => 'New Company Registered', 'message' => $company->name.' has registered on your platform. Please verify the documents and approve the joining request of the company to proceed with further processes.'];
+                $mailData = ['subject' => __('translation.New Company Registered'), 'message' => __('translation.:companyname has registered on your platform. Please verify the documents and approve the joining request of the company to proceed with further processes.', ['companyname' => $company->name])];
                 Mail::to(config('app.super_admin_mail'))->send(new CompanyRegisteredMail($mailData));
-                return response()->json(['status' => true, 'message' => 'Company details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __('translation.Company details stored successfully.')]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store company details.']);
+        return response()->json(['status' => false, 'message' => __('translation.Failed to store company details.')]);
     }
 }

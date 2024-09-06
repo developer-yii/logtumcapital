@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let employeesTable = $('#employees_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -134,7 +135,7 @@ $(document).ready(function () {
 
     // Delete employee
     $('body').on('click', '.deleteEmployee', function () {
-        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
+        if (confirm(deleteEmployeeConfirmMsg)) {
             var postData = {
                 employeeId : $(this).data('id'),
             };

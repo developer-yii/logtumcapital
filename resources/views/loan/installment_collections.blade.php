@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Collected Installments";
-  $label = "Collected Installments";
+  $labelMain = __("translation.Collected Installments");
+  $label = __("translation.Collected Installments");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -26,12 +26,12 @@
                             <thead>
                                 <tr>
                                     <th class="text-start">#</th>
-                                    <th class="text-center">Company Name</th>
-                                    <th class="text-center">Collected By</th>
-                                    <th class="text-center">Amount</th>
-                                    <th class="text-center">Bank Receipt</th>
-                                    <th class="text-center">Note</th>
-                                    <th class="text-end">Collected On</th>
+                                    <th class="text-center">{{ __("translation.Company Name") }}</th>
+                                    <th class="text-center">{{ __("translation.Collected By") }}</th>
+                                    <th class="text-center">{{ __("translation.Amount") }}</th>
+                                    <th class="text-center">{{ __("translation.Bank Receipt") }}</th>
+                                    <th class="text-center">{{ __("translation.Note") }}</th>
+                                    <th class="text-end">{{ __("translation.Collected On") }}</th>
                                 </tr>
                             </thead>
                         </table>

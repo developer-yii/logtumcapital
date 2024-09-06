@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let fundRequestTable = $('#requested_fund_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,

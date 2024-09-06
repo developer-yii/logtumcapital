@@ -1,5 +1,5 @@
 @extends('layouts.login')
-@section('title', 'Register')
+@section('title', __('translation.Register'))
 @section('content')
 <div class="row justify-content-center">
     <div class="col-xxl-4 col-lg-5">
@@ -14,47 +14,47 @@
             <div class="card-body p-4">
 
                 <div class="text-center w-75 m-auto">
-                    <h4 class="text-dark-50 text-center pb-2 fw-bold">Register Your Company</h4>
+                    <h4 class="text-dark-50 text-center pb-2 fw-bold">{{ __("translation.Register Your Company") }}</h4>
                 </div>
 
                 <form method="POST" id="register_form" action="{{ route('store-company-details') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name<span class="text-danger"> *</span></label>
+                        <label for="name" class="form-label">{{ __("translation.Name") }}<span class="text-danger"> *</span></label>
                         <input type="text" id="name" name="name" class="form-control" value="" autofocus>
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="phone_number" class="form-label">Phone number<span class="text-danger"> *</span></label>
+                        <label for="phone_number" class="form-label">{{ __("translation.Phone number") }}<span class="text-danger"> *</span></label>
                         <input type="text" id="phone_number" name="phone_number" class="form-control" value="">
-                        <span class="text-secondary">For example : +521234567890</span><br>
+                        <span class="text-secondary">{{ __("translation.For example") }} : +521234567890</span><br>
                         <span id="error_phone_number" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="address" class="form-label">Address<span class="text-danger"> *</span></label>
+                        <label for="address" class="form-label">{{ __("translation.Address") }}<span class="text-danger"> *</span></label>
                         <textarea cols="5" rows="5" name="address" id="address" class="form-control"></textarea>
                         <span id="error_address" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="consetitutive_act_document" class="form-label">Constitutive act document<span class="text-danger"> *</span></label>
+                        <label for="consetitutive_act_document" class="form-label">{{ __("translation.Constitutive act document") }}<span class="text-danger"> *</span></label>
                         <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" value="">
                         <span id="error_consetitutive_act_document" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="ine_document" class="form-label">INE document<span class="text-danger"> *</span></label>
+                        <label for="ine_document" class="form-label">{{ __("translation.INE document") }}<span class="text-danger"> *</span></label>
                         <input type="file" id="ine_document" name="ine_document" class="form-control" value="">
                         <span id="error_ine_document" class="error text-danger"></span>
                     </div>
                     <input type="hidden" id="status" name="status" value="1">
                     <div class="d-block text-center">
-                        <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>
+                        <button type="submit" class="btn btn-success" id="addorUpdateBtn">{{ __("translation.Save") }}</button>
                     </div>
                 </form>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12 text-center">
-                <p class="text-muted">Back to <a href="{{ url('/') }}" class="text-muted"><b>Home</b></a></p>
+                <p class="text-muted">{{ __("translation.Back to") }} <a href="{{ url('/') }}" class="text-muted"><b>{{ __("translation.Home") }}</b></a></p>
             </div>
         </div>
     </div>

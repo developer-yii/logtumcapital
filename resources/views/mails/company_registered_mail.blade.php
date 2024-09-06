@@ -3,6 +3,6 @@
 
 {{ $mailData['message'] }}
 
-Thanks,<br>
+{{ __('translation.Thanks') }},<br>
 {{ config('app.name') }}
 @endcomponent

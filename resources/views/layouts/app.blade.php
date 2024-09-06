@@ -25,9 +25,9 @@
                     </div>
                     <div class="log-box">
                         <ul>
-                            <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('login') }}">{{ __("translation.Login") }}</a></li>
                             <li><span class="text-white">|</span></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('register') }}">{{ __("translation.Register") }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -43,16 +43,16 @@
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="{{ url('/').'#services'}}">Services</a>
+                                    <a href="{{ url('/').'#services'}}">{{ __("translation.Services") }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/').'#approve'}}">How it works</a>
+                                    <a href="{{ url('/').'#approve'}}">{{ __("translation.How it works") }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/').'#banner' }}">Loan Calculator</a>
+                                    <a href="{{ url('/').'#banner' }}">{{ __("translation.Loan Calculator") }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('contact') }}" class="{{ Route::currentRouteName() == 'contact' ? 'active' : '' }}">Contact</a>
+                                    <a href="{{ route('contact') }}" class="{{ Route::currentRouteName() == 'contact' ? 'active' : '' }}">{{ __("translation.Contact") }}</a>
                                 </li>
                             </ul>
                         </nav>
@@ -79,16 +79,16 @@
                     <div class="ft-menu">
                         <ul>
                             <li>
-                                <a href="{{ url('/').'#services'}}">Services</a>
+                                <a href="{{ url('/').'#services'}}">{{ __("translation.Services") }}</a>
                             </li>
                             <li>
-                                <a href="{{ url('/').'#approve'}}">How it works</a>
+                                <a href="{{ url('/').'#approve'}}">{{ __("translation.How it works") }}</a>
                             </li>
                             <li>
-                                <a href="{{ url('/').'#banner'}}">Loan Calculator</a>
+                                <a href="{{ url('/').'#banner'}}">{{ __("translation.Loan Calculator") }}</a>
                             </li>
                             <li>
-                                <a href="{{ route('contact') }}">Contact</a>
+                                <a href="{{ route('contact') }}">{{ __("translation.Contact") }}</a>
                             </li>
                         </ul>
                     </div>

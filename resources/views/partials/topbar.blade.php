@@ -18,7 +18,7 @@ $loginUser = Auth::user();
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
                 <!-- item-->
                 <div class="dropdown-header noti-title">
-                    <h6 class="text-overflow m-0">Welcome, {{ App\Models\User::getRoleName($loginUser->role) }}!</h6>
+                    <h6 class="text-overflow m-0">{{ __("translation.Welcome") }}, {{ App\Models\User::getRoleName($loginUser->role) }}!</h6>
                 </div>
 
                 <!-- item-->
@@ -30,7 +30,7 @@ $loginUser = Auth::user();
                 <!-- item-->
                 <a href="{{route('dashboard')}}" class="dropdown-item notify-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="mdi mdi-logout me-1"></i>
-                    <span>Logout</span>
+                    <span>{{ __("translation.Logout") }}</span>
                 </a>
                 <form id="logout-form" action="{{route('logout')}}" method="POST" class="app-display-none">
                     @csrf

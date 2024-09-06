@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let completedLoansTable = $('#completed_loans_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,

@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Disbursed Loans";
-  $label = "Disbursed loans";
+  $labelMain = __("translation.Disbursed Loans");
+  $label = __("translation.Disbursed loans");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -13,7 +13,7 @@
         <h4 class="page-title">{{ $labelMain }}</h4>
     </div>
     <div class="col-md-6">
-        <a href="{{ route('generate.pdf') }}" class="btn btn-primary float-end" id="download_pdf">Print PDF</a>
+        <a href="{{ route('generate.pdf') }}" class="btn btn-primary float-end" id="download_pdf">{{ __("translation.Print PDF") }}</a>
     </div>
 </div>
 
@@ -27,13 +27,13 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th class="text-center">Company Name</th>
-                                    <th class="text-center">Employee Name</th>
-                                    <th class="text-center">Amount</th>
-                                    <th class="text-center">Duration (in weeks)</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Date</th>
-                                    <th class="text-end">Action</th>
+                                    <th class="text-center">{{ __("translation.Company Name") }}</th>
+                                    <th class="text-center">{{ __("translation.Employee Name") }} </th>
+                                    <th class="text-center">{{ __("translation.Amount") }}</th>
+                                    <th class="text-center">{{ __("translation.Duration (in weeks)") }}</th>
+                                    <th class="text-center">{{ __("translation.Status") }}</th>
+                                    <th class="text-center">{{ __("translation.Date") }}</th>
+                                    <th class="text-end">{{ __("translation.Actions") }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -49,37 +49,37 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewLoanDetailsModalLabel">Loan Details</h5>
+                <h5 class="modal-title" id="viewLoanDetailsModalLabel">{{ __("translation.Loan Details") }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="first_installment_date" class="form-label">First Installment Date</label>
+                        <label for="first_installment_date" class="form-label">{{ __("translation.First Installment Date") }}</label>
                         <input type="text" class="form-control" id="first_installment_date" readonly>
                     </div>
                     <div class="col">
-                        <label for="last_installment_date" class="form-label">Last Installment Date</label>
+                        <label for="last_installment_date" class="form-label">{{ __("translation.Last Installment Date") }}</label>
                         <input type="text" class="form-control" id="last_installment_date" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="yearly_interest_rate" class="form-label">Annual Interest Rate</label>
+                        <label for="yearly_interest_rate" class="form-label">{{ __("translation.Annual Interest Rate") }}</label>
                         <input type="text" class="form-control" id="yearly_interest_rate" readonly>
                     </div>
                     <div class="col">
-                        <label for="loan_interest_rate" class="form-label">Loan Interest Rate</label>
+                        <label for="loan_interest_rate" class="form-label">{{ __("translation.Loan Interest Rate") }}</label>
                         <input type="text" class="form-control" id="loan_interest_rate" readonly>
                     </div>
                     <div class="col">
-                        <label for="weekly_interest_rate" class="form-label">Weekly Interest Rate</label>
+                        <label for="weekly_interest_rate" class="form-label">{{ __("translation.Weekly Interest Rate") }}</label>
                         <input type="text" class="form-control" id="weekly_interest_rate" readonly>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("translation.Close") }}</button>
             </div>
         </div>
     </div>

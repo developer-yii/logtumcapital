@@ -23,6 +23,7 @@ $(document).ready(function () {
 
     // Initialize DataTable
     let fundRequestTable = $('#requested_fund_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -54,7 +55,7 @@ $(document).ready(function () {
     // change fund request status
     $('body').on('change', '.change-fund-request-status', function(){
         var changedStatus = $(this).val();
-        if (confirm("Are you sure you want to change status?")) {
+        if (confirm(changeFundRequestConfirmMsg)) {
             if(changedStatus == 2){
                 $('#upload_ioweyou_form').trigger("reset");
                 $('#upload_ioweyou_modal .error').html('');

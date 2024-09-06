@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Loan List PDF</title>
+    <title>{{ __("translation.Loan List PDF") }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,14 +61,14 @@
     <table>
         <thead>
             <tr>
-                <th>Loan</th>
-                <th>Weeks</th>
-                <th>Name</th>
-                <th>Payment</th>
-                <th>Delivery</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Company</th>
+                <th>{{ __("translation.Loan") }}</th>
+                <th>{{ __("translation.Weeks") }}</th>
+                <th>{{ __("translation.Name") }}</th>
+                <th>{{ __("translation.Payment") }}</th>
+                <th>{{ __("translation.Delivery") }}</th>
+                <th>{{ __("translation.Start") }} Date</th>
+                <th>{{ __("translation.End") }} Date</th>
+                <th>{{ __("translation.Company") }}</th>
             </tr>
         </thead>
         <tbody>
@@ -87,12 +87,12 @@
         </tbody>
     </table>
     <div class="summary">
-        <span>Total Loan Amount: {{ currencyFormatter($totalLoanAmount) }}</span>
-        <span>Total Loans: {{ $totalLoans }}</span>
-        <span>Total Payment: {{ currencyFormatter($totalPayment) }}</span>
+        <span>{{ __("translation.Total Loan Amount") }} : {{ currencyFormatter($totalLoanAmount) }}</span>
+        <span>{{ __("translation.Total Loans") }} : {{ $totalLoans }}</span>
+        <span>{{ __("translation.Total Payment") }} : {{ currencyFormatter($totalPayment) }}</span>
     </div>
     <footer>
-        <p>Downloaded as on: {{ \Carbon\Carbon::now()->format('M d, Y H:i:s') }}</p>
+        <p>{{ __("translation.Downloaded as on") }} : {{ \Carbon\Carbon::now()->format('M d, Y H:i:s') }}</p>
     </footer>
 </body>
 </html>

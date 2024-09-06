@@ -157,10 +157,10 @@ class CompanyController extends Controller
             $company->fill($data);
 
             if ($company->save()) {
-                return response()->json(['status' => true, 'message' => 'Company details stored successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Company details stored successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to store company details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to store company details.")]);
     }
 
     // edit compnay details
@@ -170,7 +170,7 @@ class CompanyController extends Controller
         if(!empty($companyData)){
             return response()->json(['status'=>true, 'message'=>'Success.', 'data'=>['companyDetails' => $companyData]]);
         }
-        return response()->json(['status' => false, 'message' => 'Failed to get company details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to get company details.")]);
     }
 
     // delete company details
@@ -179,14 +179,14 @@ class CompanyController extends Controller
         if($request->companyId){
             $companyData = Company::find($request->companyId);
             if (!$companyData) {
-                return response()->json(['status' => false, 'message' => 'Company not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Company not found.")]);
             }
 
             if ($companyData->delete()) {
-                return response()->json(['status' => true, 'message' => 'Company details deleted successfully.']);
+                return response()->json(['status' => true, 'message' => __("translation.Company details deleted successfully.")]);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to delete company details.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to delete company details.")]);
     }
 
     // change status of company
@@ -194,16 +194,16 @@ class CompanyController extends Controller
         if($request->companyId){
             $companyData = Company::find($request->companyId);
             if (!$companyData) {
-                return response()->json(['status' => false, 'message' => 'Company not found.']);
+                return response()->json(['status' => false, 'message' => __("translation.Company not found.")]);
             }
 
             if (!empty($companyData->status)) {
                 $companyData->status = $request->status;
                 if($companyData->save()){
-                    return response()->json(['status' => true, 'message' => 'Status of the company changed successfully.']);
+                    return response()->json(['status' => true, 'message' => __("translation.Status of the company changed successfully.")]);
                 }
             }
         }
-        return response()->json(['status' => false, 'message' => 'Failed to change status of the company.']);
+        return response()->json(['status' => false, 'message' => __("translation.Failed to change status of the company.")]);
     }
 }

@@ -47,7 +47,7 @@ class LoanRequestController extends Controller
                         $extension = strtolower(pathinfo($row->ioweyou, PATHINFO_EXTENSION));
                         $img= asset('storage').'/'.$row->ioweyou;
                         // if($extension == 'pdf'){
-                            return '<a class="btn custom-btn" href="'.$img.'" download>Download</a>';
+                            return '<a class="btn custom-btn" href="'.$img.'" download>'.__("translation.Download").'</a>';
                         // }
                         // return "<img class='enlarge-image pe-auto' href='".$img."' height='50px' width='50px'>";
                     }else{
@@ -57,9 +57,9 @@ class LoanRequestController extends Controller
                 ->editColumn('status',function($row){
                     if($row->status == 1){
                         return "<select class='change-fund-request-status form-select w-auto' data-id='".$row->id."'>
-                            <option value='1' selected>Pending</option>
-                            <option value='2'>Accept</option>
-                            <option value='3'>Reject</option>
+                            <option value='1' selected>".__("translation.Pending")."</option>
+                            <option value='2'>".__("translation.Accept")."</option>
+                            <option value='3'>".__("translation.Reject")."</option>
                         </select>";
                     }else{
                         return LoanRequest::getLoanRequestStatusName($row->status);
@@ -98,7 +98,7 @@ class LoanRequestController extends Controller
 
             $weekText = 'weeks';
             if($loanRequestData->duration < 2){
-                $weekText = 'week';
+                $weekText = __("translation.week");
             }
 
             $employeeMailData = [];
@@ -113,7 +113,7 @@ class LoanRequestController extends Controller
                 //  create installments
                 $installmentResponse = $this->createInstallments($loanRequestData, $responseLoanData, $disbursement_date);
                 if(!$installmentResponse){
-                    return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
+                    return ['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")];
                 }
 
                 if(!empty($responseLoanData->id)){
@@ -123,13 +123,13 @@ class LoanRequestController extends Controller
                 }
 
                 $employeeMailData = [
-                    'subject' => 'Loan Request Approved',
-                    'message' => 'Your request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
+                    'subject' => __("translation.Loan Request Approved"),
+                    'message' => __("translation.Your request of fund amounting to :amount for a duration of :duration :weektext has been approved.", ['amount' => currencyFormatter($loanRequestData->amount), 'duration' => $loanRequestData->duration, 'weektext' => $weekText])
                 ];
 
                 $companyAdminMailData = [
-                    'subject' => 'Loan Request Approved',
-                    'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been approved.'
+                    'subject' => __("translation.Loan Request Approved"),
+                    'message' => __("translation.Employee : :fullname has requested funds amounting to :amount for a duration of :duration :weektext has been approved.", ['fullname' => $fullName, 'amount' => currencyFormatter($loanRequestData->amount), 'duration' => $loanRequestData->duration, 'weektext' => $weekText])
                 ];
             }
             // Loan request rejected
@@ -137,13 +137,13 @@ class LoanRequestController extends Controller
                 $loanRequestData->status = $status;
                 $loanRequestData->save();
                 $employeeMailData = [
-                    'subject' => 'Loan Request Rejected',
-                    'message' => 'Your request of fund amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
+                    'subject' => __("translation.Loan Request Rejected"),
+                    'message' => __("translation.Your request of fund amounting to :amount for a duration of :duration :weektext has been rejected.", ['amount' => currencyFormatter($loanRequestData->amount), 'duration' => $loanRequestData->duration, 'weektext' => $weekText])
                 ];
 
                 $companyAdminMailData = [
-                    'subject' => 'Loan Request Rejected',
-                    'message' => 'Employee : ' . $fullName . ' has requested funds amounting to '.currencyFormatter($loanRequestData->amount).' for a duration of ' . $loanRequestData->duration .' '.$weekText.' has been rejected.'
+                    'subject' => __("translation.Loan Request Rejected"),
+                    'message' => __("translation.Employee : :fullName has requested funds amounting to :amount for a duration of :duration :weektext has been rejected.", ['fullname' => $fullName, 'amount' => currencyFormatter($loanRequestData->amount), 'duration' => $loanRequestData->duration, 'weektext' => $weekText])
                 ];
             }
 
@@ -151,9 +151,9 @@ class LoanRequestController extends Controller
             if(!empty($companyAdminEmail)){
                 Mail::to($companyAdminEmail)->send(new SendFundRequestNotificationMail($companyAdminMailData));
             }
-            return ['status' => true, 'message' => 'Loan request status changed successfully.'];
+            return ['status' => true, 'message' => __("translation.Loan request status changed successfully.")];
         }
-        return ['status' => false, 'message' => 'Something went wrong. Please try again later.'];
+        return ['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")];
     }
 
     private function createLoan($loanRequest, $companyAdminId, $disbursement_date){
@@ -466,10 +466,10 @@ class LoanRequestController extends Controller
                 if(isset($changeFundRequestResponse['status'])){
                     return response()->json($changeFundRequestResponse);
                 }
-                return response()->json(['status'=>true, 'message'=>'Ioweyou document uploaded successfully.']);
+                return response()->json(['status'=>true, 'message'=>__("translation.Ioweyou document uploaded successfully.")]);
             }
         }
-        return response()->json(['status'=>false, 'message'=>'Something went wrong. Please try again later.']);
+        return response()->json(['status'=>false, 'message'=>__("translation.Something went wrong. Please try again later.")]);
     }
 
     // pending for disbursed loan request list
@@ -598,7 +598,7 @@ class LoanRequestController extends Controller
             if(!empty($getLoanDetails)){
                 return response()->json(['status' => true, 'message' => 'Success.', 'loanDetails' => $getLoanDetails]);
             }
-            return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+            return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
         }
     }
 
@@ -611,7 +611,7 @@ class LoanRequestController extends Controller
                 return response()->json($response);
             }
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 
     // completed loans
@@ -638,7 +638,7 @@ class LoanRequestController extends Controller
                         $extension = strtolower(pathinfo($row->ioweyou, PATHINFO_EXTENSION));
                         $img= asset('storage').'/'.$row->ioweyou;
                         // if($extension == 'pdf'){
-                            return '<a class="btn custom-btn" href="'.$img.'" download>Download</a>';
+                            return '<a class="btn custom-btn" href="'.$img.'" download>'.__("translation.Download").'</a>';
                         // }
                         // return "<img class='enlarge-image pe-auto' href='".$img."' height='50px' width='50px'>";
                     }else{
@@ -675,9 +675,9 @@ class LoanRequestController extends Controller
                 })
                 ->editColumn('bank_receipt', function($row) {
                     if ($row->bank_receipt) {
-                        return '<a href="'.asset('storage/'.$row->bank_receipt).'" target="_blank" download>Download</a>';
+                        return '<a href="'.asset('storage/'.$row->bank_receipt).'" target="_blank" download>'.__("translation.Download").'</a>';
                     } else {
-                        return '<a href="javascript:void(0)" target="_blank">Download</a>';
+                        return '<a href="javascript:void(0)" target="_blank">'.__("translation.Download").'</a>';
                     }
                 })
                 ->editColumn('note', function($row){
@@ -715,7 +715,7 @@ class LoanRequestController extends Controller
         $totalLoanAmount = $loanData->sum('amount');
         $totalPayment = $loanData->sum('payment');
 
-        $data = ['title' => 'Loan List', 'loanData' => $loanData, 'totalLoans' => $totalLoans, 'totalLoanAmount' => $totalLoanAmount, 'totalPayment' => $totalPayment];
+        $data = ['title' => __("translation.Loan List"), 'loanData' => $loanData, 'totalLoans' => $totalLoans, 'totalLoanAmount' => $totalLoanAmount, 'totalPayment' => $totalPayment];
 
         // Load a view file to generate the PDF
         $pdf = PDF::loadView('loan_list_pdf', $data);

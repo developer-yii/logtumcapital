@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Loan Requests";
-  $label = "Loan requests";
+  $labelMain = __("translation.Loan Requests");
+  $label = __("translation.Loan Requests");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -27,15 +27,15 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Company Name</th>
-                                    <th>Employee Name</th>
-                                    <th>Bank Name</th>
-                                    <th>Account Number</th>
-                                    <th>Amount</th>
-                                    <th>Duration (in weeks)</th>
-                                    <th>IOweYou</th>
-                                    <th>Status</th>
-                                    <th class="text-end">Date</th>
+                                    <th>{{ __("translation.Company Name") }}</th>
+                                    <th>{{ __("translation.Employee Name") }}</th>
+                                    <th>{{ __("translation.Bank Name") }}</th>
+                                    <th>{{ __("translation.Account Number") }}</th>
+                                    <th>{{ __("translation.Amount") }}</th>
+                                    <th>{{ __("translation.Duration (in weeks)") }}</th>
+                                    <th>{{ __("translation.IOweYou") }}</th>
+                                    <th>{{ __("translation.Status") }}</th>
+                                    <th class="text-end">{{ __("translation.Date") }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -53,26 +53,26 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><span>Upload</span> IOweYou</h4>
+                    <h4 class="modal-title"><span>{{ __("translation.Upload") }}</span> {{ __("translation.IOweYou") }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
                     <input type="hidden" id="fund_request_id" name="fund_request_id" value="">
                     <input type="hidden" id="status" name="status" value="">
                     <div class="form-group mb-3">
-                        <label for="disbursement_date" class="form-label">Disbursement date</label>
+                        <label for="disbursement_date" class="form-label">{{ __("translation.Disbursement date") }}</label>
                         <input type="text" id="disbursement_date" name="disbursement_date" class="form-control">
                         <span id="error_disbursement_date" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="ioweyou_document" class="form-label">IOweYou</label>
+                        <label for="ioweyou_document" class="form-label">{{ __("translation.IOweYou") }}</label>
                         <input type="file" id="ioweyou_document" name="ioweyou_document" class="form-control" value="">
                         <span id="error_ioweyou_document" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">
-                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-success float-end" id="save_btn">Save</button>
+                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">{{ __("translation.Cancel") }}</button>
+                    <button type="submit" class="btn btn-success float-end" id="save_btn">{{ __("translation.Save") }}</button>
                 </div>
             </div>
         </form>
@@ -84,7 +84,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Preview Image</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{ __("translation.Preview Image") }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -98,6 +98,7 @@
     <script>
         var getFundRequestsUrl = "{{ route('loan.requests') }}";
         var rejectRequestStatusUrl = "{{ route('loan.rejectFundRequestStatus') }}";
+        var changeFundRequestConfirmMsg = '{{ __("translation.Are you sure you want to change status?") }}';
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

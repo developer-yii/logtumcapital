@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Interest Rate Details";
-  $label = "Interest rate";
+  $labelMain = __("translation.Interest Rate Details");
+  $label = __("translation.Interest Rate");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -26,9 +26,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th>Interest Rate</th>
-                                    <th>Action</th>
+                                    <th>{{ __("translation.Name") }}</th>
+                                    <th>{{ __("translation.Interest Rate") }}</th>
+                                    <th>{{ __("translation.Actions") }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -46,25 +46,25 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><span>Add</span> {{$label}}</h4>
+                    <h4 class="modal-title"><span>{{ __("translation.Add") }}/span> {{$label}}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
                     <input type="hidden" name="interest_rate_id" id="interest_rate_id">
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">{{ __("translation.Name") }}</label>
                         <input type="text" id="name" name="name" class="form-control" value="" autocomplete readonly>
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="interest_rate" class="form-label">Interest Rate <span class="text-danger"> *</span></label>
+                        <label for="interest_rate" class="form-label">{{ __("translation.Interest Rate") }} <span class="text-danger"> *</span></label>
                         <input type="text" id="interest_rate" name="interest_rate" class="form-control" value="">
                         <span id="error_interest_rate" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">
-                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">Save</button>
+                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">{{ __("translation.Cancel") }}</button>
+                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">{{ __("translation.Save") }}</button>
                 </div>
             </div>
         </form>

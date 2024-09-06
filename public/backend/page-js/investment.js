@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Initialize DataTable
     let investmentsTable = $('#investments_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,
@@ -103,7 +104,7 @@ $(document).ready(function () {
 
     // Delete investment
     $('body').on('click', '.deleteInvestment', function () {
-        if (confirm("All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?")) {
+        if (confirm(deleteInvestmentConfirmMsg)) {
             var postData = {
                 investmentId : $(this).data('id'),
             };

@@ -3,7 +3,7 @@
 @section('content')
 <div class="row mt-3 mb-3">
     <div class="col-md-2">
-        <h4 class="page-title">Dashboard</h4>
+        <h4 class="page-title">{{ __("translation.Dashboard") }}</h4>
     </div>
     <div class="col-md-10"></div>
 </div>
@@ -22,7 +22,7 @@
                         <div class="float-end">
                             <i class="mdi mdi-warehouse widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Companies">Companies</h5>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Companies">{{ __("translation.Companies") }}</h5>
                         <h3 class="mt-3 mb-3">{{ currencyFormatter($totalCompanies, false) }}</h3>
                         {{-- <p class="mb-0 text-muted">
                             <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> +15%</span>
@@ -37,7 +37,7 @@
                         <div class="float-end">
                             <i class="uil-users-alt widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of employees">Employees</h5>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of employees">{{ __("translation.Employees") }}</h5>
                         <h3 class="mt-3 mb-3">{{ currencyFormatter($totalEmployees, false) }}</h3>
                         {{-- <p class="mb-0 text-muted">
                             <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> +0.5%</span>
@@ -52,7 +52,7 @@
                         <div class="float-end">
                             <i class="uil-users-alt widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of investors">Investors</h5>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of investors">{{ __("translation.Investors") }}</h5>
                         <h3 class="mt-3 mb-3">{{ currencyFormatter($totalInvestors, false) }}</h3>
                         {{-- <p class="mb-0 text-muted">
                             <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> +0.5%</span>

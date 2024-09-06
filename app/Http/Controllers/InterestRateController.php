@@ -44,12 +44,12 @@ class InterestRateController extends Controller
             if($interestRateData){
                 $interestRateData->interest_rate = $request->interest_rate;
                 if($interestRateData->save()){
-                    return response()->json(['status' => true, 'message' => 'Interest rate updated successfully.']);
+                    return response()->json(['status' => true, 'message' => __("translation.Interest rate updated successfully.")]);
                 }
             }
-            return response()->json(['status' => false, 'message' => 'No data found.']);
+            return response()->json(['status' => false, 'message' => __("translation.No data found.")]);
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 
     //  get edit details
@@ -59,8 +59,8 @@ class InterestRateController extends Controller
             if($interestRateData){
                 return response()->json(['status' => true, 'message' => 'Success.', 'interestRateData' => $interestRateData]);
             }
-            return response()->json(['status' => false, 'message' => 'No data found.']);
+            return response()->json(['status' => false, 'message' => __("translation.No data found.")]);
         }
-        return response()->json(['status' => false, 'message' => 'Something went wrong. Please try again later.']);
+        return response()->json(['status' => false, 'message' => __("translation.Something went wrong. Please try again later.")]);
     }
 }

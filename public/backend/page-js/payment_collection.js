@@ -24,6 +24,7 @@ $(document).ready(function () {
 
     // initialize datatable
     let paymentColllectionsTable = $('#payment_collections_table').DataTable({
+        language: language_check(),
         searching: false,
         pageLength: 10,
         processing: true,

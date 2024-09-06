@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Loan Terms";
-  $label = "Loan Terms";
+  $labelMain = __("translation.Loan Terms");
+  $label = __("translation.Loan Terms");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -28,11 +28,11 @@
                         @endphp
                         <h4>Name : {{ $user->first_name." ".$user->last_name }}</h4>
                         @if(isset($_GET['uid']) && isset($_GET['lid']))
-                            <h5>Debit As of Today : {{ currencyFormatter(0) }}</h5>
-                            <h5>Credit Available : {{ currencyFormatter($user->authorized_credit_limit) }}</h5>
+                            <h5>{{ __("translation.Debit As of Today") }} : {{ currencyFormatter(0) }}</h5>
+                            <h5>{{ __("translation.Credit Available") }} : {{ currencyFormatter($user->authorized_credit_limit) }}</h5>
                         @else
-                            <h5>Debit As of Today : {{ currencyFormatter($loanAmount) }}</h5>
-                            <h5>Credit Available : {{ currencyFormatter($user->authorized_credit_limit - $loanAmount) }}</h5>
+                            <h5>{{ __("translation.Debit As of Today") }} : {{ currencyFormatter($loanAmount) }}</h5>
+                            <h5>{{ __("translation.Credit Available") }} : {{ currencyFormatter($user->authorized_credit_limit - $loanAmount) }}</h5>
                         @endif
                     </div>
                 </div>
@@ -43,12 +43,12 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Installment Date</th>
-                                    <th>Capital</th>
-                                    <th>Interest</th>
-                                    <th>Installment Amount</th>
-                                    <th>Balance</th>
-                                    <th>Status</th>
+                                    <th>{{ __("translation.Installment Date") }}</th>
+                                    <th>{{ __("translation.Capital") }}</th>
+                                    <th>{{ __("translation.Interest") }}</th>
+                                    <th>{{ __("translation.Installment Amount") }}</th>
+                                    <th>{{ __("translation.Balance") }}</th>
+                                    <th>{{ __("translation.Status") }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

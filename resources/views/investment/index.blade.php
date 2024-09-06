@@ -1,6 +1,6 @@
 @php
-  $labelMain = "Investment Details";
-  $label = "Investment";
+  $labelMain = __("translation.Investment Details");
+  $label = __("translation.Investment");
 @endphp
 @extends('layouts.main')
 @section('title', $labelMain)
@@ -13,7 +13,7 @@
         <h4 class="page-title">{{ $labelMain }}</h4>
     </div>
     <div class="col-md-6">
-        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addModal" id="add-new-btn"><i class="uil-plus"></i> Add {{ $label }}</button>
+        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addModal" id="add-new-btn"><i class="uil-plus"></i> {{ __("translation.Add") }} {{ $label }}</button>
     </div>
 </div>
 
@@ -27,12 +27,12 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th>Contributions</th>
-                                    <th>Interest Rate</th>
-                                    <th>Interest Earnings</th>
-                                    <th>Total Amount</th>
-                                    <th>Actions</th>
+                                    <th>{{ __("translation.Name") }}</th>
+                                    <th>{{ __("translation.Contributions") }}</th>
+                                    <th>{{ __("translation.Interest Rate") }}</th>
+                                    <th>{{ __("translation.Interest Earnings") }}</th>
+                                    <th>{{ __("translation.Total Amount") }}</th>
+                                    <th>{{ __("translation.Actions") }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -50,51 +50,51 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><span>Add</span> {{$label}}</h4>
+                    <h4 class="modal-title"><span>{{ __("translation.Add") }}</span> {{$label}}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-1">
                     <input type="hidden" name="investment_id" id="investment_id">
                     <div class="form-group mb-3">
-                        <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
+                        <label for="name" class="form-label">{{ __("translation.Name") }} <span class="text-danger"> *</span></label>
                         <input type="text" id="name" name="name" class="form-control" value="">
                         <span id="error_name" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="contributions" class="form-label">Contributions <span class="text-danger"> *</span></label>
+                        <label for="contributions" class="form-label">{{ __("translation.Contributions") }} <span class="text-danger"> *</span></label>
                         <input type="text" id="contributions" name="contributions" class="form-control" value="">
                         <span id="error_contributions" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="interest_rate" class="form-label">Interest rate<span class="text-danger"> *</span></label>
+                        <label for="interest_rate" class="form-label">{{ __("translation.Interest rate") }}<span class="text-danger"> *</span></label>
                         <input type="text" id="interest_rate" name="interest_rate" class="form-control" value="">
                         <span id="error_interest_rate" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="interest_earnings" class="form-label">Interest earnings<span class="text-danger"> *</span></label>
+                        <label for="interest_earnings" class="form-label">{{ __("translation.Interest earnings") }}<span class="text-danger"> *</span></label>
                         <input type="text" id="interest_earnings" name="interest_earnings" class="form-control" value="">
                         <span id="error_interest_earnings" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="total_amount" class="form-label">Total amount<span class="text-danger"> *</span></label>
+                        <label for="total_amount" class="form-label">{{ __("translation.Total amount") }}<span class="text-danger"> *</span></label>
                         <input type="text" id="total_amount" name="total_amount" class="form-control" value="">
                         <span id="error_total_amount" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="investment_contract" class="form-label">Investment Contract<span class="text-danger"> *</span></label>
+                        <label for="investment_contract" class="form-label">{{ __("translation.Investment Contract") }}<span class="text-danger"> *</span></label>
                         <input type="file" id="investment_contract" name="investment_contract" class="form-control">
-                        <div class="show-edit-document d-none" id="download_investment_contract"><a href="" download>Current Investment Contarct</a></div>
+                        <div class="show-edit-document d-none" id="download_investment_contract"><a href="" download>{{ __("translation.Current Investment Contarct") }}</a></div>
                         <span id="error_investment_contract" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="note" class="form-label">Note<span class="text-danger"> *</span></label>
+                        <label for="note" class="form-label">{{ __("translation.Note") }}<span class="text-danger"> *</span></label>
                         <textarea id="note" name="note" class="note form-control"></textarea>
                         <span id="error_note" class="error text-danger"></span>
                     </div>
                 </div>
                 <div class="d-block modal-footer">
-                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">Save</button>
+                    <button type="button" class="btn btn-secondary float-start" id="model-cancle-btn" data-bs-dismiss="modal" aria-label="Close">{{ __("translation.Cancel") }}</button>
+                    <button type="submit" class="btn btn-success float-end" id="addorUpdateBtn">{{ __("translation.Save") }}</button>
                 </div>
             </div>
         </form>
@@ -107,6 +107,7 @@
         var getInvestmentDetailsUrl = "{{ route('investment.edit', ['id' => '__ID__']) }}";
         var deleteInvestmentUrl = "{{ route('investment.delete') }}";
         var basePath = "{{ asset('/storage') }}/";
+        var deleteInvestmentConfirmMsg = '{{ __("translation.All details related to this will be permanently deleted. Are you sure you want to proceed with the deletion?") }}';
     </script>
     <script src="{{asset('/')}}backend/js/vendor/jquery.dataTables.min.js"></script>
     <script src="{{asset('/')}}backend/js/vendor/dataTables.bootstrap5.js"></script>

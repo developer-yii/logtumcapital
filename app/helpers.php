@@ -40,7 +40,7 @@ if (! function_exists('addPageJsLink')) {
 if (! function_exists('getFooterCopyrightText')) {
     function getFooterCopyrightText(){
         $appName = config('app.name');
-        return '© '.date('Y').' '.$appName.'. All rights reserved';
+        return '© '.date('Y').' '.$appName.'. '.__("translation.All rights reserved.");
     }
 }
 if (!function_exists('isActiveRouteMain')) {

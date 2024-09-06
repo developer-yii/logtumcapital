@@ -66,6 +66,27 @@ class EmployeeController extends Controller
     {
         $user = auth()->user();
         if ($request->ajax()) {
+             // $employees = User::where('role', 4)
+            // ->where('users.company_id', $user->company_id)
+            // ->leftJoin('loans', 'users.id', '=', 'loans.user_id')
+            // ->select(
+            //     'users.id',
+            //     'users.first_name',
+            //     'users.middle_name',
+            //     'users.last_name',
+            //     'users.email',
+            //     'users.phone_number',
+            //     'loans.user_id',
+            //     DB::raw('COALESCE(SUM(loans.amount), 0) as used_credit_limit'),
+            //     DB::raw('(users.authorized_credit_limit - COALESCE(SUM(loans.amount), 0)) as available_credit_limit'),
+            //     'users.authorized_credit_limit',
+            //     'users.ine',
+            //     'users.proof_of_address'
+            // )
+            // ->groupBy(
+            //     'users.id',
+            //     'loans.user_id',
+            // );
             $employees = User::where('role', 4)
             ->where('users.company_id', $user->company_id)
             ->leftJoin('loans', 'users.id', '=', 'loans.user_id')
@@ -76,7 +97,6 @@ class EmployeeController extends Controller
                 'users.last_name',
                 'users.email',
                 'users.phone_number',
-                'loans.user_id',
                 DB::raw('COALESCE(SUM(loans.amount), 0) as used_credit_limit'),
                 DB::raw('(users.authorized_credit_limit - COALESCE(SUM(loans.amount), 0)) as available_credit_limit'),
                 'users.authorized_credit_limit',
@@ -85,7 +105,14 @@ class EmployeeController extends Controller
             )
             ->groupBy(
                 'users.id',
-                'loans.user_id',
+                'users.first_name',
+                'users.middle_name',
+                'users.last_name',
+                'users.email',
+                'users.phone_number',
+                'users.authorized_credit_limit',
+                'users.ine',
+                'users.proof_of_address'
             );
             return Datatables::of($employees)
                 ->addIndexColumn()

@@ -38,7 +38,7 @@
                                 <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
                                 <div class="content">
                                     <h5>Dirección de la empresa</h5>
-                                    <p>64500, Ernesto Garcia Ortiz 154, Del Nte., 64500 Monterrey, N.L.</p>
+                                    <p>Ernesto Garcia Ortiz 154, Del Nte., 64500 Monterrey, N.L., Mexico.</p>
                                 </div>
                             </li>
                             <li>
@@ -53,7 +53,7 @@
                                 <div class="icon"><i class="far fa-envelope"></i></div>
                                 <div class="content">
                                     <h5>Contáctenos</h5>
-                                    <p><a href="mailto:info.logtum@gmail.com">info.logtum@gmail.com</a></p>
+                                    <p><a href="mailto:{{ config('app.main_company_mail') }}">{{ config('app.main_company_mail') }}</a></p>
                                 </div>
                             </li>
                         </ul>

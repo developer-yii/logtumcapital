@@ -187,4 +187,5 @@ return [
 
     'super_admin_mail' => env('SUPER_ADMIN_MAIL'),
     'interest_rate' => env('INTEREST_RATE'),
+    'main_company_mail' => env('MAIN_COMPANY_MAIL')
 ];

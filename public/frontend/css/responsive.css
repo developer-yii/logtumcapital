@@ -24,7 +24,7 @@
     .contact-form-wrap-box .login-wrap {
         margin-left: 0;
     }
-    
+
 }
 
 @media (max-width: 991px) {
@@ -158,7 +158,7 @@
     #approve .receive-bx .main-box .send-box {
         margin-bottom: 15px;
     }
-    
+
     .personal-box {
         margin-bottom: 15px;
     }
@@ -200,7 +200,7 @@
     }
 
     header .logo-box img {
-        max-width: 110px;
+        max-width: 130px;
     }
 
     #services .personal-box p {
@@ -246,10 +246,6 @@
 
     h5 {
         font-size: 18px;
-    }
-
-    header .logo-box img {
-        max-width: 90px;
     }
 
     #approve .receive-bx .main-box::after {

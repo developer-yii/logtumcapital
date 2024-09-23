@@ -7,7 +7,7 @@
 
             <div class="card-header py-3 text-center bg-primary">
                 <a href="{{ route('register') }}">
-                    <span><img src="{{ asset('frontend/images/LOGO.png') }}" alt="logo" height="50"></span>
+                    <span><img src="{{ asset('frontend/images/LOGO.png') }}" alt="logo" height="95"></span>
                 </a>
             </div>
 
@@ -36,15 +36,33 @@
                         <span id="error_address" class="error text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="consetitutive_act_document" class="form-label">{{ __("translation.Constitutive act document") }}<span class="text-danger"> *</span></label>
-                        <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" value="">
-                        <span id="error_consetitutive_act_document" class="error text-danger"></span>
+                        <label for="consetitutive_act_document" class="form-label">
+                            {{ __("translation.Constitutive act document") }}
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <br>
+                        <div class="border">
+                            <input type="file" id="consetitutive_act_document" name="consetitutive_act_document" class="form-control" style="display:none;" onchange="updateCustomLabel('consetitutive_act_document', 'label_consetitutive_act_document')">
+                            <label for="consetitutive_act_document" id="label_consetitutive_act_document" class="btn btn-secondary">Elejir Archivo</label>
+                            <span id="error_consetitutive_act_document" class="error text-danger"></span>
+                            <small id="file-name-consetitutive_act_document" class="text-muted">ningún archivo seleccionado</small>
+                        </div>
                     </div>
+
                     <div class="form-group mb-3">
-                        <label for="ine_document" class="form-label">{{ __("translation.INE document") }}<span class="text-danger"> *</span></label>
-                        <input type="file" id="ine_document" name="ine_document" class="form-control" value="">
-                        <span id="error_ine_document" class="error text-danger"></span>
+                        <label for="ine_document" class="form-label">
+                            {{ __("translation.INE document") }}
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <br>
+                        <div class="border">
+                            <input type="file" id="ine_document" name="ine_document" class="form-control" style="display:none;" onchange="updateCustomLabel('ine_document', 'label_ine_document')">
+                            <label for="ine_document" id="label_ine_document" class="btn btn-secondary">Elejir Archivo</label>
+                            <span id="error_ine_document" class="error text-danger"></span>
+                            <small id="file-name-ine_document" class="text-muted">ningún archivo seleccionado</small>
+                        </div>
                     </div>
+
                     <input type="hidden" id="status" name="status" value="1">
                     <div class="d-block text-center">
                         <button type="submit" class="btn btn-success" id="addorUpdateBtn">{{ __("translation.Save") }}</button>
@@ -94,5 +112,19 @@
                 },
             });
         });
+        function updateCustomLabel(inputId, labelId) {
+            const input = document.getElementById(inputId);
+            const label = document.getElementById(labelId);
+            const fileNameDisplay = document.getElementById(`file-name-${inputId}`);
+
+            if (input.files.length > 0) {
+                label.textContent = "Elejir Archivo";
+                fileNameDisplay.textContent = input.files[0].name;
+            } else {
+                label.textContent = "Elejir Archivo";
+                fileNameDisplay.textContent = "ningún archivo seleccionado";
+            }
+        }
+
     </script>
 @endpush

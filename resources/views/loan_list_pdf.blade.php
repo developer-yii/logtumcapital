@@ -66,8 +66,8 @@
                 <th>{{ __("translation.Name") }}</th>
                 <th>{{ __("translation.Payment") }}</th>
                 <th>{{ __("translation.Delivery") }}</th>
-                <th>{{ __("translation.Start") }} Date</th>
-                <th>{{ __("translation.End") }} Date</th>
+                <th>{{ __("translation.Start Date") }}</th>
+                <th>{{ __("translation.End Date") }}</th>
                 <th>{{ __("translation.Company") }}</th>
             </tr>
         </thead>

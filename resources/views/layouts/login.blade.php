@@ -24,7 +24,7 @@
 </head>
 
 <body class="authentication-bg">
-    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+    <div class="account-pages pt-2 pt-sm-3 pb-4 pb-sm-5">
         <div class="container">
             @yield('content')
         </div>

@@ -28,6 +28,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="mt-3 pe-3 mx-auto">
+                                    <p class="text-white fw-semibold">Importante: En Logtum Capital, únicamente ofrecemos nuestros préstamos a través de nuestra página web. No trabajamos con intermediarios externos y nunca pedimos pagos anticipados.</p>
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="right-img">
@@ -53,7 +56,7 @@
                     <div class="rate-box">
                         <div class="row">
                             @php
-                                $companyLogos = [asset('frontend/images/LOGTUM_INTREST_RATE_LOGO.png'), asset('frontend/images/CITIBANAMEX_LOGO.png'), asset('frontend/images/BBVA_LOGO.png')];
+                                $companyLogos = [asset('frontend/images/LOGO.png'), asset('frontend/images/CITIBANAMEX_LOGO.png'), asset('frontend/images/BBVA_LOGO.png')];
                                 $i = 0;
                             @endphp
                             @foreach($interestRateData as $interest)

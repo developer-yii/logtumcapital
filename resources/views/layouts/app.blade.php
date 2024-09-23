@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="reg-box">
                     <div class="mail-box">
-                        <a href="mailto:info.logtum@gmail.com">info.logtum@gmail.com</a>
+                        <a href="mailto:{{ config('app.main_company_mail') }}">{{ config('app.main_company_mail') }}</a>
                     </div>
                     <div class="log-box">
                         <ul>

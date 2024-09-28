@@ -255,7 +255,7 @@ header .top-header .reg-box .log-box ul li a span {
 #banner .text-left .loan-box {
     background: #fff;
     padding: 30px 30px 30px 30px;
-    border-radius: 50px;
+    border-radius: 30px;
     max-width: 80%;
     width: 100%;
 }
@@ -318,6 +318,11 @@ header .top-header .reg-box .log-box ul li a span {
 
 /*------ rate sec css  -------*/
 
+#interest {
+    position: relative;
+    padding-bottom: 140px;
+}
+
 #interest .title-text h2 {
     color: #5271FF;
 }
@@ -377,6 +382,22 @@ header .top-header .reg-box .log-box ul li a span {
     font-size: 18px;
 }
 
+#interest .linkBox .linkClick a {
+    background-color: #5271ff;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 500;
+    padding: 10px 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+#interest .linkBox {
+    position: absolute;
+    left: 0;
+    bottom: 50px;
+}
+
 /* -------- approve css start --------- */
 
 #approve {
@@ -384,25 +405,26 @@ header .top-header .reg-box .log-box ul li a span {
 }
 
 #approve .approve-box .title-box {
-    margin-bottom: 40px;
+    margin-bottom: 70px;
+    text-align: center;
 }
 
 #approve .approve-box .title-box h2 {
     display: inline-block;
-    padding: 5px 40px;
-    background: #fff;
-    color: #004aad;
+    padding: 10px 40px;
+    background: #5271ff;
+    color: #fff;
     margin-bottom: 0;
 }
 
 #approve .receive-bx .main-box {
     background: #fff;
-    padding: 80px 30px 30px;
+    padding: 40px 30px;
     position: relative;
     overflow: hidden;
 }
 
-#approve .receive-bx .main-box::after {
+/* #approve .receive-bx .main-box::after {
     content: '';
     position: absolute;
     height: 210px;
@@ -412,17 +434,18 @@ header .top-header .reg-box .log-box ul li a span {
     top: -12px;
     left: 51%;
     transform: translateX(-50%  );
-}
+} */
 
 #approve .receive-bx .main-box .send-box h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #6ec3be;
+    background-color: #3245a6;
     border-radius: 50%;
     height: 55px;
     width: 55px;
     margin: 0 auto 30px;
+    color: #fff;
 }
 
 #approve .receive-bx .main-box .send-box h2 span {
@@ -437,13 +460,44 @@ header .top-header .reg-box .log-box ul li a span {
     z-index: 55;
 }
 
+#approve .receive-bx .main-box .send-box.second,
+#approve .receive-bx .main-box .send-box.first {
+    position: relative;
+}
+
+#approve .receive-bx .main-box .send-box.first::after {
+    content: '';
+    position: absolute;
+    background-image: url(../../frontend/images/lineImg.png);
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 290px;
+    background-size: contain;
+    top: 20%;
+    transform: translateY(-80%);
+    left: 260px;
+}
+
+#approve .receive-bx .main-box .send-box.second::after {
+    content: '';
+    position: absolute;
+    background-image: url(../../frontend/images/lineArrow.png);
+    background-repeat: no-repeat;
+    height: 23px;
+    width: 290px;
+    background-size: contain;
+    top: 20%;
+    transform: translateY(-80%);
+    left: 270px;
+}
+
 #approve .receive-bx .main-box .send-box h5 {
     color: #000;
 }
 
-#approve .receive-bx .main-box .send-box.down-box {
+/* #approve .receive-bx .main-box .send-box.down-box {
     margin-top: 50px;
-}
+} */
 
 #approve .receive-bx .main-box .send-box p {
     max-width: 80%;
@@ -480,19 +534,23 @@ header .top-header .reg-box .log-box ul li a span {
 #services .our-box .right-box .reg-btn a::after {
     content: '';
     position: absolute;
-    right: -70px;
-    top: 50%;
-    width: 65px;
-    border: 2px dotted #5271FF;
+    background-image: url(../../frontend/images/btnLIne.png);
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 100px;
+    background-size: contain;
+    top: 55%;
+    transform: translateY(-50%);
+    right: -110px;
 }
 
-#services .our-box .right-box .reg-btn a::before {
+/* #services .our-box .right-box .reg-btn a::before {
     content: '\f054';
     position: absolute;
     font-family: 'fontawesome';
     right: -82px;
     top: 2px;
-}
+} */
 
 #services .loans-type {
     margin-top: 50px;
@@ -529,11 +587,16 @@ header .top-header .reg-box .log-box ul li a span {
 }
 
 #services .personal-box ul li p {
-    padding: 10px 0px 0px 30px;
+    padding: 10px 0px 0px 22px;
 }
 
 #services .personal-box p {
     padding-top: 20px;
+}
+
+#services .personal-box p.lastLine {
+    text-align: center;
+    font-weight: 700;
 }
 
 /* --------- our-services css end --------- */
@@ -551,7 +614,7 @@ footer {
 footer .footer-box {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 
 footer .footer-box .ft-logo a img {
@@ -570,16 +633,16 @@ footer .footer-box .ft-menu ul li a {
     font-size: 16px;
 }
 
-footer .footer-box .icon-box ul {
+footer .icon-box ul {
     display: flex;
     align-items: center;
 }
 
-footer .footer-box .icon-box ul li:not(:last-child) {
+footer .icon-box ul li:not(:last-child) {
     margin-right: 15px;
 }
 
-footer .footer-box .icon-box ul li a {
+footer .icon-box ul li a {
     background-color: var(--white-color);
     border-radius: 50%;
     height: 45px;
@@ -589,9 +652,25 @@ footer .footer-box .icon-box ul li a {
     align-items: center;
 }
 
-footer .footer-box .icon-box ul li a i {
+footer .icon-box ul li a i {
     font-size: 34px;
     color: var(--black-color);
+}
+
+footer .footer-box .footerText {
+    width: 40%;
+}
+
+footer .footer-box .ft-logo {
+    width: 20%;
+}
+
+footer .footer-box .ft-menu {
+    width: 30%;
+}
+
+footer .footer-box .footerText p {
+    color: #fff;
 }
 
 /* footer css end */
@@ -821,3 +900,24 @@ footer .footer-box .icon-box ul li a i {
 
 
 /* ------ Contact page css end -------  */
+
+#interest .rate-box .box-box .logoText {
+    min-height: 112px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#interest .rate-box .box-box .logoText h3 {
+    font-size: 28px;
+    margin-bottom: 0;
+}
+
+#interest .rate-box .box-box .logoText h3.blue {
+    color: #3245a6 !important;
+}
+
+#interest .rate-box .box-box .logoText h3.red {
+    color: #ff3030 !important;
+}

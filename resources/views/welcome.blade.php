@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="banner-box">
                     <div class="up-title">
-                        <h1>{{ __("translation.Calculate the monthly") }} <br>{{ __("translation.payment of your loan") }}</h1>
+                        <h1>Calculo de Pago Semanal de <br>Intereses de un Préstamo</h1>
                     </div>
                     <div class="loan-sec">
                         <div class="row align-items-center">
@@ -22,14 +22,14 @@
                                         </div>
                                         <p class="title-p">{{ __("translation.With weekly payment of") }}</p>
                                         <h3 id="weekly_interest_payment">$1,162</h3>
-                                        <p>{{ __("translation.You only need your ID and a proof of address") }}</p>
+                                        <p class="title-p">Con Requisitos Mínimos y Pagos Flexibles</p>
                                         <div class="btn-submit text-center">
                                             <a href="{{ route('register') }}">{{ __("translation.Register") }}</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mt-3 pe-3 mx-auto">
-                                    <p class="text-white fw-semibold">Importante: En Logtum Capital, únicamente ofrecemos nuestros préstamos a través de nuestra página web. No trabajamos con intermediarios externos y nunca pedimos pagos anticipados.</p>
+                                    {{-- <p class="text-white fw-semibold">Importante: En Logtum Capital, únicamente ofrecemos nuestros préstamos a través de nuestra página web. No trabajamos con intermediarios externos y nunca pedimos pagos anticipados.</p> --}}
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -62,14 +62,21 @@
                             @foreach($interestRateData as $interest)
                                 <div class="col-md-4">
                                     <div class="box-box">
-                                        <div class="img-box">
-                                            <img src="{{ $companyLogos[$i] }}" alt="logo-img">
-                                        </div>
+                                        @if($interest->id == 1)
+                                            <div class="img-box">
+                                                <img src="{{ $companyLogos[$i] }}" alt="logo-img">
+                                            </div>
+                                        @else
+                                            <div class="logoText">
+                                                <h3 class="blue">Banamex</h3>
+                                                <p>Tarjeta: Simplicity</p>
+                                            </div>
+                                        @endif
                                         <div class="text-box">
                                             <h4>{{ $interest->interest_rate.'%' }}</h4>
                                             <p>{{ __("translation.Fixed Annual Rate") }}</p>
                                             <div class="value-btn">
-                                                <button class="btn-val">{{ __("translation.Evaluate") }}</button>
+                                                <button class="btn-val">CAT Por Pago Aplazado</button>
                                             </div>
                                         </div>
                                     </div>
@@ -108,6 +115,11 @@
                             </div> --}}
                         </div>
                     </div>
+                    <div class="linkBox">
+                        <div class="linkClick">
+                            <a href="javascript:void(0)">Fuente: www.rankia.mx</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,37 +131,37 @@
         <div class="approve-part">
             <div class="container">
                 <div class="approve-box">
-                    {{-- <div class="title-box">
-                        <h2>Loan Approval Process</h2>
-                    </div>
                     <div class="receive-bx">
                         <div class="main-box">
+                            <div class="title-box">
+                                <h2>Proceso De Aprobacion</h2>
+                            </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="send-box down-box">
+                                    <div class="send-box down-box first">
                                         <h2><span>1</span></h2>
-                                        <h5>Send</h5>
-                                        <p>Documentation, Photo and video of your inventory</p>
+                                        <h5>Envie</h5>
+                                        <p>Envíe la cantidad requerida y su documentación</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="send-box down-box">
+                                    <div class="send-box down-box second">
                                         <h2><span>2</span></h2>
-                                        <h5>Receives</h5>
-                                        <p>Proposal for approval in minutes.</p>
+                                        <h5>Reciba</h5>
+                                        <p>Propuesta de aprobación en cuestión de minutos</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="send-box third-box">
                                         <h2><span>3</span></h2>
-                                        <h5>Enjoy</h5>
-                                        <p>From the fund in your account and grow your business.</p>
+                                        <h5>Disfruta</h5>
+                                        <p>Disposición de recursos en beneficio de los colaboradores</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
-                    <img src="{{ asset('frontend/images/LOAN_APPROVAL.png') }}">
+                    </div>
+                    {{-- <img src="{{ asset('frontend/images/LOAN_APPROVAL.png') }}"> --}}
                 </div>
             </div>
         </div>
@@ -172,7 +184,7 @@
                                 <div class="right-box">
                                     <p>{{ __("translation.We offer convenient money lending solution and reliable. With competitive interest rates that are lower than traditional banks. our goal is to make the loan is accessible to everyone.") }}</p>
                                     <div class="reg-btn">
-                                        <a href="{{ route('register') }}">{{ __("translation.Register") }}</a>
+                                        <a href="{{ route('register') }}">Registre Su Empresa</a>
                                     </div>
                                 </div>
                             </div>
@@ -183,10 +195,10 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="personal-box">
                                     <h4>{{ __("translation.Personal Loan") }}</h4>
-                                    <h6>{{ __("translation.Need funds for") }}</h6>
+                                    <h6>Necesita Fondos Para:</h6>
                                     <ul>
                                         <li>
-                                            <p>{{ __("translation.a personal project,") }}</p>
+                                            <p>Un Proyecto Personal</p>
                                         </li>
                                         <li>
                                             <p>{{ __("translation.unexpected expense, or") }}</p>
@@ -195,7 +207,7 @@
                                             <p>{{ __("translation.special occasion?") }}</p>
                                         </li>
                                     </ul>
-                                    <p>{{ __("translation.Our personal loans offer competitive interest rates.") }}</p>
+                                    <p class="lastLine">{{ __("translation.Our personal loans offer competitive interest rates.") }}</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -213,7 +225,7 @@
                                             <p>{{ __("translation.Home emergencies") }}</p>
                                         </li>
                                     </ul>
-                                    <p>{{ __("translation.We understand the urgency of your situation and strive to offer fast financing.") }}</p>
+                                    <p class="lastLine">{{ __("translation.We understand the urgency of your situation and strive to offer fast financing.") }}</p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -231,7 +243,7 @@
                                             <p>{{ __("translation.Access funds to cover expenses") }}</p>
                                         </li>
                                     </ul>
-                                    <p>{{ __("translation.Say goodbye to financial stress and hello to peace of mind with our salary advance services.") }}</p>
+                                    <p class="lastLine">{{ __("translation.Say goodbye to financial stress and hello to peace of mind with our salary advance services.") }}</p>
                                 </div>
                             </div>
                         </div>

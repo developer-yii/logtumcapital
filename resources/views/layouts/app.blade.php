@@ -92,14 +92,25 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="icon-box">
-                        <ul>
-                            <li><a href="https://www.facebook.com/profile.php?id=61564223813658" target="_blank"><i class="fa-brands fa-facebook"></i></a></li>
-                            <li><a href="https://www.instagram.com/logtumcapital/" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
-                            {{-- <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li> --}}
-                            {{-- <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li> --}}
-                        </ul>
+                    <div class="footerText">
+                        <p>Logtum Capital SAPI de C.V. es una empresa
+                            constituida bajo las normas y leyes vigentes en la
+                            República Mexicana, dedicada a ofrecer soluciones
+                            financieras innovadoras y de alta calidad.</p>
+                            <p>Nuestro enfoque se centra en brindar servicios
+                                personalizados que se ajusten a las necesidades de
+                                nuestros clientes, garantizando transparencia,
+                                confiabilidad y compromiso en cada una de nuestras
+                                operaciones.</p>
                     </div>
+                </div>
+                <div class="icon-box">
+                    <ul>
+                        <li><a href="https://www.facebook.com/profile.php?id=61564223813658" target="_blank"><i class="fa-brands fa-facebook"></i></a></li>
+                        <li><a href="https://www.instagram.com/logtumcapital/" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                        {{-- <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li> --}}
+                        {{-- <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li> --}}
+                    </ul>
                 </div>
             </div>
         </div>

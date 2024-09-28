@@ -1,3 +1,15 @@
+@media (max-width:1399px) {
+    #approve .receive-bx .main-box .send-box.first::after {
+        width: 260px;
+        left: 220px;
+    }
+
+    #approve .receive-bx .main-box .send-box.second::after {
+        width: 250px;
+        left: 225px;
+    }
+}
+
 @media (max-width:1199px) {
     h1 {
         font-size: 45px;
@@ -6,6 +18,23 @@
     h2 {
         font-size: 40px;
     }
+
+    #approve .receive-bx .main-box .send-box.first::after {
+        width: 220px;
+        left: 180px;
+    }
+
+    #approve .receive-bx .main-box .send-box.second::after {
+        width: 210px;
+        left: 180px;
+        height: 20px;
+    }
+
+    #interest .linkBox .linkClick a {
+        font-size: 25px;
+    }
+
+   
 }
 
 @media (max-width: 1024px) {
@@ -23,6 +52,18 @@
 
     .contact-form-wrap-box .login-wrap {
         margin-left: 0;
+    }
+
+    footer .footer-box .ft-menu {
+        width: 25%;
+    }
+
+    footer .footer-box .ft-logo {
+        width: 15%;
+    }
+    
+    footer .footer-box .footerText {
+        width: 45%;
     }
 
 }
@@ -119,7 +160,28 @@
     #banner .right-img img {
         border-radius: 50px;
     }
+
+    #approve .receive-bx .main-box .send-box.first::after {
+        width: 150px;
+        left: 135px;
+        top: 18%;
+    }
+
+    #approve .receive-bx .main-box .send-box.second::after {
+        width: 150px;
+        left: 135px;
+        height: 20px;
+    }
+
+    footer .footer-box .ft-logo {
+        width: 20%;
+    }
+
+    #interest .linkBox .linkClick a {
+        font-size: 20px;
+    }
 }
+
 
 
 @media (max-width: 767px) {
@@ -169,6 +231,29 @@
 
     #banner .text-left .loan-box {
         padding: 20px 20px 20px 20px;
+    }
+
+    #approve .receive-bx .main-box .send-box.first::after,
+    #approve .receive-bx .main-box .send-box.second::after {
+        display: none;
+    }
+
+    #interest .rate-box .row {
+        gap: 10px;
+    }
+
+    footer .footer-box {
+        flex-wrap: wrap;
+    }
+
+    footer .footer-box .footerText {
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    footer .footer-box .ft-logo,
+    footer .footer-box .ft-menu {
+        width: 50%;
     }
 
 }
@@ -297,6 +382,12 @@
         padding: 80px 0;
     }
 
+}
+
+@media (max-width:375px) {
+    footer .footer-box .ft-logo, footer .footer-box .ft-menu {
+        width: 100%;
+    }
 }
 
 @media (max-width: 360px) {

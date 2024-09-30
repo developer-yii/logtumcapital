@@ -75,6 +75,14 @@
                 <div class="footer-box">
                     <div class="ft-logo">
                         <a href="#"><img src="{{ asset('frontend/images/LOGO.png') }}" alt="logo-img"></a>
+                        <div class="icon-box mt-5">
+                            <ul>
+                                <li><a href="https://www.facebook.com/profile.php?id=61564223813658" target="_blank"><i class="fa-brands fa-facebook"></i></a></li>
+                                <li><a href="https://www.instagram.com/logtumcapital/" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                                {{-- <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li> --}}
+                                {{-- <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li> --}}
+                            </ul>
+                        </div>
                     </div>
                     <div class="ft-menu">
                         <ul>
@@ -103,14 +111,6 @@
                                 confiabilidad y compromiso en cada una de nuestras
                                 operaciones.</p>
                     </div>
-                </div>
-                <div class="icon-box">
-                    <ul>
-                        <li><a href="https://www.facebook.com/profile.php?id=61564223813658" target="_blank"><i class="fa-brands fa-facebook"></i></a></li>
-                        <li><a href="https://www.instagram.com/logtumcapital/" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
-                        {{-- <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li> --}}
-                        {{-- <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li> --}}
-                    </ul>
                 </div>
             </div>
         </div>

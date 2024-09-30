@@ -42,6 +42,8 @@ class InterestRateController extends Controller
         if(!empty($request->interest_rate_id)){
             $interestRateData = InterestRate::where('id', $request->interest_rate_id)->first();
             if($interestRateData){
+                $interestRateData->company_name = $request->name;
+                $interestRateData->sub_title = $request->tag_line;
                 $interestRateData->interest_rate = $request->interest_rate;
                 if($interestRateData->save()){
                     return response()->json(['status' => true, 'message' => __("translation.Interest rate updated successfully.")]);

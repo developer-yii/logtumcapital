@@ -82,6 +82,12 @@
                         <span>{{ __("translation.Collected Installments") }}</span>
                     </a>
                 </li>
+                <li class="side-nav-item {{ isActiveRouteMain(['settings.get']) }}">
+                    <a href="{{ route('settings.get') }}" class="side-nav-link {{ isActiveRoute(['settings.get']) }}">
+                        <i class="uil-cog fs-3"></i>
+                        <span>Configuraciones</span>
+                    </a>
+                </li>
             @elseif($user->role == 2)
                 <li class="side-nav-item {{ isActiveRouteMain(['employee.getCompanyEmployees']) }}">
                     <a href="{{ route('employee.getCompanyEmployees') }}" class="side-nav-link {{ isActiveRoute(['employee.getCompanyEmployees']) }}">

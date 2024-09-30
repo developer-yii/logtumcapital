@@ -51,7 +51,8 @@
             <div class="container">
                 <div class="interest-box">
                     <div class="title-text">
-                        <h2><span>{{ __("translation.Comparison of") }}</span> {{ __("translation.Annual interest Rates") }}</h2>
+                        {{-- <h2><span>{{ __("translation.Comparison of") }}</span> {{ __("translation.Annual interest Rates") }}</h2> --}}
+                        <h2><span>Comparacion de </span> Tasas de Intres Anual</h2>
                     </div>
                     <div class="rate-box">
                         <div class="row">
@@ -68,8 +69,8 @@
                                             </div>
                                         @else
                                             <div class="logoText">
-                                                <h3 class="blue">Banamex</h3>
-                                                <p>Tarjeta: Simplicity</p>
+                                                <h3 class="{{(($interest->id % 2) == 0)?'red':'blue'}}">{{ $interest->company_name }}</h3>
+                                                <p>{{ $interest->sub_title }}</p>
                                             </div>
                                         @endif
                                         <div class="text-box">
@@ -117,7 +118,7 @@
                     </div>
                     <div class="linkBox">
                         <div class="linkClick">
-                            <a href="javascript:void(0)">Fuente: www.rankia.mx</a>
+                            {!! $settingData->value !!}
                         </div>
                     </div>
                 </div>
@@ -204,7 +205,8 @@
                                             <p>{{ __("translation.unexpected expense, or") }}</p>
                                         </li>
                                         <li>
-                                            <p>{{ __("translation.special occasion?") }}</p>
+                                            {{-- <p>{{ __("translation.special occasion?") }}</p> --}}
+                                            <p>Ocasión Especial</p>
                                         </li>
                                     </ul>
                                     <p class="lastLine">{{ __("translation.Our personal loans offer competitive interest rates.") }}</p>

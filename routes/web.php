@@ -10,9 +10,12 @@ use App\Http\Controllers\InterestRateController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\PaymentCollectorController;
+use App\Http\Controllers\SettingController;
 use App\Models\InterestRate;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +30,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $interestRateData = InterestRate::all();
-    return view('welcome', compact('interestRateData'));
+    $settingData = Setting::where('id', 1)->first();
+    return view('welcome', compact('interestRateData', 'settingData'));
 });
 Route::get('/contact', function () {
     return view('contact');
@@ -74,6 +78,11 @@ Route::middleware(['checkrole:Super Admin'])->group(function () {
         Route::get('/get', [InterestRateController::class, 'get'])->name('interestrate.get');
         Route::post('/store', [InterestRateController::class, 'store'])->name('interestrate.store');
         Route::get('/edit/{id}', [InterestRateController::class, 'edit'])->name('interestrate.edit');
+    });
+    Route::prefix('settings')->group(function () {
+        Route::get('/get', [SettingController::class, 'get'])->name('settings.get');
+        Route::post('/store', [SettingController::class, 'store'])->name('settings.store');
+        Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('settings.edit');
     });
 });
 

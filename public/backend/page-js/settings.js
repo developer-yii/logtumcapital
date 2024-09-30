@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // Initialize DataTable
-    let interestRateTable = $('#interest_rate_table').DataTable({
+    let settingsTable = $('#settings_table').DataTable({
         language: language_check(),
         searching: false,
         pageLength: 10,
@@ -10,15 +10,15 @@ $(document).ready(function () {
         "bLengthChange": false,
         ajax: {
             type: 'GET',
-            url: getInterestRatesUrl,
+            url: getSettingsUrl,
         },
         "drawCallback": function(settings) {
             $('[data-bs-toggle="tooltip"]').tooltip();
         },
         columns: [
             {data: 'DT_RowIndex', name:'id', orderable:false, sorting:false, className:'text-left'},
-            {data: 'company_name', name: 'company_name', orderable:false, sorting:false, className:'text-center'},
-            {data: 'interest_rate', name: 'interest_rate', orderable:false, sorting:false, className:'text-center'},
+            {data: 'key', name: 'key', orderable:false, sorting:false, className:'text-center'},
+            {data: 'value', name: 'value', orderable:false, sorting:false, className:'text-center'},
             {data: 'action', name: 'action', orderable:false, sorting:false, className:'text-end'},
         ],
     });
@@ -43,7 +43,7 @@ $(document).ready(function () {
                     $('#add-form').trigger("reset");
                     $('#addModal').modal('hide');
                     showToastMessage('success', response.message);
-                    interestRateTable.draw();
+                    settingsTable.draw();
                 }else if(response.status == 'error'){
                     var firstInput = "";
                     $.each(response.message, function(key, value){
@@ -62,16 +62,15 @@ $(document).ready(function () {
     $('body').on('click', '.editInterestRate', function () {
         $('#add-form').trigger("reset");
         $('.error').html('');
-        var interestRateId = $(this).data('id');
-        var url = getInterestRateDetailsUrl;
-        url = url.replace('__ID__', interestRateId);
+        var settignId = $(this).data('id');
+        var url = getSettingDetailsUrl;
+        url = url.replace('__ID__', settignId);
         $.get(url, function (response) {
             if(response.status == true){
                 $('#addModal .modal-title span').html('Edit');
-                $('#interest_rate_id').val(response.interestRateData.id);
-                $('#name').val(response.interestRateData.company_name);
-                $('#tag_line').val(response.interestRateData.sub_title);
-                $('#interest_rate').val(response.interestRateData.interest_rate);
+                $('#setting_id').val(response.settingsData.id);
+                $('#key').val(response.settingsData.key);
+                $('#value').val(response.settingsData.value);
                 $('#addModal').modal('show');
             }else{
                 showToastMessage('error', response.message);

@@ -51,8 +51,8 @@
             <div class="container">
                 <div class="interest-box">
                     <div class="title-text">
-                        {{-- <h2><span>{{ __("translation.Comparison of") }}</span> {{ __("translation.Annual interest Rates") }}</h2> --}}
-                        <h2><span>Comparacion de </span> Tasas de Intres Anual</h2>
+                        <h2><span>{{ __("translation.Comparison of") }}</span> {{ __("translation.Annual interest Rates") }}</h2>
+                        {{-- <h2><span>Comparacion de </span> Tasas de Intres Anual</h2> --}}
                     </div>
                     <div class="rate-box">
                         <div class="row">
